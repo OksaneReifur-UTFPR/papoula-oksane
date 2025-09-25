@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Pedidos - Lindos Detalhes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/pedidos.css">
+</head>
+<body>
+    <!-- Corações flutuantes romanticamente espalhados -->
+    <div class="floating-hearts">
+        <div class="heart heart-1">💖</div>
+        <div class="heart heart-2">💕</div>
+        <div class="heart heart-3">💗</div>
+        <div class="heart heart-4">💝</div>
+        <div class="heart heart-5">💖</div>
+        <div class="heart heart-6">💕</div>
+        <div class="heart heart-7">💗</div>
+        <div class="heart heart-8">💝</div>
+        <div class="heart heart-9">💖</div>
+        <div class="heart heart-10">💕</div>
+        <div class="heart heart-11">💗</div>
+        <div class="heart heart-12">💝</div>
+    </div>
+
+    <!-- Corações pequenos extras nas bordas -->
+    <div class="side-hearts">
+        <div class="side-heart left-1">💕</div>
+        <div class="side-heart left-2">💖</div>
+        <div class="side-heart left-3">💗</div>
+        <div class="side-heart left-4">💝</div>
+        <div class="side-heart left-5">💕</div>
+        <div class="side-heart right-1">💖</div>
+        <div class="side-heart right-2">💕</div>
+        <div class="side-heart right-3">💗</div>
+        <div class="side-heart right-4">💝</div>
+        <div class="side-heart right-5">💖</div>
+    </div>
+
+    <header>
+        <div class="header-container">
+            <div class="header-top">
+                <div class="logo">
+                    <img src="../images/logo.jpg" alt="Lindos Detalhes">
+                    <div>
+                        <div class="logo-text">LINDOS DETALLES</div>
+                        <div class="store-subtitle"> 🌸 Loja de Mudas de Flores 🌸 </div>
+                    </div>
+                </div>
+                <div class="user-section">
+                    <div class="user-dropdown">
+                        <select id="oUsuario" onchange="handleUserAction(this.value)">
+                            <option value="">👤 Usuário</option>
+                            <option value="gerenciar-conta">⚙️ Gerenciar Conta</option>
+                            <option value="sair">🚪 Sair</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav__menu">
+                    <li class="nav__menu-item">
+                        <a href="menu.html">🏠 Home</a>
+                    </li>
+                    <li class="nav__menu-item">
+                        <a href="#">🌸 Produtos</a>
+                        <ul class="nav__submenu">
+                            <li class="nav__submenu-item">
+                                <a href="produtos.html">🌺 Todas as Mudas</a>
+                            </li>
+                            <li class="nav__submenu-item">
+                                <a href="#">📂 Categorias</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav__menu-item">
+                        <a href="carrinho.html">🛒 Carrinho</a>
+                    </li>
+                    <li class="nav__menu-item active">
+                        <a href="pedidos.html">📦 Meus Pedidos</a>
+                    </li>
+                    <li class="nav__menu-item">
+                        <a href="cadastro.html">👤 Cadastro</a>
+                    </li>
+                    <li class="nav__menu-item">
+                        <a href="sobre.html">ℹ️ Sobre</a>
+                    </li>
+                    <li class="nav__menu-item">
+                        <a href="contato.html">💬 Contato</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-title">
+            <h1>Meus Pedidos</h1>
+            <p class="page-subtitle">Acompanhe seus pedidos de flores e mudas com carinho</p>
+        </div>
+
+        <div class="pedidos-container">
+            <div class="pedidos-content">
+                <div id="pedidos-lista">
+                    <!-- Estado vazio temporário -->
+                    <div class="empty-state">
+                        <div class="empty-icon">🌸</div>
+                        <h2 class="empty-title">Ainda não há pedidos por aqui!</h2>
+                        <p class="empty-description">
+                            Que tal dar uma olhadinha em nossas lindas mudas de flores?<br>
+                            Temos as mais belas variedades esperando para encantar seu jardim! 💕
+                        </p>
+                        <a href="produtos.html" class="btn-primary">
+                            🌺 Ver Produtos
+                        </a>
+                    </div>
+                    <!-- Aqui será carregado dinamicamente o histórico de pedidos -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-hearts">
+                <span>💖</span>
+                <span>💕</span>
+                <span>💗</span>
+                <span>💝</span>
+                <span>💖</span>
+            </div>
+            <p>&copy; 2025 - Lindos Detalhes - Loja de Mudas de Flores</p>
+            <p>Cultivando amor e beleza em cada jardim 🌸</p>
+        </div>
+    </footer>
+
+    <script src="../js/pedidos.js"></script>
+</body>
+</html>

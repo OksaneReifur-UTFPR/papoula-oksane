@@ -1,0 +1,111 @@
+meu-projeto/
+│
+├── backend/
+│   └── ... (seu código Node.js + PostgreSQL)
+│
+├── frontend/
+│   │   ├── css/   
+│   │   ├── menu.css          # Home/Principal
+│   │   ├── produtos.css      # Lista de Produtos
+│   │   ├── sobre.css         # Sobre
+│   │   ├── contato.css       # Contato
+│   │   ├── cadastro.css      # Cadastro/Login
+│   │   ├── carrinho.css      # Carrinho
+│   │   └── pedidos.css  
+│   │   │   
+│   │   ├── html/
+│   ├── menu.html
+│   ├── produtos.html
+│   ├── carrinho.html
+│   ├── pedidos.html
+│   ├── cadastro.html
+│   ├── sobre.html
+│   ├── contato.html
+│   └── index.html
+│   │   └── images/
+│   │  
+│   ├── js/
+│   ├── menu.js
+│   │── produtos.js
+│   ├── carrinho.js
+│   ├── pedidos.js
+│   ├── cadastro.js
+│   └── contato.js    
+│
+└── README.md
+
+
+
+frontend/
+│
+├── assets/
+│   ├── css/
+│   │   ├── menu.css          # Home/Principal
+│   │   ├── produtos.css      # Lista de Produtos
+│   │   ├── sobre.css         # Sobre
+│   │   ├── contato.css       # Contato
+│   │   ├── cadastro.css      # Cadastro/Login
+│   │   ├── carrinho.css      # Carrinho
+│   │   └── pedidos.css       # Pedidos
+│   └── images/
+│       ├── logo.png
+│       ├── favicon.png
+│       └── ...              # Demais imagens de flores, produtos, etc.
+│
+├── menu.html
+├── produtos.html
+├── sobre.html
+├── contato.html
+├── cadastro.html
+├── carrinho.html
+└── pedidos.html
+
+
+Ordem recomendada dos CRUDs:
+Pessoa (faça primeiro pois Cliente e Funcionario depende dela)
+Carga (não depende de ninguém)
+Cliente (depende de Pessoa)
+Funcionário (depende de Pessoa e Carga)
+
+
+
+
+
+
+
+senha do kevin para entrar no kodos ia  Escola@2024
+
+
+
+
+
+backend/
+│
+├── controllers/
+│   ├── produtoController.js
+│   ├── usuarioController.js
+│   ├── pedidoController.js
+│
+├── models/
+│   ├── produtoModel.js
+│   ├── usuarioModel.js
+│   ├── pedidoModel.js
+│
+├── routes/
+│   ├── produtoRoutes.js
+│   ├── usuarioRoutes.js
+│   ├── pedidoRoutes.js
+│
+├── db/
+│   └── db.js
+│
+├── middlewares/
+│   └── autenticacao.js
+│
+├── utils/
+│   └── helpers.js
+│
+├── app.js
+├── server.js
+├── package.json
+└── .env
