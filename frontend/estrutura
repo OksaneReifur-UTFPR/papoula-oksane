@@ -1,19 +1,78 @@
-meu-projeto/
+oksane_papoula_flores/
+
 │
 ├── backend/
-│   └── ... (seu código Node.js + PostgreSQL)
+│   └── controllers/
+       cargControllers
+       clienteControllers
+       formaPagamentoControllers
+       funcionarioControllers
+       pagamentoControllers
+       pagamentoHasFormaDepagamentoControllers
+       pedidoControllers
+       pedidoHasPlantaControllers
+       pessoaControllers
+       plantaControllers
+     routes/
+     cargRoutes
+       clienteRoutes
+       formaPagamentoRoutes
+       funcionarioRoutes
+       loginRoutes
+       pagamentoHasFormaDepagamentoRoutes
+       pagamentoRoutes
+       pedidoHasPlantaRoutes
+       pedidoRoutes
+       pessoaRoutes
+       plantaRoutes
+
+        database.js
+        server.js
+
 │
 ├── frontend/
 │   │   ├── css/   
-│   │   ├── menu.css          # Home/Principal
-│   │   ├── produtos.css      # Lista de Produtos
-│   │   ├── sobre.css         # Sobre
-│   │   ├── contato.css       # Contato
-│   │   ├── cadastro.css      # Cadastro/Login
-│   │   ├── carrinho.css      # Carrinho
+│   │   ├── menu.css          
+│   │   ├── produtos.css      
+│   │   ├── sobre.css         
+│   │   ├── contato.css       
+│   │   ├── cadastro.css      
+│   │   ├── carrinho.css      
 │   │   └── pedidos.css  
+
+
+     gerenciamento/
+         cadastro-pessoa/
+         cadastro-pessoa.css
+         cadastro-pessoa.html
+         cadastro-pessoa.js
+
+         cadastro-produtos/
+         cadastro-produtos.css
+         cadastro-produtos.html
+         cadastro-produtos.js
+
+         cargo/
+         cargo.css
+         cargo.html
+         cargo.js
+
+         crud-pedidos/
+         pedidos.css
+         pedidos.html
+         pedidos.js
+         gerenciamento/
+        │
+        ├── gerenciamento.html         
+        ├── gerenciamento.css          
+        ├── gerenciamento.js            
+        │
+        ├── images/
+│        └── logo-fundo.png         
+         
+
 │   │   │   
-│   │   ├── html/
+├── html/
 │   ├── menu.html
 │   ├── produtos.html
 │   ├── carrinho.html
@@ -72,6 +131,29 @@ Funcionário (depende de Pessoa e Carga)
 
 
 
+voce consegue fazer uma tela, parecida com essa tela que voce fez mas agora para gerenciar
+ os meus produtos, que sao mudas de flores , voce quer que eu mande o controller e o routes 
+ da minha tabela plantas? me diga o que eu tenho qua fazer
+ para que voce consiga fazer uma tela de gerenciamento de produtos bem bonita, delicada e romantica
+ Foto da muda (campo para upload de imagem ou link, e exibição na tabela/cadastro)
+3. Emojis de flores, corações, etc. (visual delicado e romântico, similar à tela de pessoa, mas com destaque para flores)
+4. Filtros e ordenação (busca por nome/especie, ordenação por preço/estoque, filtro de estoque baixo)
+5. Nome da tela personalizado (ex: “Flores Lindas – Gerenciamento de Mudas”, com destaque romântico no topo e botão de voltar estilizado)
+
+Vou criar:
+
+Barra superior com busca por nome/especie, botão de voltar estilizado (ex: 🌷), filtro de estoque baixo, ordenação por preço/estoque.
+Formulário para cadastro/edição, incluindo upload/link de foto, nome popular, nome científico, espécie, descrição, preço, quantidade, cor (se desejar).
+Tabela com as mudas, mostrando imagem, campos principais, estoque, preço, e emojis/florzinhas.
+Visual romântico: tons suaves, flores, corações, animações delicadas.
+
+
+
+
+
+
+
+
 
 senha do kevin para entrar no kodos ia  Escola@2024
 
@@ -109,3 +191,145 @@ backend/
 ├── server.js
 ├── package.json
 └── .env
+
+
+
+como clonar do git para o computador 
+
+oksane@oksane-Infoway:~/Documentos$ git clone https://github.com/rjhalmeman/terceiro-bimestre-dw1
+Cloning into 'terceiro-bimestre-dw1'...
+remote: Enumerating objects: 301, done.
+remote: Counting objects: 100% (301/301), done.
+remote: Compressing objects: 100% (211/211), done.
+remote: Total 301 (delta 161), reused 212 (delta 80), pack-reused 0 (from 0)
+Receiving objects: 100% (301/301), 952.46 KiB | 1.44 MiB/s, done.
+Resolving deltas: 100% (161/161), done.
+oksane@oksane-Infoway:~/Documentos$ 
+
+
+
+
+
+/ Lista de produtos do seu projeto original
+const produtos = [
+  {
+    nome: "Muda de Cosmos Chocolate",
+    preco: "R$ 15,00",
+    descricao: "(Cosmos atrosanguineus) Uma flor de aroma de chocolate, originária do México, com pétalas de cor marrom-avermelhada intensa.",
+    imagem: "../images/cosmoschocolate.jpg"
+  },
+  {
+    nome: "Muda de Girassol",
+    preco: "R$ 12,00",
+    descricao: "(Helianthus annuus) é uma planta ornamental e produtiva. Suas grandes flores amarelas seguem o movimento do sol e são muito utilizadas em jardins e para produção de sementes.",
+    imagem: "../images/girassol.jpg"
+  },
+  {
+    nome: "Muda de Rosa Rubra",
+    preco: "R$ 13,00",
+    descricao: "(Rosa spp.) é uma planta ornamental clássica e muito apreciada. Suas flores vermelhas vibrantes simbolizam amor e beleza, sendo usadas em jardins e arranjos.",
+    imagem: "../images/rosa-rubra.jpg"
+  },
+  {
+    nome: "Muda de Aconito",
+    preco: "R$ 14,00",
+    descricao: "(Aconitum napellus) é uma planta ornamental de clima frio. Produz flores em forma de elmo, geralmente azul-violeta, mas é altamente tóxica.",
+    imagem: "../images/aconito.jpg"
+  },
+  {
+    nome: "Muda de Afelandra Coral",
+    preco: "R$ 15,00",
+    descricao: "(Aphelandra sinclairiana) é um arbusto tropical ornamental. Suas flores em tons de coral a alaranjado se destacam entre as folhas verdes brilhantes.",
+    imagem: "../images/afelandra-coral.jpg"
+  },
+  {
+    nome: "Muda de Anemona",
+    preco: "R$ 16,00",
+    descricao: "(Anemone coronaria) é uma flor ornamental muito apreciada. Apresenta pétalas coloridas e delicadas, geralmente em tons de vermelho, rosa, roxo ou white.",
+    imagem: "../images/anemona.jpg"
+  },
+  {
+    nome: "Muda de Begonia Negra",
+    preco: "R$ 17,00",
+    descricao: "(Begonia pavonina) é uma planta ornamental rara. Destaca-se por suas folhas escuras e brilhantes que refletem tons azulados sob a luz.",
+    imagem: "../images/begonia-negra.jpg"
+  },
+  {
+    nome: "Muda de Beldroega Grande",
+    preco: "R$ 18,00",
+    descricao: "(Portulaca oleracea) é uma planta suculenta de crescimento rasteiro. Possui folhas carnudas e flores pequenas, usada tanto como ornamental quanto na alimentação.",
+    imagem: "../images/beldroega-grande.jpg"
+  },
+  {
+    nome: "Muda de Chapeu Chines",
+    preco: "R$ 19,00",
+    descricao: "(Holmskioldia sanguinea) é um arbusto ornamental. Suas flores em forma de chapéu apresentam tons alaranjados a vermelhos bem marcantes.",
+    imagem: "../images/chapeu-chines.jpg"
+  },
+  {
+    nome: "Muda de Cipo de Sao Joao",
+    preco: "R$ 20,00",
+    descricao: "(Pyrostegia venusta) Um cipó com flores de um laranja intenso que florescem na estação seca, como se fossem chamas.",
+    imagem: "../images/cipo-de-sao-joao.jpg"
+  },
+  {
+    nome: "Muda de Crossandra",
+    preco: "R$ 21,00",
+    descricao: "(Crossandra infundibuliformis) é uma planta tropical ornamental. Suas flores em tons de laranja ou vermelho têm pétalas delicadas em formato de leque.",
+    imagem: "../images/crossandra.jpg"
+  },
+  {
+    nome: "Muda de Escovinha",
+    preco: "R$ 22,00",
+    descricao: "(Callistemon spp.) é um arbusto ornamental originário da Austrália. Destaca-se por suas flores em forma de escova, geralmente vermelhas, atraindo pássaros e beija-flores.",
+    imagem: "../images/escovinha.jpg"
+  },
+  {
+    nome: "Muda de Espirradeira",
+    preco: "R$ 23,00",
+    descricao: "(Nerium oleander) é um arbusto ornamental resistente. Apresenta flores vistosas em tons de rosa, white ou vermelho, mas todas as partes da planta são tóxicas.",
+    imagem: "../images/espirradeira.jpg"
+  },
+  {
+    nome: "Muda de Heliconia",
+    preco: "R$ 24,00",
+    descricao: "(Heliconia spp.) é uma planta tropical ornamental. Suas flores coloridas e exóticas, em tons de vermelho, laranja ou amarelo, atraem beija-flores.",
+    imagem: "../images/heliconia.jpg"
+  },
+  {
+    nome: "Muda de Jacaranda",
+    preco: "R$ 25,00",
+    descricao: "(Jacaranda mimosifolia) é uma árvore ornamental de clima tropical e subtropical. Produz flores roxas em cachos vistosos, muito apreciadas por sua beleza e sombra.",
+    imagem: "../images/jacaranda.jpg"
+  },
+  {
+    nome: "Muda de Flor de Sao Jose",
+    preco: "R$ 26,00",
+    descricao: "(Saxifraga stolonifera) é uma planta ornamental de folhas arredondadas e flores delicadas. Produz pequenas flores white com detalhes rosados, sendo muito usada em jardins e vasos suspensos.",
+    imagem: "../images/flor-de-sao-jose.jpg"
+  },
+  {
+    nome: "Muda de Orquidea Fantasma",
+    preco: "R$ 27,00",
+    descricao: "(Dendrophylax lindenii) Uma orquídea sem clorofila, dependente de fungos, que floresce em pântanos da América do Norte, mas sua raridade a torna pouco conhecida.",
+    imagem: "../images/orquideafantasma.jpg"
+  },
+  {
+    nome: "Muda de Vine Jade",
+    preco: "R$ 28,00",
+    descricao: "(Strongylodon macrobotrys) é uma trepadeira tropical ornamental. Suas flores em cachos pendentes exibem um tom raro de azul-turquesa brilhante.",
+    imagem: "../images/vinejade.jpg"
+  },
+  {
+    nome: "Muda de Flor de Carajás",
+    preco: "R$ 29,00",
+    descricao: "(Ipomoea cavalcantei) é uma trepadeira ornamental rara da Amazônia. Apresenta flores grandes em tons de vermelho vivo, sendo símbolo da região de Carajás.",
+    imagem: "../images/flordecarajás.jpeg"
+  },
+  {
+    nome: "Muda de Rosa Juliet",
+    preco: "R$ 30,00",
+    descricao: "(Rosa spp. – Juliet Rose) é uma das rosas mais famosas e valiosas do mundo. Destaca-se por suas pétalas em tom pêssego-rosado, com formato delicado e romântico.",
+    imagem: "../images/rosajulieta.jpeg"
+  }
+];

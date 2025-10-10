@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Gerenciamento - Lindos Detalles</title>
+    
+    <!-- Link para o arquivo de estilos CSS -->
+    <link rel="stylesheet" href="gerenciamento.css">
+    
+    <!-- Importa a fonte 'Dancing Script' do Google Fonts para o título -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+        <!-- BOTÃO DE VOLTAR ADICIONADO AQUI -->
+    <a href="javascript:history.back( )" class="back-button">🌸 Voltar 🌸</a>
+
+
+    <!-- Contêiner onde o JavaScript irá criar os corações flutuantes -->
+    <div class="emoji-container"></div>
+
+    <!-- Painel central com o menu -->
+    <div class="menu-container">
+        <!-- Título estilizado -->
+        <h1>🌸 O que será gerenciado hoje? 🌸</h1>
+
+       <!-- ... (início do arquivo gerenciamento.html) ... -->
+<!-- ... (início do arquivo gerenciamento.html) ... -->
+
+<div class="button-wrapper">
+   <!-- ... (início do arquivo gerenciamento.html) ... -->
+
+<div class="button-wrapper">
+    <!-- 
+      MODIFICADO (DE NOVO!): Os caminhos agora começam com '/frontend/'
+      Isso diz ao navegador para começar da pasta raiz do projeto, 
+      entrar na pasta 'frontend', e então seguir o resto do caminho.
+    -->
+
+    <!-- Botão 1: Leva para a tela de pedidos -->
+    <button onclick="location.href='/frontend/gerenciamento/crud-pedidos/pedido.html'">Gerenciamento de Pedidos</button>
+    <!-- Botão 2: Leva para a tela de produtos -->
+    <button onclick="location.href='/frontend/gerenciamento/cadastro-produtos/cadastro-produtos.html'">Gerenciamento de Produtos</button>
+
+    <!-- Botão 3: Leva para a tela de cargos -->
+    <button onclick="location.href='/frontend/gerenciamento/cargo/cargo.html'">Gerenciamento de Cargos</button>
+
+    <!-- Botão 4: Leva para a tela de pessoas -->
+    <button onclick="location.href='/frontend/gerenciamento/cadastro-pessoa/cadastro-pessoa.html'">Gerenciamento de Pessoas</button>
+</div>
+
+<!-- ... (resto do arquivo) ... -->
+
+
+    <!-- Link para o arquivo JavaScript no final do body para melhor performance -->
+    <script src="gerenciamento.js"></script> 
+</body>
+</html>

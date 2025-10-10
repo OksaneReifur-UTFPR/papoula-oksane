@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🌷 Flores Lindas – Gerenciamento de Mudas 🌸</title>
+  <!-- Link para o CSS que vou te enviar depois -->
+  <link rel="stylesheet" href="cadastro-produtos.css">
+</head>
+<body>
+  <header>
+  <button id="btnVoltar" class="btn-voltar" title="Voltar">🌷 Voltar</button>
+  <div class="logo-romantica header-flex">
+    <div class="logo-and-title">
+      <span class="logo-emoji">🌸</span>
+      <h1 class="site-title">Lindos Detalles</h1>
+      <p class="subtitle">Gerenciamento de Mudas 💐</p>
+    </div>
+  </div>
+</header>
+
+
+  <main class="main-container">
+    <section class="controls-card">
+      <div class="top-row">
+        <input id="searchInput" type="text" placeholder="🔎 Buscar por nome ou espécie🌷" />
+        <button id="btnSearch" class="btn-primary">Buscar</button>
+
+        <div class="filter-group">
+          <label class="filter-label">
+            <input id="filterLowStock" type="checkbox" />
+            Estoque baixo (≤)
+            <input id="lowStockThreshold" type="number" min="0" value="5" class="threshold" />
+          </label>
+
+          <label class="sort-label">
+            Ordenar:
+            <select id="sortField">
+              <option value="nome_popular">Nome</option>
+              <option value="preco_unitario">Preço</option>
+              <option value="quantidade_estoque">Estoque</option>
+            </select>
+            <select id="sortDir">
+              <option value="asc">↑</option>
+              <option value="desc">↓</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button id="btnAdicionar" class="btn-success" style="display:none">Adicionar</button>
+        <button id="btnAlterar" class="btn-warning" style="display:none">Alterar</button>
+        <button id="btnExcluir" class="btn-danger" style="display:none">Excluir</button>
+        <button id="btnSalvar" class="btn-save" style="display:none">Salvar</button>
+        <button id="btnCancelar" class="btn-cancel">Cancelar</button>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h2>Cadastro / Edição de Muda 🌿</h2>
+      <form id="produtoForm" autocomplete="off">
+        <div class="form-grid">
+          <div class="form-col">
+            <label for="id_planta">🪷ID (apenas para editar):</label>
+            <input id="id_planta" name="id_planta" type="number" placeholder="ID (ex: 12)" />
+
+            <label for="nome_popular">🪷Nome popular:</label>
+            <input id="nome_popular" name="nome_popular" type="text" required placeholder="Ex: Rosa mini" />
+
+            <label for="nome_cientifico">🪷Nome científico:</label>
+            <input id="nome_cientifico" name="nome_cientifico" type="text" placeholder="Ex: Rosa × centifolia" />
+
+            <label for="especie">🪷Espécie:</label>
+            <input id="especie" name="especie" type="text" placeholder="Ex: Rosaceae" />
+
+            <label for="cor">🪷Cor (opcional):</label>
+            <input id="cor" name="cor" type="text" placeholder="Ex: rosa, branco" />
+          </div>
+
+          <div class="form-col">
+            <label for="descricao">🌷Descrição:</label>
+            <textarea id="descricao" name="descricao" rows="5" placeholder="Detalhes carinhosos sobre a muda..."></textarea>
+
+            <label for="preco_unitario">🌷Preço unitário (R$):</label>
+            <input id="preco_unitario" name="preco_unitario" type="number" min="0" step="0.01" required />
+
+            <label for="quantidade_estoque">🌷Quantidade em estoque:</label>
+            <input id="quantidade_estoque" name="quantidade_estoque" type="number" min="0" required />
+
+            <label for="foto_url">🌷Foto (URL) — use link ou faça upload:</label>
+            <input id="foto_url" name="foto_url" type="url" placeholder="https://..." />
+
+            <label for="foto_file">OU 🌷enviar arquivo (upload):</label>
+            <input id="foto_file" name="foto_file" type="file" accept="image/*" />
+          </div>
+
+          <div class="form-preview">
+            <p class="preview-label">Pré-visualização da foto 💕</p>
+            <div class="img-preview-wrap">
+              <img id="imgPreview" src="" alt="Preview da muda" />
+              <div id="noImage" class="no-image">🌷 Sem imagem</div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <h2>🌷Lista de Mudas 🌿</h2>
+      <div class="table-wrap">
+        <table id="produtosTable">
+          <thead>
+            <tr>
+              <th>💕Foto</th>
+              <th>💕Nome</th>
+              <th>💕Espécie</th>
+              <th>💕Preço</th>
+              <th>💕Estoque</th>
+              <th>💕Ações</th>
+            </tr>
+          </thead>
+          <tbody id="produtosTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>💐 Flores Lindas • feito com carinho</p>
+  </footer>
+
+  <div id="messageContainer" class="message-container"></div>
+  <div class="floating-hearts"></div>
+
+  <!-- Script que vou enviar depois -->
+  <script src="cadastro-produtos.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+/* Importa a fonte do Google Fonts para ser usada no h1 */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap' );
+
+/* Estilo geral da página */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Impede barras de rolagem */
+}
+
+/* Define o logo como imagem de fundo da página */
+body {
+    background-image: url('images/logo-fundo.png'); 
+    background-color: #fdfaf6;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contêiner principal do menu */
+.menu-container {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5); /* Fundo semitransparente, sem desfoque */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Garante que o menu fique sobre os corações */
+}
+
+/* Estilo para o título "O que será gerenciado hoje?" */
+h1 {
+    font-family: 'Dancing Script', cursive; /* Fonte cursiva e elegante */
+    color: #b06a7e; /* Tom de rosa escuro, combinando com o logo */
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Agrupador para os botões */
+.button-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Espaçamento vertical entre os botões */
+}
+
+/* Estilo dos botões */
+button {
+    background-color: #d99aab;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    min-width: 320px;
+}
+
+/* Efeito ao passar o mouse sobre o botão */
+button:hover {
+    background-color: #c88397;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Contêiner para os corações flutuantes */
+.emoji-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Permite clicar através dos corações */
+    z-index: 1;
+}
+
+/* Estilo base para cada coração criado pelo JavaScript */
+.emoji {
+    position: absolute;
+    user-select: none;
+    opacity: 0; /* Começa invisível, a animação controla a opacidade */
+}
+
+/* Animação de flutuação e pulsação para os corações */
+@keyframes pulsingFloat {
+    0%, 100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 0.4; /* Opacidade nos pontos de descanso */
+    }
+    50% {
+        transform: translateY(-20px) scale(1.1) rotate(5deg); /* Move para cima, aumenta e gira */
+        opacity: 0.7; /* Mais visível no pico da animação */
+    }
+}
+/* ================================= */
+/*  NOVO: Estilo do Botão de Voltar  */
+/* ================================= */
+.back-button {
+    position: fixed; /* Fica fixo na tela mesmo com rolagem */
+    top: 25px;
+    left: 25px;
+    z-index: 100; /* Garante que fique acima de todos os outros elementos */
+    
+    /* Estilo visual */
+    background: linear-gradient(135deg, #f8bbd0, #e793b3); /* Gradiente rosa suave */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px; /* Totalmente arredondado */
+    text-decoration: none; /* Remove o sublinhado do link */
+    font-weight: 600;
+    font-size: 1rem;
+    
+    /* Sombra e borda delicadas */
+    box-shadow: 0 4px 15px rgba(217, 154, 171, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+
+    /* Efeito de transição suave */
+    transition: all 0.3s ease-in-out;
+}
+
+.back-button:hover {
+    background: linear-gradient(135deg, #e793b3, #f8bbd0); /* Inverte o gradiente */
+    transform: translateY(-3px) scale(1.05); /* Leve pulo e aumento */
+    box-shadow: 0 6px 20px rgba(217, 154, 171, 0.6);
+    border-color: white;
+}
+

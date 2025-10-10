@@ -45,7 +45,7 @@
     <main>
         <div class="carrinho-container">
             <div class="logo-box">
-                <img src="../images/logo.jpg" alt="Logo Lindos Detalhes">
+                <img src="../images/logo.jpg" alt="Logo Lindos Detalles">
                 <h1 class="logo-text">LINDOS DETALLES</h1>
                 <div class="carrinho-subtitle">Seu carrinho de flores e presentes 💐</div>
             </div>
@@ -53,32 +53,17 @@
                 <h2>Meu Carrinho <span class="cart-emoji">🛒💖</span></h2>
                 <p>Veja os produtos escolhidos para encantar alguém especial!</p>
             </div>
-            <div class="carrinho-itens">
-                <!-- Exemplo de item no carrinho -->
-                <div class="item-carrinho">
-                    <img src="../images/exemplo-flor.jpg" alt="Buquê Elegante" class="item-imagem">
-                    <div class="item-info">
-                        <h3>Buquê Elegante</h3>
-                        <p class="item-descricao">Rosas, lírios e detalhes românticos</p>
-                        <div class="item-quantidade">
-                            <button class="btn-quantidade">-</button>
-                            <span>1</span>
-                            <button class="btn-quantidade">+</button>
-                        </div>
-                    </div>
-                    <div class="item-preco">R$ 78,90</div>
-                    <button class="btn-remover">Remover 💔</button>
-                </div>
-                <!-- Fim exemplo -->
-
-                <!-- Adicione outros itens do carrinho aqui -->
+            <!-- Aqui os itens do carrinho serão exibidos pelo JS -->
+            <div class="carrinho-itens" id="carrinho-lista">
+                <!-- Itens do carrinho vão aparecer aqui dinamicamente -->
             </div>
             <div class="carrinho-total">
                 <span>Total:</span>
-                <span class="total-valor">R$ 78,90</span>
+                <span class="total-valor">R$ 0,00</span>
             </div>
             <button class="btn-finalizar">Finalizar pedido 💗</button>
         </div>
     </main>
+    <script src="../js/carrinho.js"></script>
 </body>
 </html>

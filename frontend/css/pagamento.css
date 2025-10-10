@@ -1,0 +1,225 @@
+/* Importando a fonte do seu exemplo para consistência */
+@import url('https://fonts.googleapis.com/css2?family=Your+Chosen+Font&display=swap' ); /* Substitua 'Your+Chosen+Font' se usar uma específica */
+
+/* Reset e configurações básicas */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #eee2e6 0%, #d83976 50%, #f8f6f7 100%);
+    color: #613020;
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Botão de Voltar (estilo do seu exemplo) */
+.back-button {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    background: linear-gradient(135deg, #e793b3, #da094f);
+    color: rgb(253, 245, 245);
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.3);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+.back-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(236, 64, 122, 0.5);
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 4rem 1rem 2rem 1rem;
+    color: rgb(243, 239, 240);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+}
+header h1 { font-size: 2.5rem; }
+.subtitle { font-size: 1.2rem; font-style: italic; opacity: 0.9; }
+
+/* Conteúdo Principal */
+main {
+    max-width: 700px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.payment-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(236, 64, 122, 0.15);
+    border: 2px solid rgba(244, 143, 177, 0.3);
+}
+.payment-section h2 {
+    color: #ec407a;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-bottom: 3px solid #f48fb1;
+    padding-bottom: 0.8rem;
+}
+
+/* Opções de Pagamento (Botões) */
+.payment-options {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.payment-option {
+    flex: 1;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 2px solid #f8bbd0;
+    background-color: #fff0f5;
+    color: #c2185b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.payment-option:hover {
+    border-color: #ec407a;
+    background-color: #fce4ec;
+}
+.payment-option.active {
+    background: linear-gradient(135deg, #ec407a, #f06292);
+    color: white;
+    border-color: #ec407a;
+    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.3);
+}
+
+/* Detalhes do Pagamento (Conteúdo dinâmico) */
+.payment-details {
+    display: none; /* Escondido por padrão */
+    animation: fadeIn 0.5s ease;
+}
+.payment-details.active {
+    display: block; /* Visível quando ativo */
+}
+
+/* Formulário do Cartão */
+#form-cartao .form-group { margin-bottom: 1rem; }
+#form-cartao label { display: block; font-weight: 600; color: #c2185b; margin-bottom: 0.5rem; }
+#form-cartao input {
+    width: 100%;
+    padding: 0.9rem;
+    border: 2px solid #dd5b9c;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+#form-cartao input:focus {
+    outline: none;
+    border-color: #ec407a;
+    box-shadow: 0 0 0 4px rgba(236, 64, 122, 0.15);
+}
+.form-row { display: flex; gap: 1rem; }
+
+/* Seção Pix e Boleto */
+#content-pix, #content-boleto { text-align: center; }
+.qr-code-container {
+    margin: 1rem auto;
+    padding: 1rem;
+    background: white;
+    border-radius: 10px;
+    display: inline-block;
+    border: 2px solid #f8bbd0;
+}
+.pix-status { font-weight: bold; color: #c2185b; margin-top: 1rem; }
+.info-text { font-size: 0.9rem; color: #888; margin-top: 1rem; }
+
+/* Botões de Ação */
+.finalize-button-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+.btn-primary, .btn-secondary {
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.2);
+}
+.btn-primary {
+    background: linear-gradient(135deg, #ffc1e3, #e76597);
+    color: #880e4f;
+}
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(231, 147, 179, 0.5);
+}
+.btn-secondary {
+    background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+    color: #c2185b;
+}
+
+/* Animação de Fade In */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Rodapé */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    color: #ad1457;
+    font-weight: 500;
+}
+
+/* ===================================== */
+/*  NOVO: Estilo dos Corações Flutuantes */
+/* ===================================== */
+.floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Permite clicar através dos corações */
+    z-index: 1; /* Garante que fiquem no fundo */
+}
+
+.heart {
+    position: absolute;
+    user-select: none;
+    font-size: 1.5rem; /* Tamanho base do coração */
+    color: #ff6b9d; /* Cor rosa principal, como no exemplo */
+    
+    /* Animação será definida pelo JS */
+    animation: float 8s ease-in-out infinite;
+}
+
+/* Animação de flutuação suave, inspirada no seu exemplo */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) scale(1) rotate(0deg);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translateY(-25px) scale(1.15) rotate(8deg);
+        opacity: 0.75;
+    }
+}
+

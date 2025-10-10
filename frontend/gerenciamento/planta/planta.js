@@ -3,11 +3,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const API_BASE_URL = 'http://localhost:3000'; // Ajuste a porta se necessário
     let operacao = null; // Controla a ação atual: 'incluir', 'alterar', 'excluir'
 
-    // --- ELEMENTOS DO DOM ---
-    const form = document.getElementById('cargoForm');
-    const searchIdInput = document.getElementById('searchIdCargo');
-    const nomeCargoInput = document.getElementById('nome_cargo');
-    const cargoTableBody = document.getElementById('cargoTableBody');
+    // --- ELEMENTOS DO DOM --- aqui foi a primeira coisa que eu mexi
+    const form = document.getElementById('plantaForm');
+    const searchIdInput = document.getElementById('searchIdPlanta');
+    const nome_popular_input = document.getElementById('nome_popular');
+    const nome_cientifico_input = document.getElementById('nome_cientifico');
+    const especie_input = document.getElementById('especie');
+    const descricao_input = document.getElementById('descricao');
+    const preco_unitario_input = document.getElementById('preco_unitario');
+    const quantidade_estoque_input = document.getElementById('quantidade_estoque');
+
+
+
+    const plantaTableBody = document.getElementById('plantaTableBody');
     const messageContainer = document.getElementById('messageContainer');
 
     // Botões
@@ -47,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const configurarEstadoInicial = () => {
         form.reset();
         operacao = null;
-        nomeCargoInput.disabled = true;
+        nome_popular_input.disabled = true;
         searchIdInput.disabled = false;
         gerenciarBotoes({}); // Esconde todos os botões de ação
         searchIdInput.focus();
@@ -56,52 +64,73 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FUNÇÕES DE LÓGICA E API ---
 
     /**
-     * Carrega e renderiza todos os cargos na tabela.
+     * Carrega e renderiza todos os plantas na tabela.
      */
-    const carregarCargos = async () => {
+    const carregarPlantas = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/cargo`);
-            if (!response.ok) throw new Error('Falha ao carregar cargos.');
-            const cargos = await response.json();
-            
-            cargoTableBody.innerHTML = '';
-            cargos.forEach(cargo => {
+            const response = await fetch(`${API_BASE_URL}/planta`);
+            if (!response.ok) throw new Error('Falha ao carregar plantas.');
+            const plantas = await response.json();
+
+            plantaTableBody.innerHTML = '';
+            plantas.forEach(planta => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${cargo.id_cargo}</td><td>${cargo.nome_cargo}</td>`;
+                row.innerHTML =
+                //aqui foi a segunda coisa que eu mexi
+                    `<td>${planta.id_planta}</td>
+                <td>${planta.nome_popular}</td>
+                <td>${planta.nome_cientifico}</td>
+                <td>${planta.especie}</td>
+                <td>${planta.descricao}</td>
+                <td>${planta.preco_unitario}</td>
+                <td>${planta.quantidade_estoque}</td>`
+
+
+
+
+                    ;
                 row.onclick = () => {
-                    searchIdInput.value = cargo.id_cargo;
-                    buscarCargo();
+                    searchIdInput.value = planta.id_planta;
+                    buscarPlanta();
                 };
-                cargoTableBody.appendChild(row);
+                plantaTableBody.appendChild(row);
             });
         } catch (error) {
             mostrarMensagem(error.message);
         }
     };
-    
+
     /**
-     * Busca um cargo pelo ID e atualiza a interface de acordo.
+     * Busca um planta pelo ID e atualiza a interface de acordo.
      */
-    const buscarCargo = async () => {
+    const buscarPlanta = async () => {
         const id = searchIdInput.value;
         if (!id) {
             mostrarMensagem('Por favor, digite um ID para buscar.');
             return;
         }
-
+              //aqui foi a terceira coisa que eu fiz
         try {
-            const response = await fetch(`${API_BASE_URL}/cargo/${id}`);
+            const response = await fetch(`${API_BASE_URL}/planta/${id}`);
             if (response.ok) {
-                const cargo = await response.json();
-                nomeCargoInput.value = cargo.nome_cargo;
+                const planta = await response.json();
+                nome_popular_input.value = planta.nome_popular;
+                nome_cientifico_input.value = planta.nome_cientifico;
+                especie_input.value = planta.especie;
+                descricao_input.value = planta.descricao;
+                preco_unitario_input.value = planta.preco_unitario;
+                quantidade_estoque_input.value = planta.quantidade_estoque;
+
+
+
                 gerenciarBotoes({ alterar: true, excluir: true }); // Encontrou: mostra Alterar e Excluir
-                mostrarMensagem(`Cargo "${cargo.nome_cargo}" encontrado!`);
+                mostrarMensagem(`Planta "${planta.nome_popular}" encontrado!`);
             } else if (response.status === 404) {
-                nomeCargoInput.value = '';
+                nomePlantaInput.value = '';
                 gerenciarBotoes({ incluir: true }); // Não encontrou: mostra Incluir
-                mostrarMensagem('Cargo não encontrado. Você pode incluir um novo.');
+                mostrarMensagem('Planta não encontrado. Você pode incluir um novo.');
             } else {
-                throw new Error('Erro ao buscar o cargo.');
+                throw new Error('Erro ao buscar o planta.');
             }
         } catch (error) {
             mostrarMensagem(error.message);
@@ -110,33 +139,33 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
-     * Prepara a UI para a inclusão de um novo cargo.
+     * Prepara a UI para a inclusão de um novo planta.
      */
     const prepararInclusao = () => {
         operacao = 'incluir';
-        nomeCargoInput.disabled = false;
-        nomeCargoInput.value = '';
-        nomeCargoInput.focus();
+        nomePlantaInput.disabled = false;
+        nomePlantaInput.value = '';
+        nomePlantaInput.focus();
         gerenciarBotoes({ salvar: true });
-        mostrarMensagem('Digite o nome do novo cargo e clique em Salvar.');
+        mostrarMensagem('Digite o nome do novo planta e clique em Salvar.');
     };
 
     /**
-     * Prepara a UI para a alteração de um cargo existente.
+     * Prepara a UI para a alteração de um planta existente.
      */
     const prepararAlteracao = () => {
         operacao = 'alterar';
-        nomeCargoInput.disabled = false;
-        nomeCargoInput.focus();
+        nomePlantaInput.disabled = false;
+        nomePlantaInput.focus();
         gerenciarBotoes({ salvar: true });
-        mostrarMensagem('Altere o nome do cargo e clique em Salvar.');
+        mostrarMensagem('Altere o nome do planta e clique em Salvar.');
     };
 
     /**
-     * Prepara a UI para a exclusão de um cargo.
+     * Prepara a UI para a exclusão de um planta.
      */
     const prepararExclusao = () => {
-        if (confirm(`Tem certeza que deseja excluir o cargo ID ${searchIdInput.value}?`)) {
+        if (confirm(`Tem certeza que deseja excluir o planta ID ${searchIdInput.value}?`)) {
             operacao = 'excluir';
             salvarOperacao(); // Chama o salvamento direto para a exclusão
         }
@@ -147,23 +176,23 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     const salvarOperacao = async () => {
         const id = searchIdInput.value;
-        const nome = nomeCargoInput.value;
+        const nome = nomePlantaInput.value;
 
         if ((operacao === 'incluir' || operacao === 'alterar') && !nome) {
-            mostrarMensagem('O nome do cargo não pode ser vazio.');
+            mostrarMensagem('O nome do planta não pode ser vazio.');
             return;
         }
 
-        let url = `${API_BASE_URL}/cargo`;
-        let method = 'POST';
-        let body = { id_cargo: id, nome_cargo: nome };
+        let url = `${API_BASE_URL}/planta`;
+        let method = 'POST'; //aqui foi a 4 coisa que eu fiz
+        let body = { id_planta: id, nome_popular: nome_popular, nome_cientifico: nome_cientifico, especie: especie, descricao: descricao, preco_unitario: preco_unitario, quantidade_estoque: quantidade_estoque };
 
         if (operacao === 'alterar') {
-            url = `${API_BASE_URL}/cargo/${id}`;
-            method = 'PUT';
-            body = { nome_cargo: nome };
+            url = `${API_BASE_URL}/planta/${id}`;
+            method = 'PUT'; //aqui foi a 5 coisa que eu fiz
+            body = { nome_popular: nome_popular, nome_cientifico: nome_cientifico, especie: especie, descricao: descricao, preco_unitario: preco_unitario, quantidade_estoque: quantidade_estoque };
         } else if (operacao === 'excluir') {
-            url = `${API_BASE_URL}/cargo/${id}`;
+            url = `${API_BASE_URL}/planta/${id}`;
             method = 'DELETE';
             body = undefined; // DELETE não tem corpo
         }
@@ -179,10 +208,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const erro = await response.json();
                 throw new Error(erro.error || `Falha na operação de ${operacao}.`);
             }
-            
-            mostrarMensagem(`Cargo ${operacao} com sucesso!`);
+
+            mostrarMensagem(`Planta ${operacao} com sucesso!`);
             configurarEstadoInicial();
-            carregarCargos();
+            carregarPlantas();
 
         } catch (error) {
             mostrarMensagem(error.message);
@@ -190,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- EVENT LISTENERS ---
-    btnBuscar.addEventListener('click', buscarCargo);
+    btnBuscar.addEventListener('click', buscarPlanta);
     btnCancelar.addEventListener('click', configurarEstadoInicial);
     btnIncluir.addEventListener('click', prepararInclusao);
     btnAlterar.addEventListener('click', prepararAlteracao);
@@ -199,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INICIALIZAÇÃO ---
     configurarEstadoInicial();
-    carregarCargos();
+    carregarPlantas();
     createFloatingHearts(); // Função para criar os corações
 });
 

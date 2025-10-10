@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciamento de Cargos - Lindos Detalles</title>
+    <link rel="stylesheet" href="cargo.css">
+</head>
+<body>
+    <a href="#" onclick="history.back(); return false;" class="back-button">← Voltar</a>
+
+    <div class="floating-hearts"></div>
+
+    <header>
+        <h1>Gerenciamento de Cargos</h1>
+        <p>Lindos Detalles</p>
+    </header>
+
+    <main>
+        <form id="cargoForm" autocomplete="off">
+            <div class="search-container">
+                <label for="searchIdCargo">Buscar Cargo por ID</label>
+                <div class="input-group">
+                    <input type="number" id="searchIdCargo" placeholder="Digite o ID">
+                    <button type="button" id="btnBuscar">🔍 Buscar</button>
+                    <button type="button" id="btnCancelar" class="cancel-button">Limpar</button>
+                </div>
+            </div>
+
+            <fieldset id="formFields">
+                <legend>Dados do Cargo</legend>
+                <div class="form-group">
+                    <label for="nome_cargo">Nome do Cargo</label>
+                    <input type="text" id="nome_cargo" name="nome_cargo" required disabled>
+                </div>
+            </fieldset>
+
+            <div class="button-group">
+                <button type="button" id="btnIncluir" style="display: none;">🌸 Incluir Novo Cargo</button>
+                <button type="button" id="btnAlterar" style="display: none;">✏️ Alterar Cargo</button>
+                <button type="button" id="btnExcluir" style="display: none;">🗑️ Excluir Cargo</button>
+                <button type="button" id="btnSalvar" style="display: none;">💖 Salvar Alterações</button>
+            </div>
+        </form>
+
+        <section class="list-section">
+            <div class="table-container">
+                <table id="cargoTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome do Cargo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cargoTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Lindos Detalhes</p>
+    </footer>
+
+    <div id="messageContainer"></div>
+
+    <script src="cargo.js"></script>
+</body>
+</html>

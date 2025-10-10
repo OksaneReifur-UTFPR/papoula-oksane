@@ -1,126 +1,33 @@
-// Lista de produtos do seu projeto original
-const produtos = [
-  {
-    nome: "Muda de Cosmos Chocolate",
-    preco: "R$ 15,00",
-    descricao: "(Cosmos atrosanguineus) Uma flor de aroma de chocolate, originária do México, com pétalas de cor marrom-avermelhada intensa.",
-    imagem: "../images/cosmoschocolate.jpg"
-  },
-  {
-    nome: "Muda de Girassol",
-    preco: "R$ 12,00",
-    descricao: "(Helianthus annuus) é uma planta ornamental e produtiva. Suas grandes flores amarelas seguem o movimento do sol e são muito utilizadas em jardins e para produção de sementes.",
-    imagem: "../images/girassol.jpg"
-  },
-  {
-    nome: "Muda de Rosa Rubra",
-    preco: "R$ 13,00",
-    descricao: "(Rosa spp.) é uma planta ornamental clássica e muito apreciada. Suas flores vermelhas vibrantes simbolizam amor e beleza, sendo usadas em jardins e arranjos.",
-    imagem: "../images/rosa-rubra.jpg"
-  },
-  {
-    nome: "Muda de Aconito",
-    preco: "R$ 14,00",
-    descricao: "(Aconitum napellus) é uma planta ornamental de clima frio. Produz flores em forma de elmo, geralmente azul-violeta, mas é altamente tóxica.",
-    imagem: "../images/aconito.jpg"
-  },
-  {
-    nome: "Muda de Afelandra Coral",
-    preco: "R$ 15,00",
-    descricao: "(Aphelandra sinclairiana) é um arbusto tropical ornamental. Suas flores em tons de coral a alaranjado se destacam entre as folhas verdes brilhantes.",
-    imagem: "../images/afelandra-coral.jpg"
-  },
-  {
-    nome: "Muda de Anemona",
-    preco: "R$ 16,00",
-    descricao: "(Anemone coronaria) é uma flor ornamental muito apreciada. Apresenta pétalas coloridas e delicadas, geralmente em tons de vermelho, rosa, roxo ou white.",
-    imagem: "../images/anemona.jpg"
-  },
-  {
-    nome: "Muda de Begonia Negra",
-    preco: "R$ 17,00",
-    descricao: "(Begonia pavonina) é uma planta ornamental rara. Destaca-se por suas folhas escuras e brilhantes que refletem tons azulados sob a luz.",
-    imagem: "../images/begonia-negra.jpg"
-  },
-  {
-    nome: "Muda de Beldroega Grande",
-    preco: "R$ 18,00",
-    descricao: "(Portulaca oleracea) é uma planta suculenta de crescimento rasteiro. Possui folhas carnudas e flores pequenas, usada tanto como ornamental quanto na alimentação.",
-    imagem: "../images/beldroega-grande.jpg"
-  },
-  {
-    nome: "Muda de Chapeu Chines",
-    preco: "R$ 19,00",
-    descricao: "(Holmskioldia sanguinea) é um arbusto ornamental. Suas flores em forma de chapéu apresentam tons alaranjados a vermelhos bem marcantes.",
-    imagem: "../images/chapeu-chines.jpg"
-  },
-  {
-    nome: "Muda de Cipo de Sao Joao",
-    preco: "R$ 20,00",
-    descricao: "(Pyrostegia venusta) Um cipó com flores de um laranja intenso que florescem na estação seca, como se fossem chamas.",
-    imagem: "../images/cipo-de-sao-joao.jpg"
-  },
-  {
-    nome: "Muda de Crossandra",
-    preco: "R$ 21,00",
-    descricao: "(Crossandra infundibuliformis) é uma planta tropical ornamental. Suas flores em tons de laranja ou vermelho têm pétalas delicadas em formato de leque.",
-    imagem: "../images/crossandra.jpg"
-  },
-  {
-    nome: "Muda de Escovinha",
-    preco: "R$ 22,00",
-    descricao: "(Callistemon spp.) é um arbusto ornamental originário da Austrália. Destaca-se por suas flores em forma de escova, geralmente vermelhas, atraindo pássaros e beija-flores.",
-    imagem: "../images/escovinha.jpg"
-  },
-  {
-    nome: "Muda de Espirradeira",
-    preco: "R$ 23,00",
-    descricao: "(Nerium oleander) é um arbusto ornamental resistente. Apresenta flores vistosas em tons de rosa, white ou vermelho, mas todas as partes da planta são tóxicas.",
-    imagem: "../images/espirradeira.jpg"
-  },
-  {
-    nome: "Muda de Heliconia",
-    preco: "R$ 24,00",
-    descricao: "(Heliconia spp.) é uma planta tropical ornamental. Suas flores coloridas e exóticas, em tons de vermelho, laranja ou amarelo, atraem beija-flores.",
-    imagem: "../images/heliconia.jpg"
-  },
-  {
-    nome: "Muda de Jacaranda",
-    preco: "R$ 25,00",
-    descricao: "(Jacaranda mimosifolia) é uma árvore ornamental de clima tropical e subtropical. Produz flores roxas em cachos vistosos, muito apreciadas por sua beleza e sombra.",
-    imagem: "../images/jacaranda.jpg"
-  },
-  {
-    nome: "Muda de Flor de Sao Jose",
-    preco: "R$ 26,00",
-    descricao: "(Saxifraga stolonifera) é uma planta ornamental de folhas arredondadas e flores delicadas. Produz pequenas flores white com detalhes rosados, sendo muito usada em jardins e vasos suspensos.",
-    imagem: "../images/flor-de-sao-jose.jpg"
-  },
-  {
-    nome: "Muda de Orquidea Fantasma",
-    preco: "R$ 27,00",
-    descricao: "(Dendrophylax lindenii) Uma orquídea sem clorofila, dependente de fungos, que floresce em pântanos da América do Norte, mas sua raridade a torna pouco conhecida.",
-    imagem: "../images/orquideafantasma.jpg"
-  },
-  {
-    nome: "Muda de Vine Jade",
-    preco: "R$ 28,00",
-    descricao: "(Strongylodon macrobotrys) é uma trepadeira tropical ornamental. Suas flores em cachos pendentes exibem um tom raro de azul-turquesa brilhante.",
-    imagem: "../images/vinejade.jpg"
-  },
-  {
-    nome: "Muda de Flor de Carajás",
-    preco: "R$ 29,00",
-    descricao: "(Ipomoea cavalcantei) é uma trepadeira ornamental rara da Amazônia. Apresenta flores grandes em tons de vermelho vivo, sendo símbolo da região de Carajás.",
-    imagem: "../images/flordecarajás.jpeg"
-  },
-  {
-    nome: "Muda de Rosa Juliet",
-    preco: "R$ 30,00",
-    descricao: "(Rosa spp. – Juliet Rose) é uma das rosas mais famosas e valiosas do mundo. Destaca-se por suas pétalas em tom pêssego-rosado, com formato delicado e romântico.",
-    imagem: "../images/rosajulieta.jpeg"
+// EM SEU ARQUIVO produtos.js
+
+// ===================================================================================
+// SUBSTITUA A SUA FUNÇÃO 'exibeBotaoGerenciamento' POR ESTA VERSÃO ATUALIZADA
+// ===================================================================================
+function exibeBotaoGerenciamento() {
+  // 1. Pega o usuário do localStorage (você já fazia isso, está perfeito!)
+  //    Vamos assumir que ao fazer login, você salva algo como:
+  //    localStorage.setItem('usuario', JSON.stringify({ tipo: 'gerente' }));
+  const usuarioString = localStorage.getItem('usuario');
+
+  // 2. Verifica se existe um usuário salvo
+  if (usuarioString) {
+    // 3. Converte a string de volta para um objeto
+    const usuario = JSON.parse(usuarioString);
+
+    // 4. Encontra o botão que já existe no HTML pelo seu ID
+    const btnGerenciamento = document.getElementById('btn-gerenciamento');
+
+    // 5. Se o usuário for 'gerente' E o botão existir, torna o botão visível
+    if (usuario && usuario.tipo === 'gerente' && btnGerenciamento) {
+      btnGerenciamento.style.display = 'block'; // 'block' ou 'inline-block' funcionam bem aqui
+    }
   }
-];
+}
+// ===================================================================================
+
+
+
+
 
 // Função para exibir os produtos na tela
 function exibeProdutos() {
@@ -145,22 +52,104 @@ function exibeProdutos() {
   });
 }
 
-// Função para adicionar produto ao carrinho
-function adicionarAoCarrinho(nomeProduto) {
-  alert(`"${nomeProduto}" adicionado ao carrinho!`);
-  // Futuramente aqui você pode implementar localStorage ou integração com backend
+// ==================== CARRINHO NO LOCALSTORAGE ====================
+
+// Função para obter o carrinho do localStorage
+function getCarrinho() {
+  return JSON.parse(localStorage.getItem('carrinho')) || [];
 }
 
-// Função para criar corações flutuantes decorados
+// Função para salvar o carrinho no localStorage
+function setCarrinho(carrinho) {
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+}
+
+// ==================== PEDIDOS NO LOCALSTORAGE ====================
+
+// Função para obter pedidos salvos
+function getPedidos() {
+  return JSON.parse(localStorage.getItem('pedidos')) || [];
+}
+
+// Função para salvar pedidos
+function setPedidos(pedidos) {
+  localStorage.setItem('pedidos', JSON.stringify(pedidos));
+}
+
+
+// Função para atualizar o contador do carrinho no menu
+function atualizarContadorCarrinho() {
+  const carrinho = getCarrinho();
+  const count = carrinho.length;
+  const countSpan = document.getElementById('cart-count');
+  if (count > 0) {
+    countSpan.textContent = `(${count})`;
+  } else {
+    countSpan.textContent = '';
+  }
+}
+// ==================== PEDIDOS NO LOCALSTORAGE ====================
+
+// Função para obter pedidos salvos
+function getPedidos() {
+  return JSON.parse(localStorage.getItem('pedidos')) || [];
+}
+
+// Função para salvar pedidos
+function setPedidos(pedidos) {
+  localStorage.setItem('pedidos', JSON.stringify(pedidos));
+}
+
+
+// Função para mostrar recadinho carinhoso
+function mostrarMensagemCarinho(nomeProduto) {
+  const msgDiv = document.getElementById('cart-message');
+  msgDiv.className = 'cart-message';
+  msgDiv.innerHTML = `<span class="heart">💖</span> Que alegria, <b>${nomeProduto}</b> foi adicionado ao seu carrinho com amor! <span class="heart">💕</span>`;
+  msgDiv.style.display = 'flex';
+  setTimeout(() => {
+    msgDiv.style.display = 'none';
+  }, 2200);
+}
+
+ function adicionarAoCarrinho(nomeProduto) {
+  // Adiciona ao carrinho
+  const carrinho = getCarrinho();
+  carrinho.push(nomeProduto);
+  setCarrinho(carrinho);
+
+  // Também adiciona aos pedidos
+  const pedidos = getPedidos();
+  pedidos.push({
+    nome: nomeProduto,
+    data: new Date().toLocaleString('pt-BR')
+  });
+  setPedidos(pedidos);
+
+  // Mostra a mensagem carinhosa personalizada
+  const msgDiv = document.getElementById('cart-message');
+  msgDiv.className = 'cart-message';
+  msgDiv.innerHTML = `<span class="heart">💖</span> Seu pedido de <b>${nomeProduto}</b> foi adicionado com sucesso ao carrinho! <span class="heart">💕</span>`;
+  msgDiv.style.display = 'flex';
+
+  // Some depois de 2 segundos
+  setTimeout(() => {
+    msgDiv.style.display = 'none';
+  }, 2200);
+
+  // Atualiza contador do carrinho
+  atualizarContadorCarrinho();
+}
+
+// ==================== Corações flutuantes decorados ====================
 function createHearts() {
-  // Limpa corações antigos se estiver recarregando
   document.querySelector('.floating-hearts').innerHTML = '';
   document.querySelector('.side-hearts').innerHTML = '';
   const floating = document.querySelector('.floating-hearts');
   const side = document.querySelector('.side-hearts');
   const heartEmojis = ['💗', '💕', '💞', '💖'];
 
-  // Corações flutuantes centrais (quantidade, posições e delays como no cadastro)
+  // Corações flutuantes centrais
   const floatHearts = [
     {top: '8%', left: '2%', delay: '0s'},
     {top: '15%', right: '3%', delay: '1s'},
@@ -217,8 +206,9 @@ function createHearts() {
   });
 }
 
-// Inicializar a página quando carregar
 window.addEventListener('DOMContentLoaded', function() {
   exibeProdutos();
   createHearts();
+  atualizarContadorCarrinho();
+  exibeBotaoGerenciamento(); // Esta chamada já estava correta, mantenha-a!
 });

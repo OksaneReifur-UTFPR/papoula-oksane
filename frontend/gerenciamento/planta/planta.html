@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciamento de Plantas - Lindos Detalles</title>
+    <link rel="stylesheet" href="planta.css">
+</head>
+<body>
+    <a href="#" onclick="history.back(); return false;" class="back-button">← Voltar</a>
+
+    <div class="floating-hearts"></div>
+
+    <header>
+        <h1>Gerenciamento de Plantas</h1>
+        <p>Lindos Detalles</p>
+    </header>
+
+    <main>
+        <form id="plantaForm" autocomplete="off">
+            <div class="search-container">
+                <label for="searchIdPlanta">Buscar Planta por ID</label>
+                <div class="input-group">
+                    <input type="number" id="searchIdPlanta" placeholder="Digite o ID">
+                    <button type="button" id="btnBuscar">🔍 Buscar</button>
+                    <button type="button" id="btnCancelar" class="cancel-button">Limpar</button>
+                </div>
+            </div>
+          
+            <fieldset id="formFields">
+                <legend>Dados do Planta</legend> 
+                <div class="form-group">
+
+                     <label for="nome_popular">Nome popular da Planta</label>
+                    <input type="text" id="nome_popular" name="nome_popular" required disabled>
+                     <label for="nome_cientifico">Nome cientifico da Planta</label>
+                    <input type="text" id="nome_cientifico" name="nome_cientifico" required disabled>
+                    <label for="especie">Nome especie da Planta</label>
+                    <input type="text" id="especie" name="especie" required disabled>
+                     <label for="descricao">Nome descricao da Planta</label>
+                    <input type="text" id="descricao" name="descricao" required disabled>
+                     <label for="preco_unitario">Nome preco_unitario da Planta</label>
+                    <input type="text" id="preco_unitario" name="preco_unitario" required disabled>
+                     <label for="quantidade_estoque">Nome quantidade_estoque da Planta</label>
+                    <input type="text" id="quantidade_estoque" name="quantidade_estoque" required disabled>
+                </div>
+            </fieldset>
+
+            <div class="button-group">
+                <button type="button" id="btnIncluir" style="display: none;">🌸 Incluir Novo Planta</button>
+                <button type="button" id="btnAlterar" style="display: none;">✏️ Alterar Planta</button>
+                <button type="button" id="btnExcluir" style="display: none;">🗑️ Excluir Planta</button>
+                <button type="button" id="btnSalvar" style="display: none;">💖 Salvar Alterações</button>
+            </div>
+        </form>
+
+        <section class="list-section">
+            <div class="table-container">
+                <table id="plantaTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome popular</th>
+                            <th>Nome cientifico</th>
+                            <th> especie</th>
+                            <th>descricao</th>
+                            <th>preco</th>
+                            <th>qtd</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plantaTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Lindos Detalhes</p>
+    </footer>
+
+    <div id="messageContainer"></div>
+
+    <script src="planta.js"></script>
+</body>
+</html>

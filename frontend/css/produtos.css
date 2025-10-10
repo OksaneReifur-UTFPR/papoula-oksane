@@ -357,3 +357,62 @@ footer {
     .product-title { font-size: 1rem;}
     .product-info { padding: 14px 8px 10px 8px;}
 }
+
+/* ===== AVISO CARRINHO CARINHOSO ===== */
+.cart-message {
+  position: fixed;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--cor-branca);
+  border: 2px solid var(--cor-primaria);
+  color: var(--cor-primaria);
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.22rem;
+  padding: 1.1rem 2.2rem;
+  border-radius: 18px;
+  box-shadow: var(--sombra-hover);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  animation: fadeIn 0.5s;
+}
+.cart-message .heart {
+  font-size: 1.4em;
+  animation: heartBeat 2s infinite;
+}
+
+/* Contador do carrinho no menu */
+.cart-count {
+  background: var(--cor-primaria);
+  color: var(--cor-branca);
+  border-radius: 50%;
+  font-size: 0.96em;
+  padding: 2px 8px;
+  margin-left: 8px;
+  font-family: 'Poppins', sans-serif;
+  vertical-align: middle;
+  font-weight: bold;
+  box-shadow: 0 2px 8px #ffe4f1;
+  display: inline-block;
+}
+
+.btn-gerenciamento {
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, #ffb0d8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 0.9em 2.2em;
+  font-size: 1.13em;
+  font-family: 'Poppins', cursive, sans-serif;
+  font-weight: 700;
+  box-shadow: 0 2px 8px #ffe4f1;
+  cursor: pointer;
+  margin-bottom: 1em;
+  transition: background 0.18s, transform 0.15s;
+}
+.btn-gerenciamento:hover {
+  background: linear-gradient(135deg, #ffb0d8 0%, var(--cor-primaria) 100%);
+  transform: scale(1.05);
+}

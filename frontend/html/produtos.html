@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Recadinho carinhoso -->
+    <div id="cart-message" style="display:none"></div>
+
     <!-- Corações flutuantes decorativos -->
     <div class="floating-hearts"></div>
     <div class="side-hearts"></div>
@@ -17,18 +20,33 @@
     <header>
         <div class="header-container">
             <div class="logo-box">
-                <img src="../images/logo-lindos-detalles.png" alt="Logo Lindos Detalles">
+                <img src="../images/logo.jpg" alt="Logo Lindos Detalles">
                 <div class="logo-text">LINDOS DETALLES</div>
                 <div class="produtos-subtitle">Mudas de flores para encantar seu jardim</div>
             </div>
             <nav class="nav">
                 <ul class="nav__menu">
-                    <li><a href="index.html">Início</a></li>
+                    <li><a href="menu.html">Início</a></li>
                     <li><a href="produtos.html" class="active">Produtos</a></li>
                     <li><a href="sobre.html">Sobre</a></li>
                     <li><a href="contato.html">Contato</a></li>
+
+                    <!-- ===================================================================== -->
+                    <!-- BOTÃO DE GERENCIAMENTO ADICIONADO AQUI (COMEÇA ESCONDIDO) -->
+                    <!-- ===================================================================== -->
+                    <li>
+                        <a href="/frontend/gerenciamento/gerenciamento.html" id="btn-gerenciamento" style="display: none;">
+                            Gerenciamento
+                        </a>
+                    </li>
+                    <!-- ===================================================================== -->
+
                     <li><a href="cadastro.html">Cadastro</a></li>
-                    <li><a href="carrinho.html">Carrinho</a></li>
+                    <li>
+                        <a href="carrinho.html">
+                            Carrinho <span id="cart-count" class="cart-count"></span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
