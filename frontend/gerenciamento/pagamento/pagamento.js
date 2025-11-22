@@ -1,314 +1,346 @@
-// pagamento.js (versão alinhada com o HTML acima)
-const API_BASE_URL = 'http://localhost:3000';
+// =========================================================
+// pagamento.js - Código Completo
+// Implementa CRUD para Forma de Pagamento com controle de estado.
+// =========================================================
 
-let currentPersonId = null;
-let operacao = null;
+const API_BASE_URL = 'http://localhost:3000'; // Ajuste conforme a porta do seu servidor
 
-const form = document.getElementById('forma_pagamentoForm');
+let currentId = null;       // ID da forma de pagamento atualmente carregada
+let operacao = null;        // 'incluir' | 'alterar'
+
+// --- Elementos do DOM ---
 const searchId = document.getElementById('searchId');
+const nomeInput = document.getElementById('nome_forma_pagamento');
+
+// Botões
 const btnBuscar = document.getElementById('btnBuscar');
+const btnCancelar = document.getElementById('btnCancelar');
 const btnIncluir = document.getElementById('btnIncluir');
 const btnAlterar = document.getElementById('btnAlterar');
 const btnExcluir = document.getElementById('btnExcluir');
-const btnCancelar = document.getElementById('btnCancelar');
 const btnSalvar = document.getElementById('btnSalvar');
+
+// Listagem e Mensagens
 const forma_pagamentosTableBody = document.getElementById('forma_pagamentosTableBody');
 const messageContainer = document.getElementById('messageContainer');
 
-document.addEventListener('DOMContentLoaded', () => {
-    carregarForma_pagamentos();
-    initFloatingHearts();
+// =================================================================
+// FUNÇÕES DE CONTROLE DE ESTADO E UI (Interface)
+// =================================================================
 
-    btnBuscar.addEventListener('click', buscarForma_pagamento);
-    btnIncluir.addEventListener('click', incluirForma_pagamento);
-    btnAlterar.addEventListener('click', alterarForma_pagamento);
-    btnExcluir.addEventListener('click', excluirForma_pagamento);
-    btnCancelar.addEventListener('click', cancelarOperacao);
-    btnSalvar.addEventListener('click', salvarOperacao);
+/**
+ * Gerencia a visibilidade dos botões de ação.
+ */
+const gerenciarBotoes = ({ incluir = false, alterar = false, excluir = false, salvar = false }) => {
+    if (btnIncluir) btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
+    if (btnAlterar) btnAlterar.style.display = alterar ? 'inline-flex' : 'none';
+    if (btnExcluir) btnExcluir.style.display = excluir ? 'inline-flex' : 'none';
+    if (btnSalvar) btnSalvar.style.display = salvar ? 'inline-flex' : 'none';
+};
 
-    mostrarBotoes(true, true, false, false, false, false);
-    bloquearCampos(false);
-});
+/**
+ * Exibe uma mensagem de notificação temporária.
+ */
+const mostrarMensagem = (texto, tempo = 3500) => {
+    if (!messageContainer) return;
+    messageContainer.textContent = texto;
+    messageContainer.classList.add('show');
+    setTimeout(() => messageContainer.classList.remove('show'), tempo);
+};
 
-function mostrarMensagem(texto, tipo = 'info') {
-    messageContainer.innerHTML = `<div class="message ${tipo}">${texto}</div>`;
-    setTimeout(() => {
-        if (messageContainer.firstChild) messageContainer.innerHTML = '';
-    }, 3500);
+/**
+ * Habilita ou desabilita os campos comuns para edição.
+ */
+function setFormState(isEditable) {
+    nomeInput.disabled = !isEditable;
+    searchId.disabled = isEditable; // Desabilita busca se estiver editando
+
+    if (!isEditable) {
+        operacao = null;
+        gerenciarBotoes({}); // Limpa todos os botões
+    }
 }
 
-function bloquearCampos(bloquearPrimeiro) {
-    const inputs = Array.from(form.querySelectorAll('input, select, textarea'));
-    inputs.forEach((input, index) => {
-        if (index === 0) {
-            input.disabled = !!bloquearPrimeiro;
-        } else {
-            input.disabled = !bloquearPrimeiro;
-        }
-    });
-}
-
-function limparFormulario() {
-    form.reset();
-    currentPersonId = null;
+/**
+ * Reseta o formulário para o estado inicial de busca.
+ */
+function limparFormulario(clearSearch = true) {
+    currentId = null;
     operacao = null;
+    
+    // Limpa campos
+    if (clearSearch) searchId.value = '';
+    nomeInput.value = '';
+    
+    // Configura estado inicial (somente busca habilitada)
+    setFormState(false);
+    searchId.disabled = false;
+    searchId.focus();
+    
+    // Recarrega a lista
+    carregarForma_pagamentos();
 }
 
-function mostrarBotoes(btBuscar, btIncluir, btAlterar, btExcluir, btSalvar, btCancelar) {
-    btnBuscar.style.display = btBuscar ? 'inline-block' : 'none';
-    btnIncluir.style.display = btIncluir ? 'inline-block' : 'none';
-    btnAlterar.style.display = btAlterar ? 'inline-block' : 'none';
-    btnExcluir.style.display = btExcluir ? 'inline-block' : 'none';
-    btnSalvar.style.display = btSalvar ? 'inline-block' : 'none';
-    btnCancelar.style.display = btCancelar ? 'inline-block' : 'none';
-}
-
-// helper: retorna primeiro campo existente no objeto entre várias opções
-function getField(obj, ...names) {
-    if (!obj) return '';
-    for (const n of names) {
-        if (Object.prototype.hasOwnProperty.call(obj, n) && obj[n] !== undefined && obj[n] !== null) {
-            return obj[n];
-        }
-        // tentar variações simples (camelCase)
-        const camel = n.replace(/_([a-z])/g, g => g[1].toUpperCase());
-        if (Object.prototype.hasOwnProperty.call(obj, camel) && obj[camel] !== undefined && obj[camel] !== null) {
-            return obj[camel];
-        }
+/**
+ * Prepara o formulário para a inclusão de um novo registro.
+ */
+function prepararInclusao() {
+    if (searchId.value.trim() === '') {
+        mostrarMensagem('O ID (ou deixe o campo vazio para inclusão automática, se suportado pela API) precisa ser considerado para inclusão.');
+        // Se a API gerar ID, apenas limpe o campo e passe para edição
+        limparFormulario(true); 
+        currentId = null;
+    } else {
+        // Se o usuário digitou um ID, use-o
+        currentId = parseInt(searchId.value);
     }
-    return '';
-}
-
-async function buscarForma_pagamento() {
-    const id = (searchId.value || '').toString().trim();
-    if (!id) {
-        mostrarMensagem('Digite um ID para buscar', 'warning');
-        searchId.focus();
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/formaPagamento/${encodeURIComponent(id)}`);
-        if (response.ok) {
-            const forma_pagamento = await response.json();
-            preencherFormulario(forma_pagamento);
-            mostrarBotoes(true, false, true, true, false, true);
-            bloquearCampos(false);
-            mostrarMensagem('Forma de pagamento encontrada!', 'success');
-        } else if (response.status === 404) {
-            limparFormulario();
-            searchId.value = id; // manter o que o usuário digitou
-            mostrarBotoes(true, true, false, false, false, true);
-            bloquearCampos(true);
-            mostrarMensagem('Não encontrado. Você pode incluir um novo registro.', 'info');
-            const nomeField = document.getElementById('nome_forma_pagamento');
-            if (nomeField) nomeField.focus();
-        } else {
-            const txt = await response.text();
-            console.error('Erro ao buscar:', response.status, txt);
-            mostrarMensagem('Erro ao buscar forma de pagamento', 'error');
-        }
-    } catch (error) {
-        console.error('Erro:', error);
-        mostrarMensagem('Erro de conexão ao buscar forma de pagamento', 'error');
-    }
-}
-
-function preencherFormulario(forma_pagamento) {
-    if (!forma_pagamento) return;
-
-    // mapeamento tolerante a diferentes nomes vindos do servidor
-    const idVal = getField(forma_pagamento,
-        'id_forma_pagamento', 'id_formadepagamento', 'id', 'idFormaPagamento');
-    const nomeVal = getField(forma_pagamento,
-        'nome_forma_pagamento', 'nome_formadepagamento', 'nome', 'nomeFormaPagamento');
-
-    currentPersonId = idVal || null;
-
-    // proteger contra atribuição de undefined em inputs
-    searchId.value = (idVal !== undefined && idVal !== null) ? idVal : '';
-    const nomeField = document.getElementById('nome_forma_pagamento');
-    if (nomeField) nomeField.value = (nomeVal !== undefined && nomeVal !== null) ? nomeVal : '';
-}
-
-function incluirForma_pagamento() {
+    
+    nomeInput.value = '';
     operacao = 'incluir';
-    bloquearCampos(true);
-    mostrarBotoes(false, false, false, false, true, true);
-    const nomeField = document.getElementById('nome_forma_pagamento');
-    if (nomeField) { nomeField.value = ''; nomeField.focus(); }
-    mostrarMensagem('Preencha os dados e clique em Salvar.', 'info');
+    setFormState(true);
+    nomeInput.focus();
+    gerenciarBotoes({ salvar: true });
+    mostrarMensagem('Modo Inclusão: Preencha o nome e salve.');
 }
 
-function alterarForma_pagamento() {
-    if (!searchId.value) {
-        mostrarMensagem('Busque um registro antes de alterar.', 'warning');
+/**
+ * Prepara o formulário para a alteração de um registro existente.
+ */
+function prepararAlteracao() {
+    if (currentId === null) {
+        mostrarMensagem('Busque uma forma de pagamento primeiro para alterar.');
         return;
     }
     operacao = 'alterar';
-    bloquearCampos(true);
-    mostrarBotoes(false, false, false, false, true, true);
-    const nomeField = document.getElementById('nome_forma_pagamento');
-    if (nomeField) nomeField.focus();
-    mostrarMensagem('Altere os dados e clique em Salvar.', 'info');
+    setFormState(true);
+    nomeInput.focus();
+    // No modo alteração, a exclusão também deve ser possível
+    gerenciarBotoes({ salvar: true, excluir: true });
+    mostrarMensagem('Modo Alteração: Edite o nome e clique em Salvar.');
 }
 
-function excluirForma_pagamento() {
-    if (!searchId.value) {
-        mostrarMensagem('Busque um registro antes de excluir.', 'warning');
+/**
+ * Prepara para exclusão (apenas um passo de confirmação).
+ */
+function prepararExclusao() {
+    if (currentId === null) {
+        mostrarMensagem('Busque uma forma de pagamento primeiro para excluir.');
         return;
     }
-    operacao = 'excluir';
-    bloquearCampos(false);
-    mostrarBotoes(false, false, false, false, true, true);
-    mostrarMensagem('Clique em Salvar para confirmar exclusão.', 'warning');
+    excluirForma_pagamento();
 }
 
-async function salvarOperacao() {
-    const idRaw = (searchId.value || '').toString().trim();
-    const id = idRaw ? Number(idRaw) : null;
-    // usa name compatível com o HTML: nome_forma_pagamento
-    const nome = (new FormData(form)).get('nome_forma_pagamento') || '';
+// =================================================================
+// FUNÇÕES DE COMUNICAÇÃO COM A API (CRUD)
+// =================================================================
 
-    if ((operacao === 'incluir' || operacao === 'alterar') && (!nome || !nome.trim())) {
-        mostrarMensagem('Preencha o nome da forma de pagamento.', 'warning');
-        const nomeField = document.getElementById('nome_forma_pagamento');
-        if (nomeField) nomeField.focus();
+/**
+ * Busca uma forma de pagamento na API pelo ID.
+ */
+async function buscarForma_pagamento() {
+    const id = searchId.value.trim();
+    if (id === '') {
+        mostrarMensagem('Por favor, digite o ID para buscar ou clique em Limpar para incluir.');
+        limparFormulario(false);
         return;
     }
 
     try {
-        let response;
-        if (operacao === 'incluir') {
-            const payload = { nome_forma_pagamento: nome.trim() };
-            response = await fetch(`${API_BASE_URL}/forma_pagamento`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        } else if (operacao === 'alterar') {
-            if (id === null) { mostrarMensagem('ID inválido para alterar.', 'error'); return; }
-            const payload = { id_forma_pagamento: id, nome_forma_pagamento: nome.trim() };
-            response = await fetch(`${API_BASE_URL}/forma_pagamento/${encodeURIComponent(id)}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        } else if (operacao === 'excluir') {
-            if (id === null) { mostrarMensagem('ID inválido para excluir.', 'error'); return; }
-            response = await fetch(`${API_BASE_URL}/forma_pagamento/${encodeURIComponent(id)}`, {
-                method: 'DELETE'
-            });
+        const res = await fetch(`${API_BASE_URL}/forma_pagamento/${id}`);
+        
+        if (res.ok) {
+            const pagamento = await res.json();
+            currentId = pagamento.id_forma_pagamento;
+            
+            // Popula campos
+            nomeInput.value = pagamento.nome_forma_pagamento;
+            
+            // Estado de registro existente
+            setFormState(false);
+            gerenciarBotoes({ alterar: true, excluir: true });
+            mostrarMensagem(`Forma de Pagamento (ID ${currentId}) encontrada.`);
+        } else if (res.status === 404) {
+            // Não encontrado, prepara para inclusão com o ID digitado
+            currentId = parseInt(id);
+            prepararInclusao();
+            mostrarMensagem(`ID ${id} não encontrado. Preencha o nome para incluí-lo.`);
         } else {
-            mostrarMensagem('Nenhuma operação selecionada.', 'warning');
-            return;
+            throw new Error('Erro ao buscar forma de pagamento.');
         }
-
-        if (response.ok) {
-            mostrarMensagem(
-                operacao === 'incluir' ? 'Registro incluído!' :
-                operacao === 'alterar' ? 'Registro alterado!' : 'Registro excluído!',
-                'success'
-            );
-            limparFormulario();
-            carregarForma_pagamentos();
-            mostrarBotoes(true, true, false, false, false, false);
-            bloquearCampos(false);
-            searchId.focus();
-        } else {
-            let errMsg = `Erro: ${response.status}`;
-            try {
-                const errJson = await response.json();
-                errMsg = errJson.error || errJson.message || JSON.stringify(errJson);
-            } catch (e) {
-                const txt = await response.text();
-                if (txt) errMsg = txt;
-            }
-            console.error('Erro resposta:', response.status, errMsg);
-            mostrarMensagem(errMsg, 'error');
-        }
-    } catch (error) {
-        console.error('Erro na operação:', error);
-        mostrarMensagem('Erro de conexão ao realizar a operação', 'error');
-    } finally {
-        operacao = null;
+    } catch (err) {
+        mostrarMensagem(err.message || 'Erro de comunicação com o servidor.');
+        limparFormulario();
     }
 }
 
-function cancelarOperacao() {
-    limparFormulario();
-    mostrarBotoes(true, true, false, false, false, false);
-    bloquearCampos(false);
-    searchId.focus();
-    mostrarMensagem('Operação cancelada', 'info');
+
+/**
+ * Salva (inclui ou altera) o registro.
+ */
+async function salvarOperacao() {
+    if (operacao !== 'incluir' && operacao !== 'alterar') return;
+
+    const nome = nomeInput.value.trim();
+    
+    // Validação básica
+    if (!nome) {
+        mostrarMensagem('O Nome da Forma de Pagamento é obrigatório.');
+        return;
+    }
+
+    const isNew = operacao === 'incluir';
+    let msgSuccess = isNew ? 'Forma de Pagamento incluída com sucesso!' : 'Forma de Pagamento alterada com sucesso!';
+    
+    try {
+        const pagamentoData = {
+            nome_forma_pagamento: nome
+        };
+        
+        let method = isNew ? 'POST' : 'PUT';
+        let url = isNew ? `${API_BASE_URL}/forma_pagamento` : `${API_BASE_URL}/forma_pagamento/${currentId}`;
+        
+        // Se for inclusão e o ID foi preenchido, adiciona o ID no body (se a API suportar)
+        if (isNew && currentId !== null && !isNaN(currentId)) {
+             pagamentoData.id_forma_pagamento = currentId;
+        }
+
+        const res = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(pagamentoData)
+        });
+
+        if (!res.ok) {
+            const errorBody = await res.text();
+            throw new Error(`Falha na API: ${res.statusText}. Detalhe: ${errorBody.substring(0, 100)}...`);
+        }
+        
+        mostrarMensagem(msgSuccess);
+        limparFormulario();
+    } catch (error) {
+        mostrarMensagem(`Erro ao salvar: ${error.message}`);
+    }
 }
 
+
+/**
+ * Exclui a forma de pagamento pelo ID.
+ */
+async function excluirForma_pagamento() {
+    if (currentId === null) return;
+
+    if (!confirm(`Tem certeza que deseja EXCLUIR PERMANENTEMENTE a Forma de Pagamento ID ${currentId} (${nomeInput.value})?`)) {
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/forma_pagamento/${currentId}`, {
+            method: 'DELETE'
+        });
+
+        if (!res.ok) {
+            throw new Error('Falha ao excluir o registro.');
+        }
+
+        mostrarMensagem('Forma de Pagamento excluída com sucesso!');
+        limparFormulario();
+    } catch (err) {
+        mostrarMensagem(err.message || 'Erro ao tentar excluir a forma de pagamento.');
+    }
+}
+
+
+/**
+ * Carrega a lista de formas de pagamento para a tabela.
+ */
 async function carregarForma_pagamentos() {
     try {
-        const response = await fetch(`${API_BASE_URL}/forma_pagamento`);
-        if (!response.ok) throw new Error(`Status ${response.status}`);
-        const forma_pagamentos = await response.json();
-        renderizarTabelaForma_pagamentos(Array.isArray(forma_pagamentos) ? forma_pagamentos : []);
-    } catch (error) {
-        console.error('Erro ao carregar lista:', error);
-        mostrarMensagem('Erro ao carregar lista de formas de pagamento', 'error');
+        const res = await fetch(`${API_BASE_URL}/forma_pagamento`);
+        if (!res.ok) throw new Error('Falha ao carregar lista de formas de pagamento.');
+        const pagamentos = await res.json();
+        
+        forma_pagamentosTableBody.innerHTML = '';
+        
+        pagamentos.forEach(p => {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${escapeHtml(p.id_forma_pagamento)}</td>
+                <td>${escapeHtml(p.nome_forma_pagamento)}</td>
+            `;
+            // Adiciona evento de clique para carregar o registro na tabela
+            row.onclick = () => {
+                searchId.value = p.id_forma_pagamento;
+                buscarForma_pagamento();
+            };
+            forma_pagamentosTableBody.appendChild(row);
+        });
+    } catch (err) {
+        mostrarMensagem('Erro ao carregar lista: ' + err.message, 5000);
     }
 }
 
-function renderizarTabelaForma_pagamentos(forma_pagamentos) {
-    forma_pagamentosTableBody.innerHTML = '';
-    forma_pagamentos.forEach(forma_pagamento => {
-        const idVal = getField(forma_pagamento, 'id_forma_pagamento', 'id_formadepagamento', 'id');
-        const nomeVal = getField(forma_pagamento, 'nome_forma_pagamento', 'nome_formadepagamento', 'nome');
 
-        const row = document.createElement('tr');
+// =================================================================
+// FUNÇÕES AUXILIARES E INICIALIZAÇÃO
+// =================================================================
 
-        const tdId = document.createElement('td');
-        const btnId = document.createElement('button');
-        btnId.type = 'button';
-        btnId.className = 'btn-id';
-        btnId.textContent = (idVal !== undefined && idVal !== null) ? idVal : '';
-        btnId.addEventListener('click', () => selecionarForma_pagamento(idVal));
-        tdId.appendChild(btnId);
+/**
+ * Escapa HTML para prevenir XSS.
+ */
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>\"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"\'":'&#39;'}[m]));
+}
 
-        const tdNome = document.createElement('td');
-        tdNome.textContent = (nomeVal !== undefined && nomeVal !== null) ? nomeVal : '';
+/**
+ * Cria corações flutuantes para o efeito visual do tema.
+ */
+function createFloatingHearts() {
+    const container = document.querySelector('.floating-hearts');
+    if (!container) return;
+    const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨', '💖', '💕', '🌸', '💓', '💞']; 
+    for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+        // Posicionamento levemente lateral e com top variado para dar o efeito de flutuação
+        heart.style.left = `${Math.random() * 100}vw`; 
+        heart.style.top = `${5 + Math.random() * 90}vh`;
+        heart.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
+        heart.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(heart);
+    }
+}
 
-        row.appendChild(tdId);
-        row.appendChild(tdNome);
-        forma_pagamentosTableBody.appendChild(row);
+/**
+ * Associa todos os eventos aos elementos do DOM.
+ */
+function bindEvents() {
+    btnBuscar.addEventListener('click', buscarForma_pagamento);
+    btnCancelar.addEventListener('click', limparFormulario);
+    btnIncluir.addEventListener('click', prepararInclusao);
+    btnAlterar.addEventListener('click', prepararAlteracao);
+    btnExcluir.addEventListener('click', prepararExclusao);
+    btnSalvar.addEventListener('click', salvarOperacao);
+    
+    // permitir buscar ao pressionar Enter no campo de busca
+    searchId.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            buscarForma_pagamento();
+        }
     });
 }
 
-async function selecionarForma_pagamento(id) {
-    if (id === undefined || id === null) return;
-    searchId.value = id;
-    await buscarForma_pagamento();
+/**
+ * Função de inicialização principal.
+ */
+async function inicializar() {
+    bindEvents();
+    await carregarForma_pagamentos();
+    limparFormulario(); // Define o estado inicial após carregar os dados
+    createFloatingHearts();
 }
 
-function initFloatingHearts() {
-    const leftContainer = document.querySelector('.floating-hearts');
-    const rightContainer = document.querySelector('.side-hearts');
-    if (!leftContainer || !rightContainer) return;
-    const emojis = ['💝', '💕', '🩷', '💖', '💞', '💗'];
-    const LEFT_COUNT = 10, RIGHT_COUNT = 10;
-    createHearts(leftContainer, LEFT_COUNT, 'heart');
-    createHearts(rightContainer, RIGHT_COUNT, 'side-heart');
-    function createHearts(container, count, klass) {
-        container.innerHTML = '';
-        for (let i = 0; i < count; i++) {
-            const el = document.createElement('span');
-            el.className = klass;
-            el.setAttribute('aria-hidden', 'true');
-            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            el.style.left = Math.random() * 100 + '%';
-            el.style.top = Math.random() * 100 + '%';
-            const size = 12 + Math.random() * 28;
-            el.style.fontSize = size + 'px';
-            el.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
-            el.style.animationDelay = (Math.random() * 0.5) + 's';
-            el.style.filter = 'drop-shadow(0 2px 4px rgba(255, 107, 157, 0.4))';
-            container.appendChild(el);
-        }
-    }
-}
+// Inicia a aplicação ao carregar o DOM
+document.addEventListener('DOMContentLoaded', inicializar);

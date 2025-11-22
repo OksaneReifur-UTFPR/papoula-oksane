@@ -1,135 +1,180 @@
-/* Importa a fonte do Google Fonts para ser usada no h1 */
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap' );
+/* Gerenciamento - Tema unificado, delicado e romântico
+   Reescrito em 2025-11-22
+   - Mantém todas as classes existentes do HTML/JS (menu-container, button-wrapper, emoji-container, back-button, etc.)
+   - Tokens (variáveis) no :root para facilitar ajustes de cor/espacamento.
+   - Tipografia: Dancing Script para h1 (import presente abaixo).
+   - Animações suaves para corações (pulsingFloat) compatíveis com o JS.
+*/
 
-/* Estilo geral da página */
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden; /* Impede barras de rolagem */
+/* Fonte elegante para títulos */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+:root{
+  /* Paleta */
+  --pink-100: #fff0f5;
+  --pink-200: #fce4ec;
+  --pink-300: #f8bbd0;
+  --pink-400: #e793b3;
+  --accent: #ec407a;
+  --title: #b06a7e;
+  --text: #6d4c41;
+  --glass: rgba(255,255,255,0.55);
+
+  /* Espaçamentos e tamanhos */
+  --container-max: 1200px;
+  --radius-xl: 20px;
+  --radius-lg: 14px;
+  --btn-radius: 50px;
+  --shadow-soft: 0 8px 30px rgba(0,0,0,0.08);
+  --shadow-rose: 0 6px 20px rgba(231,147,179,0.15);
 }
 
-/* Define o logo como imagem de fundo da página */
-body {
-    background-image: url('images/logo-fundo.png'); 
-    background-color: #fdfaf6;
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Reset básico */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color:var(--text);
+  background-color: #fdfaf6;
+  /* Logo de fundo similar ao exemplo (preserve imagem no mesmo caminho) */
+  background-image: url('images/logo-fundo.png');
+  background-repeat:no-repeat;
+  background-position:center 10%;
+  background-size:contain;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden; /* mantém layout fixo como no exemplo */
+  -webkit-font-smoothing:antialiased;
 }
 
-/* Contêiner principal do menu */
-.menu-container {
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.5); /* Fundo semitransparente, sem desfoque */
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    z-index: 10; /* Garante que o menu fique sobre os corações */
+/* Menu/Container central */
+.menu-container{
+  width:min(92%,720px);
+  max-width:var(--container-max);
+  text-align:center;
+  background: var(--glass);
+  padding:36px 30px;
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-soft);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(236,64,122,0.06);
+  z-index:40;
 }
 
-/* Estilo para o título "O que será gerenciado hoje?" */
-h1 {
-    font-family: 'Dancing Script', cursive; /* Fonte cursiva e elegante */
-    color: #b06a7e; /* Tom de rosa escuro, combinando com o logo */
-    font-size: 2.5rem;
-    margin-top: 0;
-    margin-bottom: 30px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+/* Título principal — estilo romântico */
+.menu-container h1,
+h1{
+  font-family: 'Dancing Script', cursive;
+  color:var(--title);
+  font-size:2.6rem;
+  margin:0 0 22px 0;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.08);
+  line-height:1;
 }
 
-/* Agrupador para os botões */
-.button-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 25px; /* Espaçamento vertical entre os botões */
+/* Wrapper vertical de botões */
+.button-wrapper{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  align-items:center;
 }
 
-/* Estilo dos botões */
-button {
-    background-color: #d99aab;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    min-width: 320px;
+/* Botões principais */
+.button-wrapper button,
+.menu-container button{
+  appearance:none;
+  -webkit-appearance:none;
+  background: linear-gradient(135deg, var(--pink-300), var(--pink-400));
+  color:#fff;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding:14px 28px;
+  font-size:18px;
+  font-weight:700;
+  border-radius:var(--btn-radius);
+  cursor:pointer;
+  min-width:300px;
+  max-width:92%;
+  transition: transform .28s ease, box-shadow .28s ease, background .28s ease;
+  box-shadow: 0 6px 18px rgba(217,154,171,0.12);
 }
 
-/* Efeito ao passar o mouse sobre o botão */
-button:hover {
-    background-color: #c88397;
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+/* Hover e foco */
+.button-wrapper button:hover,
+.menu-container button:hover{
+  transform: translateY(-6px);
+  background: linear-gradient(135deg, #c88397, #e06f8f);
+  box-shadow: 0 12px 30px rgba(217,154,171,0.18);
+  outline:none;
 }
 
-/* Contêiner para os corações flutuantes */
-.emoji-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none; /* Permite clicar através dos corações */
-    z-index: 1;
+/* Botões responsivos (quando necessários) */
+.button-wrapper button:active{ transform: translateY(-3px) scale(0.997); }
+
+/* Emoji container (camada de corações controlada por JS) */
+.emoji-container{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  pointer-events:none;
+  z-index:10; /* atrás do menu */
+  overflow:hidden;
 }
 
-/* Estilo base para cada coração criado pelo JavaScript */
-.emoji {
-    position: absolute;
-    user-select: none;
-    opacity: 0; /* Começa invisível, a animação controla a opacidade */
+/* Classe aplicada em cada emoji gerado pelo JS */
+.emoji{
+  position:absolute;
+  user-select:none;
+  opacity:0; /* animação controla a opacidade */
+  will-change: transform, opacity;
+  filter: drop-shadow(0 4px 10px rgba(231,147,179,0.14));
 }
 
-/* Animação de flutuação e pulsação para os corações */
-@keyframes pulsingFloat {
-    0%, 100% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        opacity: 0.4; /* Opacidade nos pontos de descanso */
-    }
-    50% {
-        transform: translateY(-20px) scale(1.1) rotate(5deg); /* Move para cima, aumenta e gira */
-        opacity: 0.7; /* Mais visível no pico da animação */
-    }
-}
-/* ================================= */
-/*  NOVO: Estilo do Botão de Voltar  */
-/* ================================= */
-.back-button {
-    position: fixed; /* Fica fixo na tela mesmo com rolagem */
-    top: 25px;
-    left: 25px;
-    z-index: 100; /* Garante que fique acima de todos os outros elementos */
-    
-    /* Estilo visual */
-    background: linear-gradient(135deg, #f8bbd0, #e793b3); /* Gradiente rosa suave */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 50px; /* Totalmente arredondado */
-    text-decoration: none; /* Remove o sublinhado do link */
-    font-weight: 600;
-    font-size: 1rem;
-    
-    /* Sombra e borda delicadas */
-    box-shadow: 0 4px 15px rgba(217, 154, 171, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-
-    /* Efeito de transição suave */
-    transition: all 0.3s ease-in-out;
+/* Animação delicada: flutua e pulsa */
+@keyframes pulsingFloat{
+  0%,100%{ transform: translateY(0) scale(1) rotate(0deg); opacity:0.38; }
+  50%{ transform: translateY(-22px) scale(1.08) rotate(4deg); opacity:0.78; }
 }
 
-.back-button:hover {
-    background: linear-gradient(135deg, #e793b3, #f8bbd0); /* Inverte o gradiente */
-    transform: translateY(-3px) scale(1.05); /* Leve pulo e aumento */
-    box-shadow: 0 6px 20px rgba(217, 154, 171, 0.6);
-    border-color: white;
+/* Back button (mesma aparência do exemplo) */
+.back-button{
+  position:fixed;
+  top:22px;
+  left:22px;
+  z-index:120;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 20px;
+  background: linear-gradient(135deg, var(--pink-300), var(--pink-400));
+  color:#fff;
+  text-decoration:none;
+  border-radius:50px;
+  font-weight:600;
+  font-size:1rem;
+  border: 2px solid rgba(255,255,255,0.6);
+  box-shadow:var(--shadow-rose);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.back-button:hover{ transform: translateY(-4px) scale(1.04); box-shadow: 0 10px 28px rgba(217,154,171,0.22); }
+
+/* Ajustes visuais menores para acessibilidade */
+.menu-container button:focus, .back-button:focus { outline: 3px solid rgba(231,147,179,0.18); outline-offset: 2px; }
+
+/* Responsividade */
+@media (max-width:900px){
+  .menu-container{ padding:28px 20px; width:min(94%,620px); }
+  h1{ font-size:2.2rem; }
+  .button-wrapper{ gap:16px; }
+  .button-wrapper button{ min-width:240px; padding:12px 20px; font-size:16px; }
 }
 
+/* Pequenas otimizações para telas pequenas */
+@media (max-width:480px){
+  body{ background-position: center 6%; background-size: 300px; }
+  .menu-container{ width:92%; padding:22px; border-radius:16px; }
+  h1{ font-size:1.8rem; }
+  .button-wrapper button{ min-width:unset; width:100%; }
+}

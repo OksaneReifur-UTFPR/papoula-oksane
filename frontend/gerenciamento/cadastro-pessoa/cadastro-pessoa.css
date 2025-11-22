@@ -1,191 +1,334 @@
-/* cadastro-pessoa.css
-   Tema romântico e delicado — tons pastéis, sombras suaves, corações flutuantes discretos
-*/
+/* =========================================================
+   cadastro-pessoa.css — Estilizado para o tema Rosa/Fofo/Delicado 💖
+   (Consistente com planta.css e cargo.css)
+   ========================================================= */
 
-:root{
-  --bg-1: #fff7fb;
-  --bg-2: #ffeaf4;
-  --accent: #d16ba5;
-  --muted: #7a5773;
-  --card: #ffffff;
-  --shadow: rgba(209,107,165,0.18);
-  --glass: rgba(255,255,255,0.6);
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset e configurações básicas */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Fundo com gradiente suave do exemplo */
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    color: #880e4f; /* Cor do texto principal (rosa escuro) */
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
-  color: #4b3a48;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  overflow-x:hidden;
-  position:relative;
+/* ------------------------------------------------------------------
+   Corações Flutuantes
+   ------------------------------------------------------------------ */
+.floating-hearts{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  pointer-events:none;z-index:5; 
+}
+.heart{
+  position:absolute;
+  color:rgba(255, 182, 193, 0.7); /* Light Pink */
+  font-size:1.5rem;
+  animation:heartFloat 11s linear infinite;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  opacity: 0.7;
 }
 
-/* header */
-.back-button{
-  display:inline-block;
-  margin:12px 18px;
-  color:var(--accent);
-  text-decoration:none;
-  font-weight:600;
+@keyframes heartFloat{
+  0%{transform:translateY(0) scale(1.0); opacity:0.6}
+  50%{transform:translateY(-25px) scale(1.1); opacity:0.9}
+  100%{transform:translateY(0) scale(1.0); opacity:0.6}
 }
+
+/* ------------------------------------------------------------------
+   Header e Botão de Voltar
+   ------------------------------------------------------------------ */
 header{
+  background: transparent;
+  padding: 50px 0 20px 0;
   text-align:center;
-  padding: 4px 20px 18px;
+  position:relative;
+  z-index: 10;
 }
 header h1{
-  margin:6px 0 0;
-  color:var(--accent);
-  font-size:1.6rem;
-  letter-spacing:0.2px;
+  font-family: 'Dancing Script', cursive;
+  color: #ec407a; /* Rosa mais vibrante */
+  font-size: 2.8rem;
+  margin: 0.25rem 0 0.4rem 0;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.6px;
 }
 header p{
-  margin:4px 0 10px;
-  color:var(--muted);
-  font-size:0.95rem;
+  font-size: 1.1rem;
+  color: #d83b6f; /* Rosa médio */
+  font-style: italic;
+  font-family: 'Poppins', sans-serif;
+  margin-top:0.4rem;
+}
+.back-button{
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    background: linear-gradient(135deg, #f48fb1, #ec407a);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.4);
+    transition: all 0.3s ease;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+}
+.back-button:hover{
+    background: linear-gradient(135deg, #ec407a, #f48fb1);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(236, 64, 122, 0.6);
 }
 
-/* form card */
+/* ------------------------------------------------------------------
+   Containers Principais (Main, Search, Fieldset)
+   ------------------------------------------------------------------ */
 main{
-  max-width:980px;
-  margin:6px auto 40px;
-  padding:0 16px;
+    max-width: 850px; 
+    margin: 2.7rem auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 30px; 
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(236, 64, 122, 0.15); 
+    border: 3px solid #f8bbd0; 
+    backdrop-filter: blur(4px);
+    position:relative;
+    z-index:10;
+    transition: box-shadow .28s;
 }
-form#pessoaForm{
-  background: var(--card);
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 10px 30px var(--shadow);
-  border: 1px solid rgba(255,255,255,0.6);
-  margin-bottom:18px;
+main:hover{
+    box-shadow: 0 12px 50px rgba(236, 64, 122, 0.25);
 }
-.search-row{display:flex;flex-direction:column;gap:8px}
-.search-group{
+
+.search-container{
+    background: white;
+    padding: 1.6rem;
+    border-radius: 15px;
+    margin-bottom: 1.8rem;
+    border: 2px solid #fce4ec; 
+    box-shadow: 0 4px 12px rgba(236, 64, 122, 0.05);
+}
+.search-container label{
+    display:block;
+    margin-bottom:0.35rem;
+    font-family:'Poppins', sans-serif;
+    font-size:1rem;
+    color:#ec407a;
+    font-weight: 600;
+}
+.input-group{
   display:flex;
-  gap:8px;
+  gap:1rem;
   align-items:center;
+  flex-wrap: wrap;
 }
-input[type="text"], input[type="date"], input[type="number"], select {
-  flex:1;
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid #f3b3d0;
-  font-size:0.95rem;
-  transition: all .18s ease;
-  background: linear-gradient(180deg, #fff, var(--glass));
-}
-input:focus, select:focus {
-  outline:none;
-  box-shadow:0 6px 18px rgba(209,107,165,0.18);
-  border-color:var(--accent);
-}
-label{display:block;color:var(--accent);font-weight:600;margin-top:10px;font-size:0.88rem}
+.input-group input { flex: 1; min-width: 180px; }
 
-/* actions */
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:14px;
-}
-.btn {
-  border-radius:10px;
-  padding:8px 12px;
-  background:transparent;
-  border:1px solid transparent;
-  cursor:pointer;
-  font-weight:600;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-.btn.ghost { background:transparent; color:var(--muted); }
-.btn.primary { background: linear-gradient(90deg,#f7b6d2,#f2a7c6); color:white; box-shadow:0 6px 18px rgba(209,107,165,0.16); border:none; }
-.btn.danger { background: #ff9fb8; color:white; border:none; }
-.btn:hover{ transform:translateY(-3px); }
 
-/* conditional blocks */
-.conditional{ display:none; margin-top:8px; }
-
-/* list section */
-.list-section{
-  margin-top:6px;
+fieldset {
+    border: 2px solid #fce4ec; 
+    border-radius: 15px;
+    padding: 1.4rem;
+    margin-bottom: 1.5rem;
+    background: white;
+    box-shadow: 0 4px 12px rgba(236, 64, 122, 0.05);
 }
-.table-wrap{
-  background:var(--card);
-  padding:12px;
-  border-radius:14px;
-  box-shadow:0 8px 24px var(--shadow);
-  border: 1px solid rgba(255,255,255,0.6);
+fieldset legend {
+    font-family: 'Dancing Script', cursive; 
+    font-weight: 700;
+    color: #ec407a;
+    padding: 0 0.8rem;
+    font-size: 1.5rem; 
 }
-table{ width:100%; border-collapse:collapse; font-size:0.95rem; }
-thead th{
-  text-align:left;
-  padding:10px 12px;
-  background: linear-gradient(90deg,#fff0f7,#fff7fb);
-  color:var(--accent);
-  font-weight:700;
-}
-tbody td{
-  padding:10px 12px;
-  border-top:1px solid #f7e6ef;
-}
-.link-btn{
-  background:none;
-  border:none;
-  padding:0;
-  font:inherit;
-  color:var(--accent);
-  text-decoration:underline;
-  cursor:pointer;
+fieldset.conditional-fieldset {
+    border-color: #fce4ec80; /* Borda mais suave para campos condicionais */
 }
 
-/* toast message */
-.toast{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  min-width:160px;
-  max-width:320px;
-  padding:10px 14px;
+/* ------------------------------------------------------------------
+   Inputs e Formulário
+   ------------------------------------------------------------------ */
+.form-input{
+  padding:10px 15px; 
   border-radius:12px;
-  background: rgba(255,255,255,0.95);
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  color:#4b3a48;
+  border:1px solid #f48fb1; 
+  background: #fff;
+  color: #880e4f;
+  font-size:1rem;
+  box-shadow:0 2px 8px rgba(220,160,180,0.07) inset;
+  transition:all .3s ease;
+  width: 100%;
+}
+.form-input:focus{
+  outline:none;
+  border-color: #d83b6f; 
+  background:#fff7fb;
+  box-shadow:0 0 0 4px rgba(236, 64, 122, 0.12); 
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.form-group label{
+  font-family:'Poppins', sans-serif; 
+  font-size:1rem;
   font-weight:600;
-  opacity:0;
-  transform:translateY(8px);
-  transition:all .28s ease;
-  pointer-events:none;
+  color:#ec407a; 
+  margin-top:0.4rem;
 }
-.toast.show, .toast.info, .toast.success, .toast.error { opacity:1; transform:translateY(0); pointer-events:auto; }
-.toast.info { border-left:6px solid #ffd6e9; }
-.toast.success { border-left:6px solid #b5e7c6; }
-.toast.error { border-left:6px solid #ffb6b6; }
+.form-grid-2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+.type-select-group {
+    max-width: 50%; /* Faz o select de tipo ocupar metade da largura em telas maiores */
+    margin-top: 1rem;
+}
+/* ------------------------------------------------------------------
+   Estilos dos Botões
+   ------------------------------------------------------------------ */
+.button-group{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap; justify-content: flex-end;}
+button{
+  cursor:pointer;
+  border:none;
+  border-radius:15px; 
+  padding:0.7rem 1.4rem;
+  font-weight:700;
+  font-size:1rem;
+  box-shadow:0 4px 10px rgba(236, 64, 122, 0.1);
+  transition:all .25s ease;
+  font-family:'Poppins',sans-serif;
+  display:inline-flex;align-items:center;gap:7px;
+  min-width: 120px;
+}
+button:hover{transform:translateY(-2px) scale(1.02)}
 
-/* floating hearts (decorative, behind everything) */
-.heart{
-  position:fixed;
-  z-index:0;
-  pointer-events:none;
-  left:0;
-  top:0;
-  font-size:18px;
-  opacity:0.75;
-  filter: drop-shadow(0 2px 6px rgba(209,107,165,0.12));
-  animation:heartFloat linear infinite;
+/* Estilos de Botões Específicos (Cores consistentes) */
+#btnBuscar{background: linear-gradient(135deg, #f48fb1, #ec407a); color: white;}
+#btnBuscar:hover{background: linear-gradient(135deg, #ec407a, #f48fb1); box-shadow: 0 6px 15px rgba(236, 64, 122, 0.25);}
+
+.cancel-button{background: linear-gradient(135deg, #fff0f5, #f8bbd0); color: #880e4f; border: 1px solid #f8bbd0; box-shadow: 0 4px 10px rgba(244, 143, 177, 0.1);}
+.cancel-button:hover{background: linear-gradient(135deg, #f8bbd0, #f48fb1);}
+
+#btnIncluir{background: linear-gradient(135deg, #ffb6c1, #ff8a80); color: white;}
+#btnAlterar{background: linear-gradient(135deg, #f48fb1, #ec407a); color: white;}
+#btnExcluir{background: linear-gradient(135deg, #ff8a80, #ff5252); color: white;}
+#btnSalvar{background: linear-gradient(135deg, #ec407a, #d83b6f); color: white; box-shadow: 0 6px 15px rgba(236, 64, 122, 0.3);}
+
+
+/* ------------------------------------------------------------------
+   Tabela e Listagem
+   ------------------------------------------------------------------ */
+.list-section {
+    margin-top: 2.5rem;
 }
-@keyframes heartFloat{
-  0% { transform: translateY(100vh) scale(.9); opacity:0; }
-  25% { opacity:.5; }
-  60% { opacity:1; }
-  100% { transform: translateY(-10vh) scale(1.05); opacity:0; }
+.list-section h2 {
+    font-family: 'Dancing Script', cursive; 
+    color: #d83b6f;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
-/* responsive */
-@media (max-width:640px){
-  .search-group { flex-direction:column; align-items:stretch; }
-  .actions { flex-direction:column; }
-  header h1 { font-size:1.3rem;}
+.table-container{
+    margin-top: 1.5rem;
+    overflow-x:auto;
+    border: 3px solid #f8bbd0;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(236, 64, 122, 0.1);
+    background: white;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  overflow:hidden;
+  box-shadow:none;
+  border-radius: 17px;
+  font-size:1rem;
+}
+th{
+  background:linear-gradient(135deg, #f48fb1, #ec407a);
+  color:#fff;
+  padding:14px;
+  text-align:left;
+  font-weight:600;
+  font-family:'Poppins',sans-serif;
+  letter-spacing:.03em;
+  position: sticky;
+  top: 0;
+}
+td{
+  padding:11px 16px;
+  border-bottom:1px dashed #f8bbd0;
+  color: #880e4f;
+  font-size:0.98rem;
+}
+tr:nth-child(even){background:#fff0f5} 
+tr:hover { background: #fee7ef; cursor: pointer; }
+
+
+/* Rodapé */
+footer {
+    text-align: center;
+    padding: 2rem 0 1.2rem;
+    margin-top: 2.5rem;
+    color: #ec407a;
+    font-family: 'Dancing Script', cursive; 
+    font-size: 1.8rem;
+    background: transparent;
+    letter-spacing: 0.03em;
+    border-top: none;
+    box-shadow: none;
+}
+
+/* Mensagens de Notificação (Toast) */
+.message-container{
+  position:fixed;bottom:22px;left:50%;
+  transform:translateX(-50%);
+  background: linear-gradient(135deg, #ec407a, #f48fb1);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(236, 64, 122, 0.4);
+  font-size: 1.1rem;
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  font-family:'Poppins',sans-serif;
+}
+.message-container.show{
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* ------------------------------------------------------------------
+   Responsividade
+   ------------------------------------------------------------------ */
+@media (max-width: 768px) {
+  main { max-width: 95%; margin: 1.5rem auto; padding: 1.5rem; border-radius: 20px;}
+  header h1 { font-size: 2.2rem; }
+  .back-button { top: 15px; left: 10px; padding: 7px 15px; font-size: 0.9rem;}
+  .input-group{ flex-direction: column; align-items:stretch; }
+  .input-group button{ width:100%; }
+  .form-grid-2 { grid-template-columns: 1fr; gap: 1rem; }
+  .type-select-group { max-width: 100%; }
+  .button-group { justify-content: center; }
+  .table-container { border-radius: 10px; }
+  table th, table td { padding: 10px; }
 }

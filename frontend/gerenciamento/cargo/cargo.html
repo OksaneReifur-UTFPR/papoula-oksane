@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="cargo.css">
 </head>
 <body>
-    <a href="#" onclick="history.back(); return false;" class="back-button">← Voltar</a>
+    <a href="#" onclick="history.back(); return false;" class="back-button">
+        <span>« Voltar 🌸</span>
+    </a>
 
     <div class="floating-hearts"></div>
 
     <header>
-        <h1>Gerenciamento de Cargos</h1>
-        <p>Lindos Detalles</p>
+        <h1>Gerenciamento de Cargos 💖</h1>
+        <p>Defina as posições de trabalho com carinho e precisão ✨</p>
     </header>
 
     <main>
@@ -21,22 +23,22 @@
             <div class="search-container">
                 <label for="searchIdCargo">Buscar Cargo por ID</label>
                 <div class="input-group">
-                    <input type="number" id="searchIdCargo" placeholder="Digite o ID">
-                    <button type="button" id="btnBuscar">🔍 Buscar</button>
+                    <input type="number" id="searchIdCargo" class="form-input" placeholder="Digite o ID para buscar">
+                    <button type="button" id="btnBuscar">🔎 Buscar</button>
                     <button type="button" id="btnCancelar" class="cancel-button">Limpar</button>
                 </div>
             </div>
 
             <fieldset id="formFields">
-                <legend>Dados do Cargo</legend>
+                <legend>Dados do Cargo 🌸</legend>
                 <div class="form-group">
                     <label for="nome_cargo">Nome do Cargo</label>
-                    <input type="text" id="nome_cargo" name="nome_cargo" required disabled>
+                    <input type="text" id="nome_cargo" name="nome_cargo" class="form-input" required disabled>
                 </div>
             </fieldset>
 
             <div class="button-group">
-                <button type="button" id="btnIncluir" style="display: none;">🌸 Incluir Novo Cargo</button>
+                <button type="button" id="btnIncluir" style="display: none;">✨ Incluir Novo Cargo</button>
                 <button type="button" id="btnAlterar" style="display: none;">✏️ Alterar Cargo</button>
                 <button type="button" id="btnExcluir" style="display: none;">🗑️ Excluir Cargo</button>
                 <button type="button" id="btnSalvar" style="display: none;">💖 Salvar Alterações</button>
@@ -60,10 +62,10 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Lindos Detalhes</p>
+        <p>💖 &copy; 2025 Lindos Detalles 💖</p>
     </footer>
 
-    <div id="messageContainer"></div>
+    <div id="messageContainer" class="message-container"></div>
 
     <script src="cargo.js"></script>
 </body>

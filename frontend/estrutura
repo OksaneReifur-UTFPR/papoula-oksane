@@ -193,6 +193,18 @@ backend/
 └── .env
 
 
+agora vou te enviar uma nova tela para 
+ que voce faça a mesma coisa das telas anteriores e para que voce continue 
+ seguindo o exemplo da foto que eu mandei
+
+
+como subir pro git
+
+Sempre que alterar o código, faça:
+
+git add .
+git commit -m "alguma mensagem"
+git push
 
 como clonar do git para o computador 
 

@@ -1,284 +1,332 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap');
+/* =========================================================
+   pagamento.css — Estilizado para o tema Rosa/Fofo/Delicado 💖
+   (Consistente com planta.css, cargo.css, cadastro-pessoa.css)
+   ========================================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* --- Variáveis de Tema (Consistentes) --- */
 :root {
-    --rosa: #ff6b9d;
-    --rosa-suave: #ffe4f1;
-    --branco: #ffffff;
-    --texto: #333;
-    --sombra: 0 4px 20px rgba(255, 107, 157, 0.2);
-    --sombra-hover: 0 8px 28px rgba(255, 107, 157, 0.28);
+    --rosa-principal: #f48fb1; /* Rosa Médio */
+    --rosa-claro: #fce4ec; /* Rosa muito suave para fundo */
+    --rosa-escuro: #880e4f; /* Rosa escuro para texto */
+    --rosa-label: #ec407a; /* Rosa vibrante para labels/títulos */
+    --sombra-suave: 0 4px 15px rgba(236, 64, 122, 0.1);
+    --sombra-hover: 0 6px 20px rgba(236, 64, 122, 0.25);
+    --cor-card: rgba(255, 255, 255, 0.95);
+    --cor-fundo: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
 }
 
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Reset e configurações básicas */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    background: linear-gradient(135deg, #fdf2f8, #fce7f3);
-    font-family: "Poppins", sans-serif;
-    color: var(--texto);
+    font-family: 'Poppins', sans-serif;
+    background: var(--cor-fundo);
+    color: var(--rosa-escuro);
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* CORAÇÕES FLUTUANTES */
-/* Apenas laterais */
-.floating-hearts, .side-hearts {
+/* ------------------------------------------------------------------
+   Corações Flutuantes (Efeito visual de tema)
+   ------------------------------------------------------------------ */
+.floating-hearts{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  pointer-events:none;z-index:5; 
+}
+.heart{
+  position:absolute;
+  color:rgba(255, 182, 193, 0.7); /* Light Pink */
+  font-size:1.5rem;
+  animation:heartFloat 11s linear infinite;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  opacity: 0.7;
+}
+
+@keyframes heartFloat{
+  0%{transform:translateY(0) scale(1.0); opacity:0.6}
+  50%{transform:translateY(-25px) scale(1.1); opacity:0.9}
+  100%{transform:translateY(0) scale(1.0); opacity:0.6}
+}
+
+/* ------------------------------------------------------------------
+   Header e Botão de Voltar
+   ------------------------------------------------------------------ */
+header{
+  padding: 50px 0 20px 0;
+  text-align:center;
+  position:relative;
+  z-index: 10;
+}
+header h1{
+  font-family: 'Dancing Script', cursive;
+  color: var(--rosa-label);
+  font-size: 2.8rem;
+  margin: 0.25rem 0 0.4rem 0;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.6px;
+}
+header p{
+  font-size: 1.1rem;
+  color: var(--rosa-label);
+  font-style: italic;
+  font-family: 'Poppins', sans-serif;
+  margin-top:0.4rem;
+}
+.back-button{
     position: fixed;
-    top: 0px;                 /* CORRIGIDO: adicionar unidade */
-    width: 140px;             /* largura da faixa lateral */
-    height: 100vh;
-    pointer-events: none;
-    overflow: hidden;         /* garante que corações não "vazem" para o centro */
-    z-index: 1;               /* mantemos atrás do conteúdo principal (ver comentário abaixo) */
+    top: 25px;
+    left: 25px;
+    background: linear-gradient(135deg, var(--rosa-principal), var(--rosa-label));
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.4);
+    transition: all 0.3s ease;
+    z-index: 200;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+}
+.back-button:hover{
+    background: linear-gradient(135deg, var(--rosa-label), var(--rosa-principal));
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(236, 64, 122, 0.6);
 }
 
-/* Lado esquerdo */
-.floating-hearts {
-    left: 0px;                /* CORRIGIDO: adicionar unidade e posição correta */
+/* ------------------------------------------------------------------
+   Containers Principais (Main, Search, Fieldset)
+   ------------------------------------------------------------------ */
+main{
+    max-width: 700px; /* Um pouco menor, pois é um CRUD simples */
+    margin: 2.7rem auto;
+    background: var(--cor-card);
+    border-radius: 30px; 
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(236, 64, 122, 0.15); 
+    border: 3px solid var(--rosa-claro); 
+    backdrop-filter: blur(4px);
+    position:relative;
+    z-index:10;
+    transition: box-shadow .28s;
+}
+main:hover{
+    box-shadow: 0 12px 50px rgba(236, 64, 122, 0.25);
 }
 
-/* Lado direito */
-.side-hearts {
-    right: 0px;               /* CORRIGIDO: adicionar unidade e posição correta */
+.search-container{
+    background: white;
+    padding: 1.6rem;
+    border-radius: 15px;
+    margin-bottom: 1.8rem;
+    border: 2px solid var(--rosa-claro); 
+    box-shadow: var(--sombra-suave);
+}
+.search-container label{
+    display:block;
+    margin-bottom:0.35rem;
+    font-size:1rem;
+    color:var(--rosa-label);
+    font-weight: 600;
+}
+.input-group{
+  display:flex;
+  gap:1rem;
+  align-items:center;
+  flex-wrap: wrap;
+}
+.input-group input { flex: 1; min-width: 180px; }
+
+
+fieldset {
+    border: 2px solid var(--rosa-claro); 
+    border-radius: 15px;
+    padding: 1.4rem;
+    margin-bottom: 1.5rem;
+    background: white;
+    box-shadow: var(--sombra-suave);
+}
+fieldset legend {
+    font-family: 'Dancing Script', cursive; 
+    font-weight: 700;
+    color: var(--rosa-label);
+    padding: 0 0.8rem;
+    font-size: 1.5rem; 
 }
 
-
-.heart, .side-heart {
-    position: absolute;
-    font-size: 1.9rem;
-    opacity: 0.56;
-    animation: flutuar 9s infinite ease-in-out;
-    filter: drop-shadow(0 4px 8px rgba(255, 107, 157, 0.4));
+/* ------------------------------------------------------------------
+   Inputs e Formulário
+   ------------------------------------------------------------------ */
+.form-input{
+  padding:10px 15px; 
+  border-radius:12px;
+  border:1px solid var(--rosa-principal); 
+  background: #fff;
+  color: var(--rosa-escuro);
+  font-size:1rem;
+  box-shadow:0 2px 8px rgba(220,160,180,0.07) inset;
+  transition:all .3s ease;
+  width: 100%;
+}
+.form-input:focus{
+  outline:none;
+  border-color: var(--rosa-label); 
+  background:#fff7fb;
+  box-shadow:0 0 0 4px rgba(236, 64, 122, 0.12); 
+}
+.form-input:disabled{
+    background-color: #fcf9fb;
+    cursor: not-allowed;
 }
 
-/* Se os corações estiverem usando left/top em percentuais, eles serão
-   recortados dentro das faixas laterais devido ao overflow:hidden acima. */
-
-@keyframes flutuar {
-    0% { transform: translateY(0); opacity: 0.5; }
-    50% { transform: translateY(-35px) scale(1.2); opacity: 0.9; }
-    100% { transform: translateY(0); opacity: 0.5; }
+.form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.form-group label{
+  font-family:'Poppins', sans-serif; 
+  font-size:1rem;
+  font-weight:600;
+  color:var(--rosa-label); 
+  margin-top:0.4rem;
 }
 
-/* HEADER */
-header {
+/* ------------------------------------------------------------------
+   Estilos dos Botões
+   ------------------------------------------------------------------ */
+.button-group{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap; justify-content: flex-end;}
+button{
+  cursor:pointer;
+  border:none;
+  border-radius:15px; 
+  padding:0.7rem 1.4rem;
+  font-weight:700;
+  font-size:1rem;
+  box-shadow:var(--sombra-suave);
+  transition:all .25s ease;
+  font-family:'Poppins',sans-serif;
+  display:inline-flex;align-items:center;gap:7px;
+  min-width: 120px;
+}
+button:hover{transform:translateY(-2px) scale(1.02)}
+
+/* Estilos de Botões Específicos (Cores consistentes) */
+#btnBuscar{background: linear-gradient(135deg, var(--rosa-principal), var(--rosa-label)); color: white;}
+#btnBuscar:hover{background: linear-gradient(135deg, var(--rosa-label), var(--rosa-principal)); box-shadow: var(--sombra-hover);}
+
+.cancel-button{background: linear-gradient(135deg, #fff0f5, var(--rosa-claro)); color: var(--rosa-escuro); border: 1px solid var(--rosa-claro); box-shadow: var(--sombra-suave);}
+.cancel-button:hover{background: linear-gradient(135deg, var(--rosa-claro), var(--rosa-principal));}
+
+#btnIncluir{background: linear-gradient(135deg, #ffb6c1, #ff8a80); color: white;}
+#btnAlterar{background: linear-gradient(135deg, var(--rosa-principal), var(--rosa-label)); color: white;}
+#btnExcluir{background: linear-gradient(135deg, #ff8a80, #ff5252); color: white;}
+#btnSalvar{background: linear-gradient(135deg, var(--rosa-label), #d83b6f); color: white; box-shadow: 0 6px 15px rgba(236, 64, 122, 0.3);}
+
+
+/* ------------------------------------------------------------------
+   Tabela e Listagem
+   ------------------------------------------------------------------ */
+.list-section {
+    margin-top: 2.5rem;
+}
+.list-section h2 {
+    font-family: 'Dancing Script', cursive; 
+    color: #d83b6f;
+    font-size: 2rem;
     text-align: center;
-    padding: 2rem 0 1.3rem;
-    background: linear-gradient(135deg, var(--branco), var(--rosa-suave));
-    box-shadow: var(--sombra);
-    position: relative; /* garante empilhamento acima dos corações */
-    z-index: 2;
-}
-
-.titulo-principal {
-    font-family: "Dancing Script", cursive;
-    font-size: 3rem;
-    color: var(--rosa);
-    text-shadow: 0 3px 8px rgba(255, 107, 157, 0.25);
-}
-
-.subtitulo {
-    margin-top: 0.4rem;
-    font-size: 1.1rem;
-    color: #666;
-}
-
-/* SECTIONS */
-section {
-    background: var(--branco);
-    margin: 2rem auto;
-    padding: 2rem;
-    max-width: 1100px;
-    border-radius: 18px;
-    border: 2px solid var(--rosa);
-    box-shadow: var(--sombra);
-    position: relative; /* garante empilhamento acima dos corações */
-    z-index: 2;
-}
-
-section h2 {
-    font-family: "Dancing Script", cursive;
-    text-align: center;
-    font-size: 2.3rem;
-    color: var(--rosa);
-    text-shadow: 0 2px 6px rgba(255, 107, 157, 0.18);
     margin-bottom: 1.5rem;
 }
 
-/* BUSCA */
-.search-container {
-    background: var(--rosa-suave);
-    padding: 1.5rem;
-    border-radius: 14px;
-    margin-bottom: 1.6rem;
-    border: 2px solid var(--rosa);
+.table-container{
+    margin-top: 1.5rem;
+    overflow-x:auto;
+    border: 3px solid var(--rosa-claro);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(236, 64, 122, 0.1);
+    background: white;
 }
-
-.search-input-group {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+table{
+  width:100%;
+  border-collapse:collapse;
+  overflow:hidden;
+  box-shadow:none;
+  border-radius: 17px;
+  font-size:1rem;
 }
-
-/* INPUTS */
-input {
-    padding: 0.8rem 1rem;
-    border-radius: 12px;
-    border: 2px solid var(--rosa);
-    font-size: 1rem;
-    transition: .2s;
+th{
+  background:linear-gradient(135deg, var(--rosa-principal), var(--rosa-label));
+  color:#fff;
+  padding:14px;
+  text-align:left;
+  font-weight:600;
+  font-family:'Poppins',sans-serif;
+  letter-spacing:.03em;
+  position: sticky;
+  top: 0;
 }
-
-input:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(255, 107, 157, 0.4);
+td{
+  padding:11px 16px;
+  border-bottom:1px dashed var(--rosa-claro);
+  color: var(--rosa-escuro);
+  font-size:0.98rem;
 }
+tr:nth-child(even){background:#fff0f5} 
+tr:hover { background: #fee7ef; cursor: pointer; }
 
-/* FIELDSET */
-fieldset {
-    border: 2px solid var(--rosa);
-    padding: 1.5rem;
-    border-radius: 14px;
-    background: #fff8fc;
-}
 
-legend {
-    font-weight: bold;
-    color: var(--rosa);
-}
-
-/* BOTÕES */
-button {
-    padding: 0.8rem 1.8rem;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    box-shadow: var(--sombra);
-    transition: .2s;
-}
-
-button:hover {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: var(--sombra-hover);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--rosa), #ff95b8);
-    color: white;
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, #ff95b8, var(--rosa));
-    color: white;
-}
-
-.btn-save {
-    background: #ffb3d6;
-    color: white;
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #ff3e62, #b11226);
-    color: white;
-}
-
-.btn-cancel {
-    background: #ddd;
-}
-
-/* BOTÃO DE ID */
-.btn-id {
-    background: var(--rosa-suave);
-    border: 2px solid var(--rosa);
-    padding: .3rem .8rem;
-    border-radius: 8px;
-    font-weight: bold;
-    color: var(--rosa);
-}
-.btn-id:hover {
-    background: var(--rosa);
-    color: white;
-}
-
-/* TABELA */
-.table-container {
-    max-height: 380px;
-    overflow-y: auto;
-    border-radius: 18px;
-    border: 2px solid var(--rosa);
-    box-shadow: var(--sombra);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-}
-
-thead {
-    background: linear-gradient(135deg, var(--rosa), #ff9fc4);
-    color: white;
-}
-
-th, td {
-    padding: 1rem;
-    border-bottom: 1px solid #ffd1e4;
-    text-align: left;
-}
-
-tbody tr:hover {
-    background: #ffe7f3;
-}
-
-/* MENSAGENS */
-.message-container {
-    position: fixed;
-    top: 20px; right: 20px;
-    z-index: 9999;
-}
-
-.message {
-    font-weight: bold;
-    padding: 1rem 1.5rem;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    font-size: 1rem;
-    animation: fadeMsg .4s ease;
-}
-
-.message::after {
-    content: " 💗";
-    animation: beat 1.2s infinite;
-}
-
-@keyframes beat {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.35); }
-    100% { transform: scale(1); }
-}
-
-.message.success { background: #ffe4f1; border-left: 6px solid var(--rosa); }
-.message.error { background: #ffd6df; border-left: 6px solid #d11930; }
-.message.info { background: #fce7f3; border-left: 6px solid var(--rosa); }
-.message.warning { background: #fff2ce; border-left: 6px solid #ffb300; }
-
-@keyframes fadeMsg {
-    from { opacity: 0; transform: translateY(-15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* FOOTER */
+/* Rodapé */
 footer {
     text-align: center;
-    padding: 2rem;
-    margin-top: 4rem;
-    color: white;
-    background: linear-gradient(135deg, #333, #1a1a1a);
-    position: relative; /* garante empilhamento acima dos corações */
-    z-index: 2;
+    padding: 2rem 0 1.2rem;
+    margin-top: 2.5rem;
+    color: var(--rosa-label);
+    font-family: 'Dancing Script', cursive; 
+    font-size: 1.8rem;
+    background: transparent;
+    letter-spacing: 0.03em;
+}
+
+/* Mensagens de Notificação (Toast) */
+.message-container{
+  position:fixed;bottom:22px;left:50%;
+  transform:translateX(-50%);
+  background: linear-gradient(135deg, var(--rosa-label), var(--rosa-principal));
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(236, 64, 122, 0.4);
+  font-size: 1.1rem;
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  font-family:'Poppins',sans-serif;
+}
+.message-container.show{
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* ------------------------------------------------------------------
+   Responsividade
+   ------------------------------------------------------------------ */
+@media (max-width: 768px) {
+  main { max-width: 95%; margin: 1.5rem auto; padding: 1.5rem; border-radius: 20px;}
+  header h1 { font-size: 2.2rem; }
+  .back-button { top: 15px; left: 10px; padding: 7px 15px; font-size: 0.9rem;}
+  .input-group{ flex-direction: column; align-items:stretch; }
+  .input-group button{ width:100%; }
+  .button-group { justify-content: center; }
+  .table-container { border-radius: 10px; }
+  table th, table td { padding: 10px; }
 }

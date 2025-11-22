@@ -332,10 +332,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function createFloatingHearts() {
   const container = document.querySelector('.floating-hearts');
   if (!container) return;
+  // Conjunto de emojis consistente com o tema
+  const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨','💖', '💕', '🌸', '💓', '💞']; 
   for (let i = 0; i < 16; i++) {
     const heart = document.createElement('div');
     heart.classList.add('heart');
-    heart.innerText = ['💖', '💕', '💗', '💓', '💞'][Math.floor(Math.random() * 5)];
+    heart.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
     heart.style.left = (i % 2 === 0 ? (Math.random() * 12) : (88 + Math.random() * 8)) + 'vw'; // só esquerda ou direita
     heart.style.top = (5 + Math.random() * 90) + 'vh';
     heart.style.fontSize = (0.9 + Math.random() * 0.5) + 'rem';

@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gerenciamento de Plantas - Lindos Detalles</title>
     <link rel="stylesheet" href="planta.css">
 </head>
+
 <body>
-    <a href="#" onclick="history.back(); return false;" class="back-button">← Voltar</a>
+    <a href="#" onclick="history.back(); return false;" class="back-button">
+        <span>« Voltar 🌸</span>
+    </a>
 
     <div class="floating-hearts"></div>
 
     <header>
-        <h1>Gerenciamento de Plantas</h1>
-        <p>Lindos Detalles</p>
+        <h1>Gerenciamento de Plantas 💖</h1>
+        <p>Organize suas mudas e encante o jardim com carinho ✨</p>
     </header>
 
     <main>
@@ -21,26 +25,16 @@
             <div class="search-container">
                 <label for="searchIdPlanta">Buscar Planta por ID</label>
                 <div class="input-group">
-                    <!-- combobox: input + datalist -->
-                    <input
-                        type="text"
-                        id="searchIdPlanta"
-                        class="form-input"
-                        list="idsList"
-                        placeholder="Digite o ID ou escolha um existente..."
-                        inputmode="numeric"
-                        pattern="\d*"
-                        aria-label="Buscar planta por ID"
-                    >
+                    <input type="text" id="searchIdPlanta" class="form-input" list="idsList" placeholder="Digite o ID ou escolha um existente..." inputmode="numeric" pattern="\d*" aria-label="Buscar planta por ID">
                     <datalist id="idsList"></datalist>
 
-                    <button type="button" id="btnBuscar">🔍 Buscar</button>
+                    <button type="button" id="btnBuscar">🔎 Buscar</button>
                     <button type="button" id="btnCancelar" class="cancel-button">Limpar</button>
                 </div>
             </div>
-          
+
             <fieldset id="formFields">
-                <legend>Dados da Planta</legend> 
+                <legend>Dados da Planta 🌸</legend>
                 <div class="form-grid">
                     <div class="form-col">
                         <label for="nome_popular">Nome popular</label>
@@ -63,7 +57,6 @@
                         <label for="quantidade_estoque">Quantidade em estoque</label>
                         <input type="number" id="quantidade_estoque" name="quantidade_estoque" required disabled>
 
-                        <!-- Campo de upload (novo) -->
                         <label for="imagemPlanta">Imagem (upload local)</label>
                         <input type="file" id="imagemPlanta" accept="image/*" disabled>
                     </div>
@@ -79,7 +72,7 @@
             </fieldset>
 
             <div class="button-group">
-                <button type="button" id="btnIncluir" style="display: none;">🌸 Incluir Novo Planta</button>
+                <button type="button" id="btnIncluir" style="display: none;">✨ Incluir Nova Planta</button>
                 <button type="button" id="btnAlterar" style="display: none;">✏️ Alterar Planta</button>
                 <button type="button" id="btnExcluir" style="display: none;">🗑️ Excluir Planta</button>
                 <button type="button" id="btnSalvar" style="display: none;">💖 Salvar Alterações</button>
@@ -101,19 +94,19 @@
                         </tr>
                     </thead>
                     <tbody id="plantaTableBody">
-                        <!-- Linhas populadas via JS -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Lindos Detalles</p>
+        <p>💖 &copy; 2025 Lindos Detalles 💖</p>
     </footer>
 
     <div id="messageContainer" class="message-container"></div>
 
     <script src="planta.js"></script>
 </body>
+
 </html>

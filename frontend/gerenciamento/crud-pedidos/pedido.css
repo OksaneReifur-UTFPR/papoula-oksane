@@ -1,3 +1,6 @@
+/* Importa a fonte do Google Fonts para o título */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
 /* Reset e configurações básicas */
 * {
     margin: 0;
@@ -5,222 +8,127 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #fce4ec 100%);
-    color: #6d4c41;
+    /* Fundo com gradiente suave do exemplo + cores de texto */
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    color: #880e4f; /* Cor do texto principal (rosa escuro) */
     line-height: 1.6;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
 }
 
-/* ===== Botão de Voltar ===== */
+/* ------------------------------------------------------------------
+   Visual da Tela: Header, Botão, Containers, Formulário e Tabela
+   ------------------------------------------------------------------ */
+
+/* ===== Botão de Voltar (replicando o estilo do exemplo) ===== */
 .back-button {
-    position: absolute; /* Ou 'fixed' se quiser que ele role com a página */
-    top: 25px; /* Ajuste a distância do topo */
-    left: 25px; /* Ajuste a distância da esquerda */
-    background: linear-gradient(135deg, #e793b3, #da094f); /* Gradiente para o botão */
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    /* Gradiente suave e arredondamento alto */
+    background: linear-gradient(135deg, #f48fb1, #ec407a);
     color: white;
-    padding: 10px 20px;
-    border-radius: 25px; /* Bordas bem arredondadas */
-    text-decoration: none; /* Sem sublinhado */
-    font-weight: 600;
-    font-size: 1rem;
-    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.3);
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.4);
     transition: all 0.3s ease;
-    z-index: 100; /* Garante que fique acima de outros elementos */
+    z-index: 200;
     display: flex;
     align-items: center;
-    gap: 8px; /* Espaço entre a seta e o texto */
-    border: 2px solid rgba(255, 255, 255, 0.5); /* Borda sutil */
+    gap: 6px;
+    border: none;
 }
 
 .back-button:hover {
-    background: linear-gradient(135deg, #da094f, #e793b3);
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 6px 20px rgba(236, 64, 122, 0.5);
-    border-color: white;
+    background: linear-gradient(135deg, #ec407a, #f48fb1);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(236, 64, 122, 0.6);
 }
-
-/* ===== Corações flutuantes ===== */
-.floating-hearts,
-.side-hearts {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.heart,
-.side-heart {
-    position: absolute;
-    user-select: none;
-    filter: drop-shadow(0 2px 4px rgba(255, 182, 193, 0.5));
-}
-
-.heart {
-    font-size: 2rem;
-    opacity: 0.5;
-    animation: float 6s ease-in-out infinite;
-    z-index: 2;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px) scale(1) rotate(0deg);
-        opacity: 0.5;
-    }
-    50% {
-        transform: translateY(-28px) scale(1.2) rotate(7deg);
-        opacity: 0.85;
-    }
-}
-
-.side-heart {
-    font-size: 1.5rem;
-    opacity: 0.35;
-    animation: sideFloat 8s ease-in-out infinite;
-    z-index: 1;
-}
-
-@keyframes sideFloat {
-    0%, 100% {
-        transform: translateX(0px) scale(0.9);
-        opacity: 0.35;
-    }
-    50% {
-        transform: translateX(13px) scale(1.1);
-        opacity: 0.7;
-    }
-}
-
-/* Variações de delay para os corações */
-.heart:nth-child(1) { animation-delay: 0s; }
-.heart:nth-child(2) { animation-delay: 1.5s; }
-.heart:nth-child(3) { animation-delay: 3s; }
-.heart:nth-child(4) { animation-delay: 4.5s; }
-
-.side-heart:nth-child(1) { animation-delay: 0s; }
-.side-heart:nth-child(2) { animation-delay: 1s; }
-.side-heart:nth-child(3) { animation-delay: 2s; }
-.side-heart:nth-child(4) { animation-delay: 3s; }
-.side-heart:nth-child(5) { animation-delay: 4s; }
-.side-heart:nth-child(6) { animation-delay: 5s; }
-.side-heart:nth-child(7) { animation-delay: 0.5s; }
-.side-heart:nth-child(8) { animation-delay: 1.5s; }
-.side-heart:nth-child(9) { animation-delay: 2.5s; }
-.side-heart:nth-child(10) { animation-delay: 3.5s; }
-.side-heart:nth-child(11) { animation-delay: 4.5s; }
-.side-heart:nth-child(12) { animation-delay: 5.5s; }
 
 /* Header */
 header {
-    background: linear-gradient(135deg, #da094f, #e793b3, #e4dfe1);
-    color: white;
+    /* Header do exemplo: simples, sem gradiente, com cor de fundo da página */
+    background: transparent;
     text-align: center;
-    padding: 2.5rem 0;
-    padding-top: 5rem; /* Aumenta o padding para dar espaço ao botão "Voltar" */
-    box-shadow: 0 4px 20px rgba(236, 64, 122, 0.3);
+    padding: 50px 0 20px 0;
     position: relative;
-    z-index: 10;
+    z-index: 30;
 }
 
-.header-logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
-
-.logo-circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-}
-
-.logo-text {
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: center;
-    line-height: 1.3;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
+/* Título principal com a tipografia do exemplo (Dancing Script) */
 header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
+    font-family: 'Dancing Script', cursive;
+    color: #ec407a; /* Rosa mais vibrante */
+    font-size: 2.8rem;
+    margin: 0.25rem 0 0.4rem 0;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.6px;
 }
 
+/* Subtítulo */
 .subtitle {
     font-size: 1.1rem;
+    color: #d83b6f; /* Rosa médio */
     font-style: italic;
-    opacity: 0.95;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Main container */
 main {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 2rem;
-    display: grid;
-    gap: 2rem;
+    max-width: 1000px; /* Reduzido levemente para simular a proporção do exemplo */
+    margin: 1.5rem auto;
+    padding: 0 1rem;
     position: relative;
-    z-index: 10;
+    z-index: 20;
 }
 
-/* Sections */
+/* Sections (O container principal da tela) */
 section {
+    /* Replicando o container principal do exemplo: fundo branco/transparente com borda rosa arredondada e sombra */
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
+    border-radius: 30px; /* Borda bem arredondada */
     padding: 2.5rem;
-    box-shadow: 0 8px 32px rgba(236, 64, 122, 0.15);
-    border: 2px solid rgba(244, 143, 177, 0.3);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(236, 64, 122, 0.15); /* Sombra sutilmente rosa */
+    border: 3px solid #f8bbd0; /* Borda rosa claro */
+    backdrop-filter: blur(4px);
 }
 
+/* Cabeçalho de seção (dentro do container) */
 section h2 {
+    font-family: 'Dancing Script', cursive;
     color: #ec407a;
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    border-bottom: 3px solid #f48fb1;
-    padding-bottom: 0.8rem;
-    font-weight: 600;
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: none; /* Remove a linha do original */
+    padding-bottom: 0;
+    font-weight: 700;
 }
 
-/* Form styles */
+/* Busca e Ações (replicando o retângulo interno superior) */
 .search-container {
-    background: linear-gradient(135deg, #fff0f5, #ffe4f0);
-    padding: 1.8rem;
+    /* Fundo branco com borda rosa do exemplo */
+    background: white;
+    padding: 1.6rem;
     border-radius: 15px;
-    margin-bottom: 2rem;
-    border: 2px solid #f48fb1;
-    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.1);
+    margin-bottom: 1.8rem;
+    border: 2px solid #fce4ec; /* Borda muito clara */
+    box-shadow: 0 4px 12px rgba(236, 64, 122, 0.05);
 }
 
 .search-container label {
-    display: block;
-    margin-bottom: 0.8rem;
     font-weight: 600;
     color: #ec407a;
-    font-size: 1.05rem;
-}
-
-.search-input-group input,
-.search-input-group button {
-    height: 44px;
+    margin-bottom: 0.5rem;
 }
 
 .search-input-group {
@@ -232,466 +140,264 @@ section h2 {
 
 .search-input-group input {
     flex: 1;
-    max-width: 200px;
+    max-width: 250px;
+    padding: 10px 15px;
+    border: 1px solid #f48fb1;
+    border-radius: 8px;
 }
 
+.search-input-group button {
+    height: 40px; /* Consistência de altura */
+    min-width: 100px;
+    padding: 0 1.2rem;
+}
+
+/* Fieldset/Dados do Pedido (replicando o retângulo interno inferior) */
 fieldset {
-    border: 2px solid #f48fb1;
+    /* Fundo branco com borda rosa do exemplo */
+    border: 2px solid #fce4ec;
     border-radius: 15px;
-    padding: 1.5rem;
+    padding: 1.4rem;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #ffffff, #fff5f8);
+    background: white;
+    box-shadow: 0 4px 12px rgba(236, 64, 122, 0.05);
 }
 
 fieldset legend {
-    font-weight: 600;
+    font-weight: 700;
     color: #ec407a;
     padding: 0 0.8rem;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
 }
 
-.form-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
+/* Form group: Label e Input */
+.form-group > div {
+    flex: 1;
+    min-width: 280px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
     font-weight: 600;
     color: #ec407a;
 }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 0.9rem;
-    border: 2px solid #f8bbd0;
-    border-radius: 10px;
+.form-group input {
+    padding: 10px 15px;
+    border: 1px solid #f48fb1;
+    border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: white;
+    background: #fff;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #ec407a;
-    box-shadow: 0 0 0 4px rgba(236, 64, 122, 0.15);
-    background: #fffbfc;
+.form-group input:focus {
+    border-color: #d83b6f;
+    box-shadow: 0 0 0 4px rgba(236, 64, 122, 0.12);
 }
 
-/* Itens do Pedido */
+/* Botões de Ação do Pedido (Novo grupo) */
+.button-group-pedido {
+    display: flex;
+    justify-content: flex-end; /* Alinha à direita */
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.button-group-pedido button {
+    min-width: 100px;
+    padding: 0.7rem 1.4rem;
+}
+
+/* Itens do Pedido (Tabela) */
 .itensDoPedido {
-    margin-top: 2rem;
+    margin-top: 2.5rem; /* Mais espaço para separar do formulário principal */
 }
 
 .itens-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, #fff0f5, #ffe4f0);
-    border-radius: 12px;
+    /* Cabeçalho da tabela com fundo claro */
+    background: #fff0f5;
+    padding: 1rem 1.4rem;
+    border-radius: 12px 12px 0 0;
     border: 2px solid #f48fb1;
+    border-bottom: none;
 }
 
 .itens-header span {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #ec407a;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #d83b6f;
 }
 
-/* Button styles */
-.button-group {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-}
-
-button, .search-input-group button { /* Aplica os estilos a todos os botões, incluindo os da busca */
-    padding: 0.9rem 2.2rem;
-    border: none;
-    border-radius: 25px; /* Mais arredondado */
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 120px;
-    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.2); /* Sombra mais rosa */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Leve sombra no texto */
-    letter-spacing: 0.5px;
-    border: 2px solid rgba(255, 255, 255, 0.4); /* Borda interna suave */
-}
-
-/* Botões específicos com gradientes delicados */
-.btn-primary, #btnIncluir { /* Inclui o btnIncluir explicitamente */
-    background: linear-gradient(135deg, #ffc1e3, #e793b3); /* Rosa claro para médio */
-    color: #880e4f; /* Cor de texto mais escura para contraste */
-}
-
-.btn-primary:hover, #btnIncluir:hover {
-    background: linear-gradient(135deg, #e793b3, #ffc1e3);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(231, 147, 179, 0.5);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-.btn-secondary, #btnAdicionarItem, .btn-buscar-pequeno, .produto-group button { /* Inclui botões secundários e da tabela */
-    background: linear-gradient(135deg, #d83b6f, #f8bbd0); /* Rosa médio para claro */
-    color: white; /* Mantém branco para esses, mas pode ser ajustado */
-    box-shadow: 0 4px 15px rgba(244, 143, 177, 0.2);
-}
-
-.btn-secondary:hover, #btnAdicionarItem:hover, .btn-buscar-pequeno:hover, .produto-group button:hover {
-    background: linear-gradient(135deg, #e9437d, #f48fb1);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(244, 143, 177, 0.5);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-.btn-save, #btnSalvar { /* Inclui o btnSalvar explicitamente */
-    background: linear-gradient(135deg, #ffeb3b, #ffecb3); /* Amarelo dourado suave */
-    color: #e65100; /* Laranja escuro para contraste */
-    box-shadow: 0 4px 15px rgba(255, 235, 59, 0.2);
-}
-
-.btn-save:hover, #btnSalvar:hover {
-    background: linear-gradient(135deg, #ffecb3, #ffeb3b);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 235, 59, 0.5);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-.btn-danger, #btnExcluir { /* Inclui o btnExcluir explicitamente */
-    background: linear-gradient(135deg, #ee307f, #ee5353); /* Vermelho suave para médio */
-    color: #d32323; /* Vermelho escuro para contraste */
-    box-shadow: 0 4px 15px rgba(239, 154, 154, 0.2);
-}
-
-.btn-danger:hover, #btnExcluir:hover {
-    background: linear-gradient(135deg, #f33acb, #f15757);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(239, 154, 154, 0.5);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-.btn-cancel, #btnCancelar { /* Inclui o btnCancelar explicitamente */
-    background: linear-gradient(135deg, #fc1fba, #fa4d4d); /* Cinza claro para médio */
-    color: #f8f5f5; /* Cinza escuro para contraste */
-    box-shadow: 0 4px 15px rgba(189, 189, 189, 0.2);
-}
-
-.btn-cancel:hover, #btnCancelar:hover {
-    background: linear-gradient(135deg, #e440a5, #ff6b6b);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgb(230, 72, 125);
-    border-color: rgb(226, 69, 122);
-}
-
-/* Botão Buscar (no search-input-group) */
-#btnBuscar {
-    background: linear-gradient(135deg, #f06292, #ec407a); /* Rosa um pouco mais vibrante */
-    color: white;
-    box-shadow: 0 4px 15px rgba(240, 98, 146, 0.2);
-    border: 2px solid rgb(247, 139, 139);
-}
-
-#btnBuscar:hover {
-    background: linear-gradient(135deg, #ec407a, #f06292);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(240, 98, 146, 0.5);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-
-.btn-small {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.95rem;
-    min-width: auto;
-}
-
-/* Removi o .btn-id pois não era mais usado com o texto genérico "Ações" */
-.btn-id {
-    display: none; /* Ou redefina se ainda for necessário em outro contexto */
-}
-
-/* Table styles */
-.table-container,
 .item-table-container {
-    max-height: 450px;
+    max-height: 400px;
     overflow-y: auto;
-    border: 2px solid #f8bbd0;
-    border-radius: 15px;
+    border: 2px solid #f48fb1;
+    border-radius: 0 0 15px 15px; /* Arredonda só embaixo */
     background: white;
-    box-shadow: 0 4px 15px rgba(236, 64, 122, 0.1);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95rem;
+    box-shadow: 0 8px 30px rgba(236, 64, 122, 0.04);
 }
 
 table thead {
-    background: linear-gradient(135deg, #ec407a, #f06292);
+    /* Cabeçalho da tabela com gradiente rosa */
+    background: linear-gradient(135deg, #f48fb1, #ec407a);
     color: white;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 12;
 }
 
-table th,
-table td {
-    padding: 1.1rem;
-    text-align: left;
-    border-bottom: 1px solid #f8bbd0;
-}
-
-table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-}
-
-table tbody tr {
-    transition: background-color 0.2s ease;
+table th, table td {
+    padding: 0.8rem;
+    border-bottom: 1px dashed #f8bbd0;
 }
 
 table tbody tr:hover {
-    background-color: #fff0f5;
-}
-
-table tbody tr:nth-child(even) {
-    background-color: #fffbfc;
-}
-
-table tbody tr:nth-child(even):hover {
-    background-color: #fff0f5;
-}
-
-/* Message styles */
-.message-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-.message {
-    padding: 1.2rem 1.8rem;
-    border-radius: 15px;
-    margin-bottom: 0.8rem;
-    font-weight: 600;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    animation: slideIn 0.4s ease;
-    border: 2px solid;
-}
-
-.message.success {
-    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
-    color: #2e7d32;
-    border-color: #81c784;
-}
-
-.message.error {
-    background: linear-gradient(135deg, #ffcdd2, #ef9a9a);
-    color: #c62828;
-    border-color: #e57373;
-}
-
-.message.warning {
-    background: linear-gradient(135deg, #fff9c4, #fff59d);
-    color: #f57f17;
-    border-color: #fdd835;
-}
-
-.message.info {
-    background: linear-gradient(135deg, #f8bbd0, #f48fb1);
-    color: #880e4f;
-    border-color: #ec407a;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(120%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* Footer */
-footer {
-    background: linear-gradient(135deg, #ec407a, #f06292);
-    color: white;
-    text-align: center;
-    padding: 1.8rem;
-    margin-top: 3rem;
-    box-shadow: 0 -4px 20px rgba(236, 64, 122, 0.2);
-    position: relative;
-    z-index: 10;
-}
-
-footer p {
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-/* Produto group dentro da tabela */
-.produto-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 100%;
-}
-
-.produto-group input {
-    flex-grow: 1;
-    padding: 8px;
-    border: 2px solid #f8bbd0;
-    border-radius: 8px;
-    background-color: white;
-    height: 40px;
-    box-sizing: border-box;
-}
-
-.produto-group .btn-buscar-pequeno {
-    flex-shrink: 0;
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    height: 40px;
-    min-width: auto;
+    background-color: #fff0f5; /* Hover suave */
 }
 
 /* Inputs dentro da tabela */
 table input[type="number"] {
     width: 100%;
-    padding: 8px;
-    border: 2px solid #f8bbd0;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
+    padding: 6px;
+    border: 1px solid #f48fb1;
+    border-radius: 6px;
 }
 
-table input[type="number"]:focus {
-    outline: none;
-    border-color: #ec407a;
-    box-shadow: 0 0 0 3px rgba(236, 64, 122, 0.15);
+/* Botões em geral (ajustes de cor e sombra para replicar o exemplo) */
+button {
+    padding: 0.9rem 2.2rem;
+    border: none;
+    border-radius: 15px; /* Bordas menos arredondadas que o voltar */
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 100px;
+    box-shadow: 0 4px 10px rgba(236, 64, 122, 0.1);
 }
 
-/* Responsive design */
+/* Cores de botão (primário/incluir - rosa forte) */
+.btn-primary, #btnIncluir {
+    background: linear-gradient(135deg, #ec407a, #d83b6f);
+    color: white;
+}
+
+.btn-primary:hover, #btnIncluir:hover {
+    background: linear-gradient(135deg, #d83b6f, #ec407a);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(236, 64, 122, 0.25);
+}
+
+/* Cores de botão (secundário/buscar/alterar - rosa claro) */
+.btn-secondary, #btnBuscar, #btnAlterar, #btnAdicionarItem, .produto-group button {
+    background: linear-gradient(135deg, #f48fb1, #f8bbd0);
+    color: #880e4f;
+    border: 1px solid #f8bbd0;
+}
+
+.btn-secondary:hover, #btnBuscar:hover, #btnAlterar:hover, #btnAdicionarItem:hover, .produto-group button:hover {
+    background: linear-gradient(135deg, #f8bbd0, #f48fb1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(244, 143, 177, 0.2);
+}
+
+/* Cores de botão (Salvar/Amarelo) */
+.btn-save, #btnSalvar {
+    background: linear-gradient(135deg, #ffcdd2, #ffb6c1); /* Rosa Salmão Suave */
+    color: #880e4f;
+}
+
+/* Cores de botão (Cancelar/Excluir - Vermelho) */
+.btn-danger, #btnExcluir, .btn-cancel, #btnCancelar {
+    background: linear-gradient(135deg, #ff8a80, #ff5252);
+    color: white;
+}
+
+/* Footer (simples e com gradiente rosa) */
+footer {
+    background: linear-gradient(135deg, #ec407a, #f48fb1);
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2.5rem;
+    box-shadow: 0 -4px 15px rgba(236, 64, 122, 0.15);
+    position: relative;
+    z-index: 20;
+}
+
+/* ------------------------------------------------------------------
+   Corações Flutuantes Dinâmicos (ajustado para o novo JS)
+   ------------------------------------------------------------------ */
+
+/* Novo container para os emojis gerados pelo JS */
+.emoji-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5; /* Fica atrás da interface */
+}
+
+.emoji {
+    position: absolute;
+    user-select: none;
+    filter: drop-shadow(0 2px 4px rgba(255, 182, 193, 0.3));
+    opacity: 0; 
+}
+
+/* Animação simplificada do exemplo */
+@keyframes pulsingFloat {
+    0%, 100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 0.35;
+    }
+    50% {
+        transform: translateY(-15px) scale(1.05) rotate(3deg);
+        opacity: 0.65;
+    }
+}
+
+.emoji {
+    animation: pulsingFloat 7s ease-in-out infinite;
+    font-size: 1.5rem;
+}
+
+/* (O pedido.js se encarrega de aplicar a classe 'emoji' e os delays/posições) */
+
+/* ------------------------------------------------------------------
+   Responsividade
+   ------------------------------------------------------------------ */
+
 @media (max-width: 768px) {
-    main {
-        padding: 0 1rem;
-    }
-
-    header {
-        padding-top: 4rem; /* Ajuste para o botão voltar em telas menores */
-    }
-
-    .back-button {
-        top: 15px;
-        left: 15px;
-        padding: 8px 15px;
-        font-size: 0.9rem;
-    }
-
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    .logo-circle {
-        width: 100px;
-        height: 100px;
-    }
-
-    .logo-text {
-        font-size: 0.95rem;
-    }
+    main { padding: 0 0.5rem; }
+    section { padding: 1.5rem; border-radius: 20px; }
+    header h1 { font-size: 2.2rem; }
+    .subtitle { font-size: 1rem; }
 
     .search-input-group {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .search-input-group input {
-        max-width: none;
-        margin-bottom: 0.5rem;
-    }
-
-    .button-group {
-        flex-direction: column;
-    }
-
-    button {
-        min-width: auto;
-    }
-
-    table {
-        font-size: 0.85rem;
-    }
-
-    table th,
-    table td {
-        padding: 0.7rem;
-    }
-
-    .message-container {
-        top: 10px;
-        right: 10px;
-        left: 10px;
-    }
-
-    .itens-header {
+    .search-input-group input { max-width: none; }
+    
+    .form-group {
         flex-direction: column;
         gap: 1rem;
-        align-items: flex-start;
+    }
+    .form-group > div { min-width: 100%; }
+
+    .button-group-pedido {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    /* Ajustar tamanho dos corações em mobile */
-    .heart {
-        font-size: 1.5rem;
-    }
+    /* Tabela: forçar quebra de linha em telas pequenas */
+    table thead { font-size: 0.8rem; }
+    table th, table td { padding: 0.6rem; }
 
-    .side-heart {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    section {
-        padding: 1.5rem;
-    }
-
-    .search-container,
-    fieldset {
-        padding: 1.2rem;
-    }
-
-    header h1 {
-        font-size: 1.3rem;
-    }
-
-    .subtitle {
-        font-size: 0.95rem;
-    }
-
-    /* Reduzir ainda mais os corações em telas pequenas */
-    .heart {
-        font-size: 1.2rem;
-    }
-
-    .side-heart {
-        font-size: 1rem;
-    }
+    .itens-header { flex-direction: column; align-items: stretch; gap: 10px; }
+    .itens-header span { text-align: center; }
 }

@@ -1,3 +1,84 @@
+
+
+/* ATUALIZAÇÃO VISUAL PARA REPLICAR O ESTILO DO EXEMPLO:
+   Gera corações/emojis dinâmicos com a animação e estilo do gerenciamento.css.
+   A lógica de CRUD abaixo permanece INTACTA.
+*/
+
+(function () {
+    // Debounce simples (mantido)
+    function debounce(fn, wait) {
+        let t;
+        return function (...args) {
+            clearTimeout(t);
+            t = setTimeout(() => fn.apply(this, args), wait);
+        };
+    }
+
+    // Pool de emojis fofo para o fundo
+    const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨', '💖', '💕', '🌸', '💓', '💞'];
+
+    // Cria um span. Classe 'emoji' segue o pedido.css atualizado.
+    function createEmoji() {
+        const el = document.createElement('span');
+        el.className = 'emoji';
+        el.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+
+        // Posição aleatória na viewport (mantido)
+        const left = Math.random() * 100; // vw
+        const top = Math.random() * 100;  // vh
+        el.style.left = `${left}vw`;
+        el.style.top = `${top}vh`;
+
+        // Tamanho aleatório (mantido)
+        el.style.fontSize = `${(Math.random() * 1.4 + 0.8).toFixed(2)}rem`;
+
+        // Duração e delay aleatórios, usando a animação 'pulsingFloat' do CSS
+        const duration = (Math.random() * 5) + 5; // 5s a 10s
+        const delay = Math.random() * 5;
+        el.style.animation = `pulsingFloat ${duration}s ease-in-out ${delay}s infinite`;
+
+        return el;
+    }
+
+    // Popula a camada emoji-container com uma quantidade proporcional à largura
+    function populateEmojis() {
+        let container = document.querySelector('.emoji-container');
+
+        // Cria o container principal
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'emoji-container';
+            document.body.appendChild(container);
+        }
+
+        container.innerHTML = ''; // limpa antes de popular
+
+        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        // quantidade adaptativa; em telas grandes fica mais cheio, em mobile reduz (mantido)
+        const total = Math.min(48, Math.max(14, Math.floor(vw / 30)));
+
+        for (let i = 0; i < total; i++) {
+            const emoji = createEmoji();
+            container.appendChild(emoji);
+        }
+    }
+
+    // Inicializa no DOMContentLoaded e reaplica no resize com debounce
+    function initEmojis() {
+        populateEmojis();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEmojis);
+    } else {
+        initEmojis();
+    }
+    window.addEventListener('resize', debounce(initEmojis, 350));
+})();
+
+
+
 // Configuração da API, IP e porta.
 const API_BASE_URL = 'http://localhost:3001';
 let currentPedidoId = null;

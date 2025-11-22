@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURAÇÃO INICIAL ---
-    const API_BASE_URL = 'http://localhost:3000'; // Ajuste a porta se necessário
-    let operacao = null; // Controla a ação atual: 'incluir', 'alterar', 'excluir'
+    const API_BASE_URL = 'http://localhost:3000'; 
+    let operacao = null; 
 
     // --- ELEMENTOS DO DOM ---
     const form = document.getElementById('cargoForm');
@@ -24,160 +24,207 @@ document.addEventListener('DOMContentLoaded', () => {
      * Gerencia a visibilidade dos botões de ação com base no estado da aplicação.
      */
     const gerenciarBotoes = ({ incluir = false, alterar = false, excluir = false, salvar = false }) => {
-        btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
-        btnAlterar.style.display = alterar ? 'inline-flex' : 'none';
-        btnExcluir.style.display = excluir ? 'inline-flex' : 'none';
-        btnSalvar.style.display = salvar ? 'inline-flex' : 'none';
+        if(btnIncluir) btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
+        if(btnAlterar) btnAlterar.style.display = alterar ? 'inline-flex' : 'none';
+        if(btnExcluir) btnExcluir.style.display = excluir ? 'inline-flex' : 'none';
+        if(btnSalvar) btnSalvar.style.display = salvar ? 'inline-flex' : 'none';
     };
 
     /**
-     * Exibe uma mensagem de feedback para o usuário.
+     * Exibe uma mensagem de notificação temporária.
      */
-    const mostrarMensagem = (texto) => {
+    const mostrarMensagem = (texto, tempo = 3000) => {
+        if (!messageContainer) return;
         messageContainer.textContent = texto;
         messageContainer.classList.add('show');
-        setTimeout(() => {
-            messageContainer.classList.remove('show');
-        }, 3000);
+        setTimeout(() => messageContainer.classList.remove('show'), tempo);
     };
 
     /**
-     * Define o estado inicial da tela, limpando formulários e resetando botões.
+     * Configura o formulário e botões para o estado inicial (pronto para busca).
      */
     const configurarEstadoInicial = () => {
-        form.reset();
+        if (form) form.reset();
         operacao = null;
-        nomeCargoInput.disabled = true;
-        searchIdInput.disabled = false;
-        gerenciarBotoes({}); // Esconde todos os botões de ação
-        searchIdInput.focus();
+
+        if (nomeCargoInput) nomeCargoInput.disabled = true;
+        if (searchIdInput) searchIdInput.disabled = false;
+        
+        gerenciarBotoes({});
+        if (searchIdInput) searchIdInput.focus();
     };
 
-    // --- FUNÇÕES DE LÓGICA E API ---
-
+    // --- CARREGAR LISTA ---
     /**
-     * Carrega e renderiza todos os cargos na tabela.
+     * Carrega a lista de cargos da API e popula a tabela.
      */
     const carregarCargos = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/cargo`);
-            if (!response.ok) throw new Error('Falha ao carregar cargos.');
-            const cargos = await response.json();
+            const res = await fetch(`${API_BASE_URL}/cargo`);
+            if (!res.ok) throw new Error('Falha ao carregar cargos.');
+            const cargos = await res.json();
+
+            if (cargoTableBody) cargoTableBody.innerHTML = '';
             
-            cargoTableBody.innerHTML = '';
             cargos.forEach(cargo => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${cargo.id_cargo}</td><td>${cargo.nome_cargo}</td>`;
+                row.innerHTML = `
+                    <td>${cargo.id_cargo}</td>
+                    <td>${cargo.nome_cargo}</td>
+                `;
                 row.onclick = () => {
-                    searchIdInput.value = cargo.id_cargo;
+                    if (searchIdInput) searchIdInput.value = cargo.id_cargo;
                     buscarCargo();
                 };
-                cargoTableBody.appendChild(row);
+                if (cargoTableBody) cargoTableBody.appendChild(row);
             });
-        } catch (error) {
-            mostrarMensagem(error.message);
+        } catch (err) {
+            mostrarMensagem(err.message || 'Erro ao carregar lista de cargos.', 5000);
         }
     };
-    
+
+    // --- BUSCAR POR ID ---
     /**
-     * Busca um cargo pelo ID e atualiza a interface de acordo.
+     * Busca um cargo específico na API pelo ID digitado.
      */
     const buscarCargo = async () => {
-        const id = searchIdInput.value;
+        if (!searchIdInput) return;
+        const id = String(searchIdInput.value).trim();
         if (!id) {
             mostrarMensagem('Por favor, digite um ID para buscar.');
             return;
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/cargo/${id}`);
+            const response = await fetch(`${API_BASE_URL}/cargo/${encodeURIComponent(id)}`);
+            
             if (response.ok) {
                 const cargo = await response.json();
-                nomeCargoInput.value = cargo.nome_cargo;
-                gerenciarBotoes({ alterar: true, excluir: true }); // Encontrou: mostra Alterar e Excluir
+
+                if (nomeCargoInput) nomeCargoInput.value = cargo.nome_cargo;
+                
+                gerenciarBotoes({ alterar: true, excluir: true });
                 mostrarMensagem(`Cargo "${cargo.nome_cargo}" encontrado!`);
             } else if (response.status === 404) {
-                nomeCargoInput.value = '';
-                gerenciarBotoes({ incluir: true }); // Não encontrou: mostra Incluir
+                if (nomeCargoInput) nomeCargoInput.value = '';
+                
+                gerenciarBotoes({ incluir: true });
                 mostrarMensagem('Cargo não encontrado. Você pode incluir um novo.');
             } else {
                 throw new Error('Erro ao buscar o cargo.');
             }
-        } catch (error) {
-            mostrarMensagem(error.message);
+        } catch (err) {
+            mostrarMensagem(err.message || 'Erro ao buscar.');
             configurarEstadoInicial();
         }
     };
 
+    // --- PREPARAR OPERAÇÕES ---
+
     /**
-     * Prepara a UI para a inclusão de um novo cargo.
+     * Habilita a edição dos campos.
+     */
+    const habilitarEdicao = () => {
+        if (nomeCargoInput) nomeCargoInput.disabled = false;
+    };
+
+    /**
+     * Prepara o formulário para inclusão.
      */
     const prepararInclusao = () => {
         operacao = 'incluir';
-        nomeCargoInput.disabled = false;
-        nomeCargoInput.value = '';
-        nomeCargoInput.focus();
+        habilitarEdicao();
+        
+        if (nomeCargoInput) nomeCargoInput.value = '';
+        if (searchIdInput) searchIdInput.disabled = true;
+        
         gerenciarBotoes({ salvar: true });
-        mostrarMensagem('Digite o nome do novo cargo e clique em Salvar.');
+        if (nomeCargoInput) nomeCargoInput.focus();
+        mostrarMensagem('Preencha o nome e clique em Salvar para incluir.');
     };
 
     /**
-     * Prepara a UI para a alteração de um cargo existente.
+     * Prepara o formulário para alteração.
      */
     const prepararAlteracao = () => {
+        if (!searchIdInput || !searchIdInput.value) {
+            mostrarMensagem('Primeiro busque o cargo para alterar.');
+            return;
+        }
         operacao = 'alterar';
-        nomeCargoInput.disabled = false;
-        nomeCargoInput.focus();
+        habilitarEdicao();
+        
+        if (searchIdInput) searchIdInput.disabled = true;
+        
         gerenciarBotoes({ salvar: true });
-        mostrarMensagem('Altere o nome do cargo e clique em Salvar.');
+        if (nomeCargoInput) nomeCargoInput.focus();
+        mostrarMensagem('Altere o nome e clique em Salvar.');
     };
 
     /**
-     * Prepara a UI para a exclusão de um cargo.
+     * Prepara para a exclusão (requer confirmação).
      */
     const prepararExclusao = () => {
-        if (confirm(`Tem certeza que deseja excluir o cargo ID ${searchIdInput.value}?`)) {
+        if (!searchIdInput) return;
+        const id = searchIdInput.value;
+        if (!id) return mostrarMensagem('Primeiro busque o cargo a ser excluído.');
+
+        if (confirm(`Tem certeza que deseja excluir o cargo ID ${id}?`)) {
             operacao = 'excluir';
-            salvarOperacao(); // Chama o salvamento direto para a exclusão
+            salvarOperacao(); 
         }
     };
 
+    // --- SALVAR (INCLUIR / ALTERAR / EXCLUIR) ---
     /**
-     * Executa a operação de salvar (incluir, alterar, excluir) no backend.
+     * Executa a operação de CRUD na API (Salvar, Alterar ou Excluir).
      */
     const salvarOperacao = async () => {
-        const id = searchIdInput.value;
-        const nome = nomeCargoInput.value;
-
-        if ((operacao === 'incluir' || operacao === 'alterar') && !nome) {
-            mostrarMensagem('O nome do cargo não pode ser vazio.');
+        if (!searchIdInput || !nomeCargoInput) return;
+        const id = searchIdInput.value && String(searchIdInput.value).trim();
+        const nome_cargo = nomeCargoInput.value && nomeCargoInput.value.trim();
+        
+        // Validação
+        if ((operacao === 'incluir' || operacao === 'alterar') && !nome_cargo) {
+            mostrarMensagem('O nome do cargo não pode ficar vazio.');
             return;
         }
 
         let url = `${API_BASE_URL}/cargo`;
         let method = 'POST';
-        let body = { id_cargo: id, nome_cargo: nome };
+        let bodyObj = {};
 
-        if (operacao === 'alterar') {
-            url = `${API_BASE_URL}/cargo/${id}`;
+        if (operacao === 'incluir') {
+            bodyObj.nome_cargo = nome_cargo;
+            if (id) bodyObj.id_cargo = id; // Pode permitir ID manual
+        } else if (operacao === 'alterar') {
+            if (!id) { mostrarMensagem('ID inválido para alteração.'); return; }
+            url = `${API_BASE_URL}/cargo/${encodeURIComponent(id)}`;
             method = 'PUT';
-            body = { nome_cargo: nome };
+            bodyObj.nome_cargo = nome_cargo;
         } else if (operacao === 'excluir') {
-            url = `${API_BASE_URL}/cargo/${id}`;
+            if (!id) { mostrarMensagem('ID inválido para exclusão.'); return; }
+            url = `${API_BASE_URL}/cargo/${encodeURIComponent(id)}`;
             method = 'DELETE';
-            body = undefined; // DELETE não tem corpo
+            bodyObj = null;
+        } else {
+            mostrarMensagem('Operação inválida.');
+            return;
         }
 
         try {
-            const response = await fetch(url, {
+            const options = {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: body ? JSON.stringify(body) : null
-            });
+                body: bodyObj ? JSON.stringify(bodyObj) : null
+            };
+
+            const response = await fetch(url, options);
 
             if (!response.ok) {
-                const erro = await response.json();
-                throw new Error(erro.error || `Falha na operação de ${operacao}.`);
+                let errText = `Falha na operação de ${operacao}.`;
+                try { const j = await response.json(); errText = j.error || JSON.stringify(j); } catch(e){}
+                throw new Error(errText);
             }
             
             mostrarMensagem(`Cargo ${operacao} com sucesso!`);
@@ -190,31 +237,42 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- EVENT LISTENERS ---
-    btnBuscar.addEventListener('click', buscarCargo);
-    btnCancelar.addEventListener('click', configurarEstadoInicial);
-    btnIncluir.addEventListener('click', prepararInclusao);
-    btnAlterar.addEventListener('click', prepararAlteracao);
-    btnExcluir.addEventListener('click', prepararExclusao);
-    btnSalvar.addEventListener('click', salvarOperacao);
+    if (btnBuscar) btnBuscar.addEventListener('click', buscarCargo);
+    if (btnCancelar) btnCancelar.addEventListener('click', configurarEstadoInicial);
+    if (btnIncluir) btnIncluir.addEventListener('click', prepararInclusao);
+    if (btnAlterar) btnAlterar.addEventListener('click', prepararAlteracao);
+    if (btnExcluir) btnExcluir.addEventListener('click', prepararExclusao);
+    if (btnSalvar) btnSalvar.addEventListener('click', salvarOperacao);
+
+    // permitir buscar ao pressionar Enter no campo de busca
+    if (searchIdInput) {
+        searchIdInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarCargo();
+            }
+        });
+    }
 
     // --- INICIALIZAÇÃO ---
     configurarEstadoInicial();
     carregarCargos();
-    createFloatingHearts(); // Função para criar os corações
+    createFloatingHearts(); 
 });
 
-// Função para criar corações flutuantes (pode ficar no final)
+// Função para criar corações flutuantes (Consistente com as outras telas)
 function createFloatingHearts() {
     const container = document.querySelector('.floating-hearts');
     if (!container) return;
+    const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨', '💖', '💕', '🌸', '💓', '💞']; 
     for (let i = 0; i < 20; i++) {
         const heart = document.createElement('div');
         heart.classList.add('heart');
-        heart.innerText = ['💖', '💕', '💗', '💓', '💞'][Math.floor(Math.random() * 5)];
+        heart.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
         heart.style.left = `${Math.random() * 100}vw`;
         heart.style.top = `${5 + Math.random() * 90}vh`;
         heart.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
-        heart.style.animationDelay = `${Math.random() * 8}s`;
+        heart.style.animationDelay = (Math.random() * 10) + 's';
         container.appendChild(heart);
     }
 }

@@ -1,110 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cadastro de Pessoa 🌷 - Lindos Detalles</title>
-  <link rel="stylesheet" href="cadastro-pessoa.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cadastro de Pessoa - Lindos Detalles</title>
+    <link rel="stylesheet" href="cadastro-pessoa.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <a href="#" onclick="history.back(); return false;" class="back-button">← Voltar</a>
+    <a href="#" onclick="history.back(); return false;" class="back-button">
+        <span>« Voltar 🌸</span>
+    </a>
 
-  <header>
-    <h1>Cadastro de Pessoa 💗</h1>
-    <p>Lindos Detalles</p>
-  </header>
+    <div class="floating-hearts"></div>
 
-  <main>
-    <form id="pessoaForm" autocomplete="off" onsubmit="return false;">
-      <div class="search-row">
-        <label for="searchId">Buscar CPF</label>
-        <div class="search-group">
-          <input type="text" id="searchId" inputmode="numeric" maxlength="11" placeholder="Digite o CPF" list="cpfsList">
-          <datalist id="cpfsList"></datalist>
-          <button type="button" id="btnBuscar" class="btn">🔍 Buscar</button>
-          <button type="button" id="btnLimpar" class="btn ghost">🧹 Limpar</button>
-        </div>
-      </div>
+    <header>
+        <h1>Cadastro de Pessoa 💖</h1>
+        <p>Cadastre clientes e funcionários com doçura e organização ✨</p>
+    </header>
 
-      <div class="form-block">
-        <label for="nome_pessoa">Nome</label>
-        <input type="text" id="nome_pessoa" placeholder="Nome completo">
+    <main>
+        <form id="pessoaForm" autocomplete="off" onsubmit="return false;">
+            <div class="search-container">
+                <label for="searchId">Buscar CPF</label>
+                <div class="input-group">
+                    <input type="text" id="searchId" class="form-input" inputmode="numeric" maxlength="11" placeholder="Digite o CPF" list="cpfsList">
+                    <datalist id="cpfsList"></datalist>
+                    <button type="button" id="btnBuscar">🔎 Buscar</button>
+                    <button type="button" id="btnLimpar" class="cancel-button">Limpar</button>
+                </div>
+            </div>
 
-        <label for="data_nascimento_pessoa">Data de Nascimento</label>
-        <input type="date" id="data_nascimento_pessoa">
+            <fieldset id="formFields">
+                <legend>Dados Pessoais 🌸</legend>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="nome_pessoa">Nome</label>
+                        <input type="text" id="nome_pessoa" class="form-input" placeholder="Nome completo" required disabled>
+                    </div>
 
-        <label for="tipo_pessoa">Tipo</label>
-        <select id="tipo_pessoa">
-          <option value="">-- Selecione o tipo --</option>
-          <option value="cliente">Cliente</option>
-          <option value="funcionario">Funcionário</option>
-        </select>
+                    <div class="form-group">
+                        <label for="data_nascimento_pessoa">Data de Nascimento</label>
+                        <input type="date" id="data_nascimento_pessoa" class="form-input" required disabled>
+                    </div>
+                </div>
 
-        <!-- bloco para funcionário -->
-        <div id="funcionarioFields" class="conditional" aria-hidden="true">
-          <label for="salario">Salário</label>
-          <input type="number" id="salario" step="0.01" min="0" placeholder="0.00">
+                <div class="form-group type-select-group">
+                    <label for="tipo_pessoa">Tipo de Pessoa</label>
+                    <select id="tipo_pessoa" class="form-input" required disabled>
+                        <option value="">Selecione o Tipo</option>
+                        <option value="cliente">Cliente</option>
+                        <option value="funcionario">Funcionário</option>
+                    </select>
+                </div>
+            </fieldset>
 
-          <label for="id_cargo">Cargo</label>
-          <select id="id_cargo">
-            <option value="">Carregando cargos...</option>
-          </select>
-        </div>
+            <fieldset id="funcionarioFields" style="display:none;" class="conditional-fieldset">
+                <legend>Dados do Funcionário 💼</legend>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="salario">Salário (R$)</label>
+                        <input type="text" id="salario" class="form-input" placeholder="0.00" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_cargo">Cargo</label>
+                        <select id="id_cargo" class="form-input" disabled></select>
+                    </div>
+                </div>
+            </fieldset>
 
-        <!-- bloco para cliente -->
-        <div id="clienteFields" class="conditional" aria-hidden="true">
-          <label for="data_cadastro">Data de Cadastro</label>
-          <input type="date" id="data_cadastro">
-        </div>
+            <fieldset id="clienteFields" style="display:none;" class="conditional-fieldset">
+                <legend>Dados do Cliente 🛍️</legend>
+                <div class="form-group">
+                    <label for="data_cadastro">Data de Cadastro</label>
+                    <input type="date" id="data_cadastro" class="form-input" disabled>
+                </div>
+            </fieldset>
 
-        <div class="actions">
-          <button type="button" id="btnSalvar" class="btn primary">💾 Salvar</button>
-          <button type="button" id="btnExcluir" class="btn danger">🗑️ Excluir</button>
-        </div>
-      </div>
-    </form>
+            <div class="button-group">
+                <button type="button" id="btnIncluir" style="display: none;">✨ Incluir Pessoa</button>
+                <button type="button" id="btnAlterar" style="display: none;">✏️ Alterar Pessoa</button>
+                <button type="button" id="btnExcluir" style="display: none;">🗑️ Excluir Pessoa</button>
+                <button type="button" id="btnSalvar" style="display: none;">💖 Salvar Alterações</button>
+            </div>
+        </form>
 
-    <section class="list-section">
-      <h2>Lista de Pessoas</h2>
-      <div class="table-wrap">
-        <table id="pessoasTable">
-          <thead>
-            <tr>
-              <th>CPF</th>
-              <th>Nome</th>
-              <th>Tipo</th>
-              <th>Detalhe</th>
-              <th>Data Nasc.</th>
-            </tr>
-          </thead>
-          <tbody id="pessoasTableBody"></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+        <section class="list-section">
+            <h2>Lista de Pessoas Cadastradas</h2>
+            <div class="table-container">
+                <table id="pessoasTable">
+                    <thead>
+                        <tr>
+                            <th>CPF</th>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                            <th>Detalhe</th>
+                            <th>Data Nasc.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pessoasTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
-  <footer>
-    <p>&copy; 2025 Lindos Detalles</p>
-  </footer>
+    <footer>
+        <p>💖 &copy; 2025 Lindos Detalles 💖</p>
+    </footer>
 
-  <div id="messageContainer" class="toast" role="status" aria-live="polite"></div>
+    <div id="messageContainer" class="message-container" role="status" aria-live="polite"></div>
 
-  <script src="cadastro-pessoa.js"></script>
-
-  <script>
-    // Corações flutuantes discretos (não interferem com inputs)
-    (function createFloatingHearts() {
-      const hearts = ['💗','💖','💕','💞','💓'];
-      setInterval(() => {
-        const el = document.createElement('div');
-        el.className = 'heart';
-        el.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-        el.style.left = (Math.random() * 95) + 'vw';
-        el.style.animationDuration = (7 + Math.random()*6) + 's';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 13000);
-      }, 1400);
-    })();
-  </script>
+    <script src="cadastro-pessoa.js"></script>
 </body>
 </html>

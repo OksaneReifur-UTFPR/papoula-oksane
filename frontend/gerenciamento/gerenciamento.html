@@ -14,9 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-        <!-- BOTÃO DE VOLTAR ADICIONADO AQUI -->
-    <a href="javascript:history.back( )" class="back-button">🌸 Voltar 🌸</a>
-
+    <!-- BOTÃO DE VOLTAR -->
+    <a href="javascript:history.back()" class="back-button">🌸 Voltar 🌸</a>
 
     <!-- Contêiner onde o JavaScript irá criar os corações flutuantes -->
     <div class="emoji-container"></div>
@@ -26,33 +25,26 @@
         <!-- Título estilizado -->
         <h1>🌸 O que será gerenciado hoje? 🌸</h1>
 
-       <!-- ... (início do arquivo gerenciamento.html) ... -->
-<!-- ... (início do arquivo gerenciamento.html) ... -->
+        <div class="button-wrapper">
+            <!-- Botão 1: Leva para a tela de pedidos -->
+            <button onclick="location.href='/frontend/gerenciamento/crud-pedidos/pedido.html'">Gerenciamento de Pedidos</button>
 
-<div class="button-wrapper">
-   <!-- ... (início do arquivo gerenciamento.html) ... -->
+            <!-- Botão 2: agora leva para a tela de plantas (substitui Produtos) -->
+            <button onclick="location.href='/frontend/gerenciamento/planta/planta.html'">Gerenciamento de Plantas</button>
 
-<div class="button-wrapper">
-    <!-- 
-      MODIFICADO (DE NOVO!): Os caminhos agora começam com '/frontend/'
-      Isso diz ao navegador para começar da pasta raiz do projeto, 
-      entrar na pasta 'frontend', e então seguir o resto do caminho.
-    -->
+            <!-- Botão 3: Leva para a tela de cargos -->
+            <button onclick="location.href='/frontend/gerenciamento/cargo/cargo.html'">Gerenciamento de Cargos</button>
 
-    <!-- Botão 1: Leva para a tela de pedidos -->
-    <button onclick="location.href='/frontend/gerenciamento/crud-pedidos/pedido.html'">Gerenciamento de Pedidos</button>
-    <!-- Botão 2: Leva para a tela de produtos -->
-    <button onclick="location.href='/frontend/gerenciamento/cadastro-produtos/cadastro-produtos.html'">Gerenciamento de Produtos</button>
+            <!-- Botão 4: Leva para a tela de pessoas -->
+            <button onclick="location.href='/frontend/gerenciamento/cadastro-pessoa/cadastro-pessoa.html'">Gerenciamento de Pessoas</button>
 
-    <!-- Botão 3: Leva para a tela de cargos -->
-    <button onclick="location.href='/frontend/gerenciamento/cargo/cargo.html'">Gerenciamento de Cargos</button>
+            <!-- Botão 5: Leva para a tela de pagamento (adicionado) -->
+            <button onclick="location.href='/frontend/gerenciamento/pagamento/pagamento.html'">Gerenciamento de Pagamento</button>
 
-    <!-- Botão 4: Leva para a tela de pessoas -->
-    <button onclick="location.href='/frontend/gerenciamento/cadastro-pessoa/cadastro-pessoa.html'">Gerenciamento de Pessoas</button>
-</div>
-
-<!-- ... (resto do arquivo) ... -->
-
+            <!-- Botão 6: Gerenciamento de Relatórios (novo) -->
+            <button onclick="location.href='/frontend/gerenciamento/relatorios/relatorios.html'">Gerenciamento de Relatórios</button>
+        </div>
+    </div>
 
     <!-- Link para o arquivo JavaScript no final do body para melhor performance -->
     <script src="gerenciamento.js"></script> 
