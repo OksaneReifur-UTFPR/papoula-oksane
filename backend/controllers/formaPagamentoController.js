@@ -39,6 +39,7 @@ exports.obterFormaPagamento = async (req, res) => {
 
 // Inserir nova forma de pagamento
 exports.criarFormaPagamento = async (req, res) => {
+  console.log((req))
   try {
     const { nome_formaDePagamento } = req.body;
 

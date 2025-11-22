@@ -1,365 +1,191 @@
-/* Reset e base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* cadastro-pessoa.css
+   Tema romântico e delicado — tons pastéis, sombras suaves, corações flutuantes discretos
+*/
+
+:root{
+  --bg-1: #fff7fb;
+  --bg-2: #ffeaf4;
+  --accent: #d16ba5;
+  --muted: #7a5773;
+  --card: #ffffff;
+  --shadow: rgba(209,107,165,0.18);
+  --glass: rgba(255,255,255,0.6);
 }
 
-body {
-    font-family: 'Segoe UI', 'Caveat', cursive, Arial, sans-serif;
-    background: linear-gradient(135deg, #e499bc 0%, #f7b6cf 100%);
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-    color: #b54f7c;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  color: #4b3a48;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+  position:relative;
 }
 
-/* Header */
-header {
-    background: linear-gradient(135deg, #e96ca0 60%, #ffffff 100%);
-    text-align: center;
-    padding: 2.5rem 0 1.2rem 0;
-    box-shadow: 0 2px 12px rgba(180, 80, 124, 0.10);
-    position: relative;
+/* header */
+.back-button{
+  display:inline-block;
+  margin:12px 18px;
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+}
+header{
+  text-align:center;
+  padding: 4px 20px 18px;
+}
+header h1{
+  margin:6px 0 0;
+  color:var(--accent);
+  font-size:1.6rem;
+  letter-spacing:0.2px;
+}
+header p{
+  margin:4px 0 10px;
+  color:var(--muted);
+  font-size:0.95rem;
 }
 
-.logo-romantica {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
+/* form card */
+main{
+  max-width:980px;
+  margin:6px auto 40px;
+  padding:0 16px;
+}
+form#pessoaForm{
+  background: var(--card);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 10px 30px var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+  margin-bottom:18px;
+}
+.search-row{display:flex;flex-direction:column;gap:8px}
+.search-group{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+input[type="text"], input[type="date"], input[type="number"], select {
+  flex:1;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #f3b3d0;
+  font-size:0.95rem;
+  transition: all .18s ease;
+  background: linear-gradient(180deg, #fff, var(--glass));
+}
+input:focus, select:focus {
+  outline:none;
+  box-shadow:0 6px 18px rgba(209,107,165,0.18);
+  border-color:var(--accent);
+}
+label{display:block;color:var(--accent);font-weight:600;margin-top:10px;font-size:0.88rem}
+
+/* actions */
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+.btn {
+  border-radius:10px;
+  padding:8px 12px;
+  background:transparent;
+  border:1px solid transparent;
+  cursor:pointer;
+  font-weight:600;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn.ghost { background:transparent; color:var(--muted); }
+.btn.primary { background: linear-gradient(90deg,#f7b6d2,#f2a7c6); color:white; box-shadow:0 6px 18px rgba(209,107,165,0.16); border:none; }
+.btn.danger { background: #ff9fb8; color:white; border:none; }
+.btn:hover{ transform:translateY(-3px); }
+
+/* conditional blocks */
+.conditional{ display:none; margin-top:8px; }
+
+/* list section */
+.list-section{
+  margin-top:6px;
+}
+.table-wrap{
+  background:var(--card);
+  padding:12px;
+  border-radius:14px;
+  box-shadow:0 8px 24px var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+table{ width:100%; border-collapse:collapse; font-size:0.95rem; }
+thead th{
+  text-align:left;
+  padding:10px 12px;
+  background: linear-gradient(90deg,#fff0f7,#fff7fb);
+  color:var(--accent);
+  font-weight:700;
+}
+tbody td{
+  padding:10px 12px;
+  border-top:1px solid #f7e6ef;
+}
+.link-btn{
+  background:none;
+  border:none;
+  padding:0;
+  font:inherit;
+  color:var(--accent);
+  text-decoration:underline;
+  cursor:pointer;
 }
 
-.logo-romantica span {
-    font-size: 2.7rem;
+/* toast message */
+.toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  min-width:160px;
+  max-width:320px;
+  padding:10px 14px;
+  border-radius:12px;
+  background: rgba(255,255,255,0.95);
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  color:#4b3a48;
+  font-weight:600;
+  opacity:0;
+  transform:translateY(8px);
+  transition:all .28s ease;
+  pointer-events:none;
+}
+.toast.show, .toast.info, .toast.success, .toast.error { opacity:1; transform:translateY(0); pointer-events:auto; }
+.toast.info { border-left:6px solid #ffd6e9; }
+.toast.success { border-left:6px solid #b5e7c6; }
+.toast.error { border-left:6px solid #ffb6b6; }
+
+/* floating hearts (decorative, behind everything) */
+.heart{
+  position:fixed;
+  z-index:0;
+  pointer-events:none;
+  left:0;
+  top:0;
+  font-size:18px;
+  opacity:0.75;
+  filter: drop-shadow(0 2px 6px rgba(209,107,165,0.12));
+  animation:heartFloat linear infinite;
+}
+@keyframes heartFloat{
+  0% { transform: translateY(100vh) scale(.9); opacity:0; }
+  25% { opacity:.5; }
+  60% { opacity:1; }
+  100% { transform: translateY(-10vh) scale(1.05); opacity:0; }
 }
 
-.logo-romantica h1 {
-    font-family: 'Caveat', cursive;
-    font-size: 2.5rem;
-    color: #a80b61;
-    letter-spacing: 2px;
-    font-weight: 600;
-    margin-bottom: 0.2rem;
-}
-
-.slogan {
-    font-family: 'Caveat', cursive;
-    font-size: 1.3rem;
-    color: #f0e9ec;
-    margin-top: 0.4rem;
-}
-
-/* Form Section - Wide */
-.form-section.form-section-wide {
-    max-width: 95vw !important;
-    width: 95vw !important;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 2.5rem 2rem;
-    box-sizing: border-box;
-    background: rgba(233, 200, 215, 0.92);
-    border-radius: 24px;
-    box-shadow: 0 4px 22px rgba(180, 80, 124, 0.10);
-    position: relative;
-}
-
-/* Top bar busca + botões */
-.top-bar {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    justify-content: flex-start;
-}
-#idBusca {
-    border: 2px solid #f5e7f1;
-    border-radius: 9px;
-    font-size: 1rem;
-    font-family: inherit;
-    background: #f7eef0;
-    padding: 0.7rem 0.9rem;
-    color: #a43b6b;
-    width: 170px;
-    transition: border 0.3s;
-}
-#idBusca:focus {
-    outline: none;
-    border-color: #f8bacd;
-    background: #fff6fb;
-}
-.btn-voltar {
-    background: linear-gradient(135deg, #ffb6d5 60%, #ffd6f5 100%);
-    color: #d34a7b;
-    font-size: 1.25rem;
-    border-radius: 50px;
-    border: none;
-    padding: 0.7rem 1.2rem;
-    font-family: 'Caveat', cursive;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(180, 80, 124, 0.10);
-    transition: background 0.2s, transform 0.15s;
-    margin-right: 0.8rem;
-}
-.btn-voltar:hover {
-    background: linear-gradient(135deg, #ffe1f7 60%, #ffb6d5 100%);
-    transform: scale(1.07);
-}
-
-.btn-primary, .btn-success, .btn-warning, .btn-danger, .btn-save, .btn-cancel {
-    border: none;
-    border-radius: 10px;
-    padding: 0.8rem 1.7rem;
-    font-size: 1rem;
-    font-family: inherit;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    box-shadow: 0 2px 8px rgba(180, 80, 124, 0.08);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #ff91bb 60%, #fdb9d7 100%);
-    color: #fff;
-}
-
-.btn-success {
-    background: linear-gradient(135deg, #90daa4 60%, #b8ebc8 100%);
-    color: #a43b6b;
-}
-
-.btn-warning {
-    background: linear-gradient(135deg, #ffe4b2 60%, #fffcdb 100%);
-    color: #a43b6b;
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #f87878 60%, #ffc7c7 100%);
-    color: #fff;
-}
-
-.btn-save {
-    background: linear-gradient(135deg, #ec8dc2 60%, #ffd6f5 100%);
-    color: #fff;
-}
-
-.btn-cancel {
-    background: linear-gradient(135deg, #ace9d0 50%, #ffd6f5 100%);
-    color: #b54f7c;
-}
-
-/* Form Groups */
-.form-group {
-    margin-bottom: 1.1rem;
-}
-
-.form-group label {
-    font-weight: 600;
-    color: #b54f7c;
-    font-size: 1.06rem;
-    margin-bottom: 0.3rem;
-    display: block;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 0.7rem 0.9rem;
-    border: 2px solid #ffd6f5;
-    border-radius: 9px;
-    font-size: 1rem;
-    font-family: inherit;
-    background: #fff8fa;
-    transition: border 0.3s;
-    color: #a43b6b;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #e28ba6;
-    background: #f090c5;
-}
-
-.form-options {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.form-options label {
-    font-size: 1.04rem;
-    color: #b54f7c;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-/* Dynamic sections */
-#funcionarioFields, #clienteFields {
-    background: #ffe5f6;
-    border-radius: 10px;
-    padding: 1rem 0.7rem;
-    margin-bottom: 0.7rem;
-    box-shadow: 0 2px 8px rgba(180, 80, 124, 0.08);
-}
-
-/* Table Section */
-.list-section {
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 24px;
-    max-width: 900px;
-    margin: 1rem auto 2rem auto;
-    box-shadow: 0 4px 22px rgba(180, 80, 124, 0.10);
-    padding: 1.5rem 1rem;
-    position: relative;
-}
-
-.list-section h2 {
-    color: #d34a7b;
-    font-size: 1.6rem;
-    font-family: 'Caveat', cursive;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff8fa;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(180, 80, 124, 0.05);
-}
-
-table th, table td {
-    padding: 1rem 0.8rem;
-    text-align: left;
-    font-size: 1rem;
-    border-bottom: 1px solid #ffd6f5;
-    color: #a43b6b;
-}
-
-table th {
-    background: linear-gradient(135deg, #ffb6d5 60%, #ffd6f5 100%);
-    font-weight: 700;
-    font-size: 1.08rem;
-    letter-spacing: 1px;
-}
-
-table tbody tr:nth-child(even) {
-    background: #fff6fb;
-}
-
-table tbody tr:hover {
-    background: #ffe5f6;
-    transition: background 0.15s;
-}
-
-/* Messages */
-.message-container {
-    position: fixed;
-    top: 24px;
-    right: 28px;
-    z-index: 999;
-    pointer-events: none;
-}
-
-.message {
-    padding: 1rem 1.5rem;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 1.08rem;
-    margin-bottom: 0.5rem;
-    box-shadow: 0 4px 12px rgba(180, 80, 124, 0.18);
-    animation: fadeInMsg 0.3s ease;
-}
-
-.message.success {
-    background: linear-gradient(135deg, #9cd8af, #85e69f);
-    color: #24743c;
-}
-
-.message.error {
-    background: linear-gradient(135deg, #ffd6f5, #ffb6d5);
-    color: #d34a7b;
-}
-
-.message.warning {
-    background: linear-gradient(135deg, #997710, #e8ffa7);
-    color: #a5ec48;
-}
-
-.message.info {
-    background: linear-gradient(135deg, #d1ecf1, #ffe5f6);
-    color: #b54f7c;
-}
-
-@keyframes fadeInMsg {
-    from { opacity: 0; transform: translateY(-15px);}
-    to { opacity: 1; transform: translateY(0);}
-}
-
-/* Footer */
-footer {
-    background: linear-gradient(135deg, #cf608e 60%, #ffd6f5 100%);
-    color: #641135;
-    text-align: center;
-    padding: 1.2rem;
-    font-size: 1.08rem;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
-    box-shadow: 0 -2px 12px rgba(172, 71, 115, 0.1);
-}
-
-
-/* Floating hearts - apenas nas laterais */
-.floating-hearts {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* corações principais (laterais) */
-.heart {
-    position: absolute;
-    font-size: 1.5rem;
-    color: #f57caa;
-    opacity: 0.5;
-    animation: sideFloat 5s ease-in-out infinite;
-}
-
-/* animação lateral */
-@keyframes sideFloat {
-    0%, 100% { transform: translateY(2) translateX(0) scale(0.4); opacity: 0.3; }
-    100% { transform: translateY(-30px) translateX(24px) scale(1.15); opacity: 0.4; }
-}
-
-
-/* Responsive */
-@media (max-width: 900px) {
-    .form-section.form-section-wide {
-        max-width: 99vw !important;
-        width: 99vw !important;
-        padding: 2rem 0.4rem;
-    }
-}
-@media (max-width: 700px) {
-    .form-section, .list-section {
-        max-width: 99vw;
-        padding: 1rem 0.4rem;
-    }
-    table th, table td {
-        padding: 0.7rem 0.4rem;
-        font-size: 0.95rem;
-    }
-    header {
-        padding: 1.4rem 0 0.7rem 0;
-    }
+/* responsive */
+@media (max-width:640px){
+  .search-group { flex-direction:column; align-items:stretch; }
+  .actions { flex-direction:column; }
+  header h1 { font-size:1.3rem;}
 }

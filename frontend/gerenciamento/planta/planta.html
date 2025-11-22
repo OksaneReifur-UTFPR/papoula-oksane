@@ -17,32 +17,64 @@
     </header>
 
     <main>
-        <form id="plantaForm" autocomplete="off">
+        <form id="plantaForm" autocomplete="off" enctype="multipart/form-data">
             <div class="search-container">
                 <label for="searchIdPlanta">Buscar Planta por ID</label>
                 <div class="input-group">
-                    <input type="number" id="searchIdPlanta" placeholder="Digite o ID">
+                    <!-- combobox: input + datalist -->
+                    <input
+                        type="text"
+                        id="searchIdPlanta"
+                        class="form-input"
+                        list="idsList"
+                        placeholder="Digite o ID ou escolha um existente..."
+                        inputmode="numeric"
+                        pattern="\d*"
+                        aria-label="Buscar planta por ID"
+                    >
+                    <datalist id="idsList"></datalist>
+
                     <button type="button" id="btnBuscar">🔍 Buscar</button>
                     <button type="button" id="btnCancelar" class="cancel-button">Limpar</button>
                 </div>
             </div>
           
             <fieldset id="formFields">
-                <legend>Dados do Planta</legend> 
-                <div class="form-group">
+                <legend>Dados da Planta</legend> 
+                <div class="form-grid">
+                    <div class="form-col">
+                        <label for="nome_popular">Nome popular</label>
+                        <input type="text" id="nome_popular" name="nome_popular" required disabled>
 
-                     <label for="nome_popular">Nome popular da Planta</label>
-                    <input type="text" id="nome_popular" name="nome_popular" required disabled>
-                     <label for="nome_cientifico">Nome cientifico da Planta</label>
-                    <input type="text" id="nome_cientifico" name="nome_cientifico" required disabled>
-                    <label for="especie">Nome especie da Planta</label>
-                    <input type="text" id="especie" name="especie" required disabled>
-                     <label for="descricao">Nome descricao da Planta</label>
-                    <input type="text" id="descricao" name="descricao" required disabled>
-                     <label for="preco_unitario">Nome preco_unitario da Planta</label>
-                    <input type="text" id="preco_unitario" name="preco_unitario" required disabled>
-                     <label for="quantidade_estoque">Nome quantidade_estoque da Planta</label>
-                    <input type="text" id="quantidade_estoque" name="quantidade_estoque" required disabled>
+                        <label for="nome_cientifico">Nome científico</label>
+                        <input type="text" id="nome_cientifico" name="nome_cientifico" required disabled>
+
+                        <label for="especie">Espécie</label>
+                        <input type="text" id="especie" name="especie" required disabled>
+
+                        <label for="descricao">Descrição</label>
+                        <textarea id="descricao" name="descricao" rows="3" required disabled></textarea>
+                    </div>
+
+                    <div class="form-col">
+                        <label for="preco_unitario">Preço unitário</label>
+                        <input type="text" id="preco_unitario" name="preco_unitario" required disabled>
+
+                        <label for="quantidade_estoque">Quantidade em estoque</label>
+                        <input type="number" id="quantidade_estoque" name="quantidade_estoque" required disabled>
+
+                        <!-- Campo de upload (novo) -->
+                        <label for="imagemPlanta">Imagem (upload local)</label>
+                        <input type="file" id="imagemPlanta" accept="image/*" disabled>
+                    </div>
+
+                    <div class="form-preview">
+                        <div class="preview-label">Pré-visualização da imagem</div>
+                        <div class="img-preview-wrap">
+                            <img id="imgPreview" alt="Preview da planta">
+                            <div class="no-image">Sem imagem</div>
+                        </div>
+                    </div>
                 </div>
             </fieldset>
 
@@ -61,25 +93,26 @@
                         <tr>
                             <th>ID</th>
                             <th>Nome popular</th>
-                            <th>Nome cientifico</th>
-                            <th> especie</th>
-                            <th>descricao</th>
-                            <th>preco</th>
-                            <th>qtd</th>
+                            <th>Nome científico</th>
+                            <th>Espécie</th>
+                            <th>Descrição</th>
+                            <th>Preço</th>
+                            <th>Qtd</th>
                         </tr>
                     </thead>
                     <tbody id="plantaTableBody">
-                        </tbody>
+                        <!-- Linhas populadas via JS -->
+                    </tbody>
                 </table>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Lindos Detalhes</p>
+        <p>&copy; 2025 Lindos Detalles</p>
     </footer>
 
-    <div id="messageContainer"></div>
+    <div id="messageContainer" class="message-container"></div>
 
     <script src="planta.js"></script>
 </body>

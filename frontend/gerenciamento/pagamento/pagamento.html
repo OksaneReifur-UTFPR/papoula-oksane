@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD - Forma de Pagamento 💗</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./pagamento.css">
+</head>
+
+<body>
+    <!-- Corações flutuantes -->
+    <div class="floating-hearts" aria-hidden="true"></div>
+    <div class="side-hearts" aria-hidden="true"></div>
+
+    <header>
+        <h1 class="titulo-principal">Gerenciamento de Formas de Pagamento 💗</h1>
+        <p class="subtitulo">Organize seus métodos de pagamento com carinho ✨</p>
+    </header>
+
+    <main>
+        <section class="form-section">
+            <h2>Cadastro de Forma de Pagamento</h2>
+
+            <form id="forma_pagamentoForm" autocomplete="off" novalidate>
+                <div class="search-container">
+                    <label for="searchId">Buscar por ID:</label>
+                    <div class="search-input-group">
+                        <!-- mantém name compatível com FormData se necessário -->
+                        <input type="number" id="searchId" name="id_forma_pagamento" placeholder="Digite o ID..." min="1" />
+                        <button type="button" id="btnBuscar" class="btn-primary">🔍 Buscar</button>
+
+                        <button type="button" id="btnIncluir" class="btn-primary">Incluir</button>
+                        <button type="button" id="btnAlterar" class="btn-secondary" style="display: none;">Alterar</button>
+                        <button type="button" id="btnExcluir" class="btn-danger" style="display: none;">Excluir</button>
+                        <button type="button" id="btnSalvar" class="btn-save" style="display: none;">Salvar</button>
+                        <button type="button" id="btnCancelar" class="btn-cancel" style="display: none;">Cancelar</button>
+                    </div>
+                </div>
+
+                <fieldset id="formFields">
+                    <legend>Dados da Forma de Pagamento 💞</legend>
+
+                    <div class="form-group">
+                        <!-- label for e id coincidem com o que o JS usa -->
+                        <label for="nome_forma_pagamento">Nome da forma de pagamento:</label>
+                        <!-- name e id devem bater com pagamento.js -->
+                        <input type="text" id="nome_forma_pagamento" name="nome_forma_pagamento" required />
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+
+        <section class="list-section">
+            <h2>Lista de Formas de Pagamento</h2>
+            <div class="table-container">
+                <table id="forma_pagamentosTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                        </tr>
+                    </thead>
+                    <tbody id="forma_pagamentosTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>💗 Sistema de Gerenciamento • Lindos Detalles 💗</p>
+    </footer>
+
+    <div id="messageContainer" class="message-container" aria-live="polite"></div>
+
+    <script src="./pagamento.js"></script>
+</body>
+</html>

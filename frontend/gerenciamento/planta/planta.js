@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURAÇÃO INICIAL ---
-    const API_BASE_URL = 'http://localhost:3000'; // Ajuste a porta se necessário
-    let operacao = null; // Controla a ação atual: 'incluir', 'alterar', 'excluir'
+    const API_BASE_URL = 'http://localhost:3000';
+    let operacao = null;
 
-    // --- ELEMENTOS DO DOM --- aqui foi a primeira coisa que eu mexi
+    // --- ELEMENTOS DO DOM ---
     const form = document.getElementById('plantaForm');
     const searchIdInput = document.getElementById('searchIdPlanta');
+    const idsList = document.getElementById('idsList');
+
     const nome_popular_input = document.getElementById('nome_popular');
     const nome_cientifico_input = document.getElementById('nome_cientifico');
     const especie_input = document.getElementById('especie');
@@ -13,7 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const preco_unitario_input = document.getElementById('preco_unitario');
     const quantidade_estoque_input = document.getElementById('quantidade_estoque');
 
-
+    const imagemInput = document.getElementById('imagemPlanta');
+    const imgPreview = document.getElementById('imgPreview');
+    const imgPreviewNoImage = document.querySelector('.img-preview-wrap .no-image');
 
     const plantaTableBody = document.getElementById('plantaTableBody');
     const messageContainer = document.getElementById('messageContainer');
@@ -26,196 +30,277 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnExcluir = document.getElementById('btnExcluir');
     const btnSalvar = document.getElementById('btnSalvar');
 
-    // --- FUNÇÕES DE CONTROLE DA UI (INTERFACE) ---
-
-    /**
-     * Gerencia a visibilidade dos botões de ação com base no estado da aplicação.
-     */
-    const gerenciarBotoes = ({ incluir = false, alterar = false, excluir = false, salvar = false }) => {
+    // --- FUNÇÕES UI ---
+    const gerenciarBotoes = ({ incluir = false, alterar = false, excluir = false, salvar = false } = {}) => {
         btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
         btnAlterar.style.display = alterar ? 'inline-flex' : 'none';
         btnExcluir.style.display = excluir ? 'inline-flex' : 'none';
         btnSalvar.style.display = salvar ? 'inline-flex' : 'none';
     };
 
-    /**
-     * Exibe uma mensagem de feedback para o usuário.
-     */
-    const mostrarMensagem = (texto) => {
+    const mostrarMensagem = (texto, tempo = 3000) => {
         messageContainer.textContent = texto;
         messageContainer.classList.add('show');
-        setTimeout(() => {
-            messageContainer.classList.remove('show');
-        }, 3000);
+        setTimeout(() => messageContainer.classList.remove('show'), tempo);
     };
 
-    /**
-     * Define o estado inicial da tela, limpando formulários e resetando botões.
-     */
     const configurarEstadoInicial = () => {
         form.reset();
         operacao = null;
+
         nome_popular_input.disabled = true;
+        nome_cientifico_input.disabled = true;
+        especie_input.disabled = true;
+        descricao_input.disabled = true;
+        preco_unitario_input.disabled = true;
+        quantidade_estoque_input.disabled = true;
+        imagemInput.disabled = true;
+
+        imgPreview.src = '';
+        imgPreview.style.display = 'none';
+        if (imgPreviewNoImage) imgPreviewNoImage.style.display = 'block';
+
         searchIdInput.disabled = false;
-        gerenciarBotoes({}); // Esconde todos os botões de ação
+        gerenciarBotoes({});
         searchIdInput.focus();
     };
 
-    // --- FUNÇÕES DE LÓGICA E API ---
-
-    /**
-     * Carrega e renderiza todos os plantas na tabela.
-     */
+    // --- CARREGAR LISTA ---
     const carregarPlantas = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/planta`);
-            if (!response.ok) throw new Error('Falha ao carregar plantas.');
-            const plantas = await response.json();
+            const res = await fetch(`${API_BASE_URL}/planta`);
+            if (!res.ok) throw new Error('Falha ao carregar plantas.');
+            const plantas = await res.json();
 
+            // popular tabela
             plantaTableBody.innerHTML = '';
+            // popular datalist de IDs
+            if (idsList) idsList.innerHTML = '';
+
             plantas.forEach(planta => {
                 const row = document.createElement('tr');
-                row.innerHTML =
-                //aqui foi a segunda coisa que eu mexi
-                    `<td>${planta.id_planta}</td>
-                <td>${planta.nome_popular}</td>
-                <td>${planta.nome_cientifico}</td>
-                <td>${planta.especie}</td>
-                <td>${planta.descricao}</td>
-                <td>${planta.preco_unitario}</td>
-                <td>${planta.quantidade_estoque}</td>`
-
-
-
-
-                    ;
+                row.innerHTML = `
+                    <td>${planta.id_planta}</td>
+                    <td>${planta.nome_popular || ''}</td>
+                    <td>${planta.nome_cientifico || ''}</td>
+                    <td>${planta.especie || ''}</td>
+                    <td>${planta.descricao || ''}</td>
+                    <td>${planta.preco_unitario ?? ''}</td>
+                    <td>${planta.quantidade_estoque ?? ''}</td>
+                `;
                 row.onclick = () => {
                     searchIdInput.value = planta.id_planta;
                     buscarPlanta();
                 };
                 plantaTableBody.appendChild(row);
+
+                // adicionar opção ao datalist
+                if (idsList) {
+                    const opt = document.createElement('option');
+                    opt.value = planta.id_planta;
+                    idsList.appendChild(opt);
+                }
             });
-        } catch (error) {
-            mostrarMensagem(error.message);
+
+            // se não houver plantas, limpar a lista
+            if (idsList && plantas.length === 0) idsList.innerHTML = '';
+
+        } catch (err) {
+            mostrarMensagem(err.message || 'Erro ao carregar lista.');
         }
     };
 
-    /**
-     * Busca um planta pelo ID e atualiza a interface de acordo.
-     */
+    // --- BUSCAR POR ID ---
     const buscarPlanta = async () => {
-        const id = searchIdInput.value;
+        const id = searchIdInput.value && String(searchIdInput.value).trim();
         if (!id) {
             mostrarMensagem('Por favor, digite um ID para buscar.');
             return;
         }
-              //aqui foi a terceira coisa que eu fiz
+
         try {
-            const response = await fetch(`${API_BASE_URL}/planta/${id}`);
+            const response = await fetch(`${API_BASE_URL}/planta/${encodeURIComponent(id)}`);
             if (response.ok) {
                 const planta = await response.json();
-                nome_popular_input.value = planta.nome_popular;
-                nome_cientifico_input.value = planta.nome_cientifico;
-                especie_input.value = planta.especie;
-                descricao_input.value = planta.descricao;
-                preco_unitario_input.value = planta.preco_unitario;
-                quantidade_estoque_input.value = planta.quantidade_estoque;
 
+                nome_popular_input.value = planta.nome_popular ?? '';
+                nome_cientifico_input.value = planta.nome_cientifico ?? '';
+                especie_input.value = planta.especie ?? '';
+                descricao_input.value = planta.descricao ?? '';
+                preco_unitario_input.value = planta.preco_unitario ?? '';
+                quantidade_estoque_input.value = planta.quantidade_estoque ?? '';
 
+                imgPreview.src = '';
+                imgPreview.style.display = 'none';
+                if (imgPreviewNoImage) imgPreviewNoImage.style.display = 'block';
 
-                gerenciarBotoes({ alterar: true, excluir: true }); // Encontrou: mostra Alterar e Excluir
-                mostrarMensagem(`Planta "${planta.nome_popular}" encontrado!`);
+                gerenciarBotoes({ alterar: true, excluir: true });
+                mostrarMensagem(`Planta "${planta.nome_popular || id}" encontrada!`);
             } else if (response.status === 404) {
-                nomePlantaInput.value = '';
-                gerenciarBotoes({ incluir: true }); // Não encontrou: mostra Incluir
-                mostrarMensagem('Planta não encontrado. Você pode incluir um novo.');
+                nome_popular_input.value = '';
+                nome_cientifico_input.value = '';
+                especie_input.value = '';
+                descricao_input.value = '';
+                preco_unitario_input.value = '';
+                quantidade_estoque_input.value = '';
+                imgPreview.src = '';
+                imgPreview.style.display = 'none';
+                if (imgPreviewNoImage) imgPreviewNoImage.style.display = 'block';
+
+                gerenciarBotoes({ incluir: true });
+                mostrarMensagem('Planta não encontrada. Você pode incluir um novo registro.');
             } else {
-                throw new Error('Erro ao buscar o planta.');
+                throw new Error('Erro ao buscar a planta.');
             }
-        } catch (error) {
-            mostrarMensagem(error.message);
+        } catch (err) {
+            mostrarMensagem(err.message || 'Erro ao buscar.');
             configurarEstadoInicial();
         }
     };
 
-    /**
-     * Prepara a UI para a inclusão de um novo planta.
-     */
+    // --- PREPARAR INCLUSAO / ALTERACAO / EXCLUSAO ---
+    const habilitarEdicao = () => {
+        nome_popular_input.disabled = false;
+        nome_cientifico_input.disabled = false;
+        especie_input.disabled = false;
+        descricao_input.disabled = false;
+        preco_unitario_input.disabled = false;
+        quantidade_estoque_input.disabled = false;
+        imagemInput.disabled = false;
+    };
+
     const prepararInclusao = () => {
         operacao = 'incluir';
-        nomePlantaInput.disabled = false;
-        nomePlantaInput.value = '';
-        nomePlantaInput.focus();
+        habilitarEdicao();
+        nome_popular_input.value = '';
+        nome_cientifico_input.value = '';
+        especie_input.value = '';
+        descricao_input.value = '';
+        preco_unitario_input.value = '';
+        quantidade_estoque_input.value = '';
+        imagemInput.value = '';
+        imgPreview.src = '';
+        imgPreview.style.display = 'none';
+        if (imgPreviewNoImage) imgPreviewNoImage.style.display = 'block';
+
+        searchIdInput.disabled = true;
         gerenciarBotoes({ salvar: true });
-        mostrarMensagem('Digite o nome do novo planta e clique em Salvar.');
+        nome_popular_input.focus();
+        mostrarMensagem('Preencha os dados e clique em Salvar para incluir.');
     };
 
-    /**
-     * Prepara a UI para a alteração de um planta existente.
-     */
     const prepararAlteracao = () => {
+        if (!searchIdInput.value) {
+            mostrarMensagem('Primeiro busque a planta para alterar.');
+            return;
+        }
         operacao = 'alterar';
-        nomePlantaInput.disabled = false;
-        nomePlantaInput.focus();
+        habilitarEdicao();
+        searchIdInput.disabled = true;
         gerenciarBotoes({ salvar: true });
-        mostrarMensagem('Altere o nome do planta e clique em Salvar.');
+        nome_popular_input.focus();
+        mostrarMensagem('Altere os dados e clique em Salvar.');
     };
 
-    /**
-     * Prepara a UI para a exclusão de um planta.
-     */
     const prepararExclusao = () => {
-        if (confirm(`Tem certeza que deseja excluir o planta ID ${searchIdInput.value}?`)) {
+        const id = searchIdInput.value;
+        if (!id) return mostrarMensagem('Primeiro busque a planta a ser excluída.');
+        if (confirm(`Tem certeza que deseja excluir a planta ID ${id}?`)) {
             operacao = 'excluir';
-            salvarOperacao(); // Chama o salvamento direto para a exclusão
+            salvarOperacao(); // executa exclusão imediatamente
         }
     };
 
-    /**
-     * Executa a operação de salvar (incluir, alterar, excluir) no backend.
-     */
+    // --- SALVAR (INCLUIR / ALTERAR / EXCLUIR) ---
     const salvarOperacao = async () => {
-        const id = searchIdInput.value;
-        const nome = nomePlantaInput.value;
+        const id = searchIdInput.value && String(searchIdInput.value).trim();
+        const nome_popular = nome_popular_input.value && nome_popular_input.value.trim();
+        const nome_cientifico = nome_cientifico_input.value && nome_cientifico_input.value.trim();
+        const especie = especie_input.value && especie_input.value.trim();
+        const descricao = descricao_input.value && descricao_input.value.trim();
+        const preco_unitario = preco_unitario_input.value && preco_unitario_input.value.trim();
+        const quantidade_estoque = quantidade_estoque_input.value !== '' ? Number(quantidade_estoque_input.value) : null;
 
-        if ((operacao === 'incluir' || operacao === 'alterar') && !nome) {
-            mostrarMensagem('O nome do planta não pode ser vazio.');
-            return;
+        // Validação: todos os campos obrigatórios
+        if ((operacao === 'incluir' || operacao === 'alterar')) {
+            if (!nome_popular) return mostrarMensagem('O nome popular não pode ficar vazio.');
+            if (!nome_cientifico) return mostrarMensagem('O nome científico não pode ficar vazio.');
+            if (preco_unitario === '' || preco_unitario == null) return mostrarMensagem('O preço unitário não pode ficar vazio.');
+            if (quantidade_estoque === null || isNaN(quantidade_estoque)) return mostrarMensagem('A quantidade em estoque não pode ficar vazia.');
         }
 
         let url = `${API_BASE_URL}/planta`;
-        let method = 'POST'; //aqui foi a 4 coisa que eu fiz
-        let body = { id_planta: id, nome_popular: nome_popular, nome_cientifico: nome_cientifico, especie: especie, descricao: descricao, preco_unitario: preco_unitario, quantidade_estoque: quantidade_estoque };
+        let method = 'POST';
+        let bodyObj = {};
 
-        if (operacao === 'alterar') {
-            url = `${API_BASE_URL}/planta/${id}`;
-            method = 'PUT'; //aqui foi a 5 coisa que eu fiz
-            body = { nome_popular: nome_popular, nome_cientifico: nome_cientifico, especie: especie, descricao: descricao, preco_unitario: preco_unitario, quantidade_estoque: quantidade_estoque };
+        if (operacao === 'incluir') {
+            if (id) bodyObj.id_planta = id;
+            bodyObj.nome_popular = nome_popular;
+            bodyObj.nome_cientifico = nome_cientifico;
+            bodyObj.especie = especie;
+            bodyObj.descricao = descricao;
+            bodyObj.preco_unitario = preco_unitario;
+            bodyObj.quantidade_estoque = quantidade_estoque;
+        } else if (operacao === 'alterar') {
+            if (!id) { mostrarMensagem('ID inválido para alteração.'); return; }
+            url = `${API_BASE_URL}/planta/${encodeURIComponent(id)}`;
+            method = 'PUT';
+            bodyObj.nome_popular = nome_popular;
+            bodyObj.nome_cientifico = nome_cientifico;
+            bodyObj.especie = especie;
+            bodyObj.descricao = descricao;
+            bodyObj.preco_unitario = preco_unitario;
+            bodyObj.quantidade_estoque = quantidade_estoque;
         } else if (operacao === 'excluir') {
-            url = `${API_BASE_URL}/planta/${id}`;
+            if (!id) { mostrarMensagem('ID inválido para exclusão.'); return; }
+            url = `${API_BASE_URL}/planta/${encodeURIComponent(id)}`;
             method = 'DELETE';
-            body = undefined; // DELETE não tem corpo
+            bodyObj = null;
+        } else {
+            mostrarMensagem('Operação inválida.');
+            return;
         }
 
         try {
-            const response = await fetch(url, {
+            const options = {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: body ? JSON.stringify(body) : null
-            });
+                body: bodyObj ? JSON.stringify(bodyObj) : null
+            };
+
+            const response = await fetch(url, options);
 
             if (!response.ok) {
-                const erro = await response.json();
-                throw new Error(erro.error || `Falha na operação de ${operacao}.`);
+                let errText = 'Falha na operação.';
+                try { const j = await response.json(); errText = j.error || JSON.stringify(j); } catch(e){}
+                throw new Error(errText);
             }
 
-            mostrarMensagem(`Planta ${operacao} com sucesso!`);
+            mostrarMensagem(`Operação ${operacao} realizada com sucesso!`);
             configurarEstadoInicial();
-            carregarPlantas();
-
-        } catch (error) {
-            mostrarMensagem(error.message);
+            await carregarPlantas(); // recarrega e atualiza datalist
+        } catch (err) {
+            mostrarMensagem(err.message || 'Erro na operação.');
         }
+    };
+
+    // --- PREVIEW DE IMAGEM (upload local) ---
+    const handleImagemChange = (ev) => {
+        const file = ev.target.files && ev.target.files[0];
+        if (!file) {
+            imgPreview.src = '';
+            imgPreview.style.display = 'none';
+            if (imgPreviewNoImage) imgPreviewNoImage.style.display = 'block';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imgPreview.src = e.target.result;
+            imgPreview.style.display = 'block';
+            if (imgPreviewNoImage) imgPreviewNoImage.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
     };
 
     // --- EVENT LISTENERS ---
@@ -226,24 +311,35 @@ document.addEventListener('DOMContentLoaded', () => {
     btnExcluir.addEventListener('click', prepararExclusao);
     btnSalvar.addEventListener('click', salvarOperacao);
 
+    if (imagemInput) imagemInput.addEventListener('change', handleImagemChange);
+
+    // permitir buscar ao pressionar Enter no campo de busca
+    if (searchIdInput) {
+        searchIdInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarPlanta();
+            }
+        });
+    }
+
     // --- INICIALIZAÇÃO ---
     configurarEstadoInicial();
     carregarPlantas();
-    createFloatingHearts(); // Função para criar os corações
+    createFloatingHearts();
 });
 
-// Função para criar corações flutuantes (pode ficar no final)
 function createFloatingHearts() {
-    const container = document.querySelector('.floating-hearts');
-    if (!container) return;
-    for (let i = 0; i < 20; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.innerText = ['💖', '💕', '💗', '💓', '💞'][Math.floor(Math.random() * 5)];
-        heart.style.left = `${Math.random() * 100}vw`;
-        heart.style.top = `${5 + Math.random() * 90}vh`;
-        heart.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
-        heart.style.animationDelay = `${Math.random() * 8}s`;
-        container.appendChild(heart);
-    }
+  const container = document.querySelector('.floating-hearts');
+  if (!container) return;
+  for (let i = 0; i < 16; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerText = ['💖', '💕', '💗', '💓', '💞'][Math.floor(Math.random() * 5)];
+    heart.style.left = (i % 2 === 0 ? (Math.random() * 12) : (88 + Math.random() * 8)) + 'vw'; // só esquerda ou direita
+    heart.style.top = (5 + Math.random() * 90) + 'vh';
+    heart.style.fontSize = (0.9 + Math.random() * 0.5) + 'rem';
+    heart.style.animationDelay = (Math.random() * 8) + 's';
+    container.appendChild(heart);
+  }
 }

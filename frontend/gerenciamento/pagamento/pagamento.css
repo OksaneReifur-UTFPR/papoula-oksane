@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap');
+
+:root {
+    --rosa: #ff6b9d;
+    --rosa-suave: #ffe4f1;
+    --branco: #ffffff;
+    --texto: #333;
+    --sombra: 0 4px 20px rgba(255, 107, 157, 0.2);
+    --sombra-hover: 0 8px 28px rgba(255, 107, 157, 0.28);
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+    font-family: "Poppins", sans-serif;
+    color: var(--texto);
+}
+
+/* CORAÇÕES FLUTUANTES */
+/* Apenas laterais */
+.floating-hearts, .side-hearts {
+    position: fixed;
+    top: 0px;                 /* CORRIGIDO: adicionar unidade */
+    width: 140px;             /* largura da faixa lateral */
+    height: 100vh;
+    pointer-events: none;
+    overflow: hidden;         /* garante que corações não "vazem" para o centro */
+    z-index: 1;               /* mantemos atrás do conteúdo principal (ver comentário abaixo) */
+}
+
+/* Lado esquerdo */
+.floating-hearts {
+    left: 0px;                /* CORRIGIDO: adicionar unidade e posição correta */
+}
+
+/* Lado direito */
+.side-hearts {
+    right: 0px;               /* CORRIGIDO: adicionar unidade e posição correta */
+}
+
+
+.heart, .side-heart {
+    position: absolute;
+    font-size: 1.9rem;
+    opacity: 0.56;
+    animation: flutuar 9s infinite ease-in-out;
+    filter: drop-shadow(0 4px 8px rgba(255, 107, 157, 0.4));
+}
+
+/* Se os corações estiverem usando left/top em percentuais, eles serão
+   recortados dentro das faixas laterais devido ao overflow:hidden acima. */
+
+@keyframes flutuar {
+    0% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(-35px) scale(1.2); opacity: 0.9; }
+    100% { transform: translateY(0); opacity: 0.5; }
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    padding: 2rem 0 1.3rem;
+    background: linear-gradient(135deg, var(--branco), var(--rosa-suave));
+    box-shadow: var(--sombra);
+    position: relative; /* garante empilhamento acima dos corações */
+    z-index: 2;
+}
+
+.titulo-principal {
+    font-family: "Dancing Script", cursive;
+    font-size: 3rem;
+    color: var(--rosa);
+    text-shadow: 0 3px 8px rgba(255, 107, 157, 0.25);
+}
+
+.subtitulo {
+    margin-top: 0.4rem;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* SECTIONS */
+section {
+    background: var(--branco);
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 1100px;
+    border-radius: 18px;
+    border: 2px solid var(--rosa);
+    box-shadow: var(--sombra);
+    position: relative; /* garante empilhamento acima dos corações */
+    z-index: 2;
+}
+
+section h2 {
+    font-family: "Dancing Script", cursive;
+    text-align: center;
+    font-size: 2.3rem;
+    color: var(--rosa);
+    text-shadow: 0 2px 6px rgba(255, 107, 157, 0.18);
+    margin-bottom: 1.5rem;
+}
+
+/* BUSCA */
+.search-container {
+    background: var(--rosa-suave);
+    padding: 1.5rem;
+    border-radius: 14px;
+    margin-bottom: 1.6rem;
+    border: 2px solid var(--rosa);
+}
+
+.search-input-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* INPUTS */
+input {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 2px solid var(--rosa);
+    font-size: 1rem;
+    transition: .2s;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 107, 157, 0.4);
+}
+
+/* FIELDSET */
+fieldset {
+    border: 2px solid var(--rosa);
+    padding: 1.5rem;
+    border-radius: 14px;
+    background: #fff8fc;
+}
+
+legend {
+    font-weight: bold;
+    color: var(--rosa);
+}
+
+/* BOTÕES */
+button {
+    padding: 0.8rem 1.8rem;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: var(--sombra);
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: var(--sombra-hover);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--rosa), #ff95b8);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #ff95b8, var(--rosa));
+    color: white;
+}
+
+.btn-save {
+    background: #ffb3d6;
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff3e62, #b11226);
+    color: white;
+}
+
+.btn-cancel {
+    background: #ddd;
+}
+
+/* BOTÃO DE ID */
+.btn-id {
+    background: var(--rosa-suave);
+    border: 2px solid var(--rosa);
+    padding: .3rem .8rem;
+    border-radius: 8px;
+    font-weight: bold;
+    color: var(--rosa);
+}
+.btn-id:hover {
+    background: var(--rosa);
+    color: white;
+}
+
+/* TABELA */
+.table-container {
+    max-height: 380px;
+    overflow-y: auto;
+    border-radius: 18px;
+    border: 2px solid var(--rosa);
+    box-shadow: var(--sombra);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+thead {
+    background: linear-gradient(135deg, var(--rosa), #ff9fc4);
+    color: white;
+}
+
+th, td {
+    padding: 1rem;
+    border-bottom: 1px solid #ffd1e4;
+    text-align: left;
+}
+
+tbody tr:hover {
+    background: #ffe7f3;
+}
+
+/* MENSAGENS */
+.message-container {
+    position: fixed;
+    top: 20px; right: 20px;
+    z-index: 9999;
+}
+
+.message {
+    font-weight: bold;
+    padding: 1rem 1.5rem;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: 1rem;
+    animation: fadeMsg .4s ease;
+}
+
+.message::after {
+    content: " 💗";
+    animation: beat 1.2s infinite;
+}
+
+@keyframes beat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+}
+
+.message.success { background: #ffe4f1; border-left: 6px solid var(--rosa); }
+.message.error { background: #ffd6df; border-left: 6px solid #d11930; }
+.message.info { background: #fce7f3; border-left: 6px solid var(--rosa); }
+.message.warning { background: #fff2ce; border-left: 6px solid #ffb300; }
+
+@keyframes fadeMsg {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+    color: white;
+    background: linear-gradient(135deg, #333, #1a1a1a);
+    position: relative; /* garante empilhamento acima dos corações */
+    z-index: 2;
+}
