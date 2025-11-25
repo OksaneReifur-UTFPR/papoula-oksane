@@ -5,7 +5,7 @@
 -- Dumped from database version 14.18 (Ubuntu 14.18-0ubuntu0.22.04.1)
 -- Dumped by pg_dump version 14.18 (Ubuntu 14.18-0ubuntu0.22.04.1)
 
--- Started on 2025-11-25 09:09:57 -03
+-- Started on 2025-11-25 09:31:25 -03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,7 +24,7 @@ SET default_table_access_method = heap;
 
 --
 -- TOC entry 213 (class 1259 OID 25219)
--- Name: cargo; Type: TABLE; Schema: public; Owner: postgres
+-- Name: cargo; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.cargo (
@@ -33,11 +33,9 @@ CREATE TABLE public.cargo (
 );
 
 
-ALTER TABLE public.cargo OWNER TO postgres;
-
 --
 -- TOC entry 212 (class 1259 OID 25209)
--- Name: cliente; Type: TABLE; Schema: public; Owner: postgres
+-- Name: cliente; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.cliente (
@@ -46,11 +44,9 @@ CREATE TABLE public.cliente (
 );
 
 
-ALTER TABLE public.cliente OWNER TO postgres;
-
 --
 -- TOC entry 221 (class 1259 OID 25279)
--- Name: forma_pagamento; Type: TABLE; Schema: public; Owner: postgres
+-- Name: forma_pagamento; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.forma_pagamento (
@@ -59,11 +55,9 @@ CREATE TABLE public.forma_pagamento (
 );
 
 
-ALTER TABLE public.forma_pagamento OWNER TO postgres;
-
 --
 -- TOC entry 220 (class 1259 OID 25278)
--- Name: forma_pagamento_id_formadepagamento_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: forma_pagamento_id_formadepagamento_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.forma_pagamento_id_formadepagamento_seq
@@ -75,12 +69,10 @@ CREATE SEQUENCE public.forma_pagamento_id_formadepagamento_seq
     CACHE 1;
 
 
-ALTER TABLE public.forma_pagamento_id_formadepagamento_seq OWNER TO postgres;
-
 --
 -- TOC entry 3439 (class 0 OID 0)
 -- Dependencies: 220
--- Name: forma_pagamento_id_formadepagamento_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: forma_pagamento_id_formadepagamento_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.forma_pagamento_id_formadepagamento_seq OWNED BY public.forma_pagamento.id_formadepagamento;
@@ -88,7 +80,7 @@ ALTER SEQUENCE public.forma_pagamento_id_formadepagamento_seq OWNED BY public.fo
 
 --
 -- TOC entry 214 (class 1259 OID 25224)
--- Name: funcionario; Type: TABLE; Schema: public; Owner: postgres
+-- Name: funcionario; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.funcionario (
@@ -98,11 +90,9 @@ CREATE TABLE public.funcionario (
 );
 
 
-ALTER TABLE public.funcionario OWNER TO postgres;
-
 --
 -- TOC entry 219 (class 1259 OID 25267)
--- Name: pagamento; Type: TABLE; Schema: public; Owner: postgres
+-- Name: pagamento; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pagamento (
@@ -113,11 +103,9 @@ CREATE TABLE public.pagamento (
 );
 
 
-ALTER TABLE public.pagamento OWNER TO postgres;
-
 --
 -- TOC entry 222 (class 1259 OID 25285)
--- Name: pagamento_has_formadepagamento; Type: TABLE; Schema: public; Owner: postgres
+-- Name: pagamento_has_formadepagamento; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pagamento_has_formadepagamento (
@@ -127,11 +115,9 @@ CREATE TABLE public.pagamento_has_formadepagamento (
 );
 
 
-ALTER TABLE public.pagamento_has_formadepagamento OWNER TO postgres;
-
 --
 -- TOC entry 218 (class 1259 OID 25266)
--- Name: pagamento_id_pagamento_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: pagamento_id_pagamento_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.pagamento_id_pagamento_seq
@@ -143,12 +129,10 @@ CREATE SEQUENCE public.pagamento_id_pagamento_seq
     CACHE 1;
 
 
-ALTER TABLE public.pagamento_id_pagamento_seq OWNER TO postgres;
-
 --
 -- TOC entry 3440 (class 0 OID 0)
 -- Dependencies: 218
--- Name: pagamento_id_pagamento_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: pagamento_id_pagamento_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.pagamento_id_pagamento_seq OWNED BY public.pagamento.id_pagamento;
@@ -156,7 +140,7 @@ ALTER SEQUENCE public.pagamento_id_pagamento_seq OWNED BY public.pagamento.id_pa
 
 --
 -- TOC entry 216 (class 1259 OID 25240)
--- Name: pedido; Type: TABLE; Schema: public; Owner: postgres
+-- Name: pedido; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pedido (
@@ -166,11 +150,9 @@ CREATE TABLE public.pedido (
 );
 
 
-ALTER TABLE public.pedido OWNER TO postgres;
-
 --
 -- TOC entry 217 (class 1259 OID 25251)
--- Name: pedido_has_planta; Type: TABLE; Schema: public; Owner: postgres
+-- Name: pedido_has_planta; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pedido_has_planta (
@@ -181,11 +163,9 @@ CREATE TABLE public.pedido_has_planta (
 );
 
 
-ALTER TABLE public.pedido_has_planta OWNER TO postgres;
-
 --
 -- TOC entry 215 (class 1259 OID 25239)
--- Name: pedido_id_pedido_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: pedido_id_pedido_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.pedido_id_pedido_seq
@@ -197,12 +177,10 @@ CREATE SEQUENCE public.pedido_id_pedido_seq
     CACHE 1;
 
 
-ALTER TABLE public.pedido_id_pedido_seq OWNER TO postgres;
-
 --
 -- TOC entry 3441 (class 0 OID 0)
 -- Dependencies: 215
--- Name: pedido_id_pedido_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: pedido_id_pedido_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.pedido_id_pedido_seq OWNED BY public.pedido.id_pedido;
@@ -210,7 +188,7 @@ ALTER SEQUENCE public.pedido_id_pedido_seq OWNED BY public.pedido.id_pedido;
 
 --
 -- TOC entry 211 (class 1259 OID 25204)
--- Name: pessoa; Type: TABLE; Schema: public; Owner: postgres
+-- Name: pessoa; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pessoa (
@@ -220,11 +198,9 @@ CREATE TABLE public.pessoa (
 );
 
 
-ALTER TABLE public.pessoa OWNER TO postgres;
-
 --
 -- TOC entry 210 (class 1259 OID 25193)
--- Name: planta; Type: TABLE; Schema: public; Owner: postgres
+-- Name: planta; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.planta (
@@ -238,11 +214,9 @@ CREATE TABLE public.planta (
 );
 
 
-ALTER TABLE public.planta OWNER TO postgres;
-
 --
 -- TOC entry 209 (class 1259 OID 25192)
--- Name: planta_id_planta_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: planta_id_planta_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.planta_id_planta_seq
@@ -254,12 +228,10 @@ CREATE SEQUENCE public.planta_id_planta_seq
     CACHE 1;
 
 
-ALTER TABLE public.planta_id_planta_seq OWNER TO postgres;
-
 --
 -- TOC entry 3442 (class 0 OID 0)
 -- Dependencies: 209
--- Name: planta_id_planta_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: planta_id_planta_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.planta_id_planta_seq OWNED BY public.planta.id_planta;
@@ -267,7 +239,7 @@ ALTER SEQUENCE public.planta_id_planta_seq OWNED BY public.planta.id_planta;
 
 --
 -- TOC entry 3251 (class 2604 OID 25282)
--- Name: forma_pagamento id_formadepagamento; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: forma_pagamento id_formadepagamento; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.forma_pagamento ALTER COLUMN id_formadepagamento SET DEFAULT nextval('public.forma_pagamento_id_formadepagamento_seq'::regclass);
@@ -275,7 +247,7 @@ ALTER TABLE ONLY public.forma_pagamento ALTER COLUMN id_formadepagamento SET DEF
 
 --
 -- TOC entry 3250 (class 2604 OID 25270)
--- Name: pagamento id_pagamento; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: pagamento id_pagamento; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pagamento ALTER COLUMN id_pagamento SET DEFAULT nextval('public.pagamento_id_pagamento_seq'::regclass);
@@ -283,7 +255,7 @@ ALTER TABLE ONLY public.pagamento ALTER COLUMN id_pagamento SET DEFAULT nextval(
 
 --
 -- TOC entry 3249 (class 2604 OID 25243)
--- Name: pedido id_pedido; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: pedido id_pedido; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pedido ALTER COLUMN id_pedido SET DEFAULT nextval('public.pedido_id_pedido_seq'::regclass);
@@ -291,7 +263,7 @@ ALTER TABLE ONLY public.pedido ALTER COLUMN id_pedido SET DEFAULT nextval('publi
 
 --
 -- TOC entry 3248 (class 2604 OID 25196)
--- Name: planta id_planta; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: planta id_planta; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.planta ALTER COLUMN id_planta SET DEFAULT nextval('public.planta_id_planta_seq'::regclass);
@@ -300,130 +272,110 @@ ALTER TABLE ONLY public.planta ALTER COLUMN id_planta SET DEFAULT nextval('publi
 --
 -- TOC entry 3424 (class 0 OID 25219)
 -- Dependencies: 213
--- Data for Name: cargo; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: cargo; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.cargo (id_cargo, nome_cargo) FROM stdin;
-2	cozinheiro
-3	escravo(estagiario)
-5	chefe
-9	garagero
-1	Gerente 
-\.
+INSERT INTO public.cargo VALUES (2, 'cozinheiro');
+INSERT INTO public.cargo VALUES (3, 'escravo(estagiario)');
+INSERT INTO public.cargo VALUES (5, 'chefe');
+INSERT INTO public.cargo VALUES (9, 'garagero');
+INSERT INTO public.cargo VALUES (1, 'Gerente ');
 
 
 --
 -- TOC entry 3423 (class 0 OID 25209)
 -- Dependencies: 212
--- Data for Name: cliente; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: cliente; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.cliente (cpf_cliente, data_cadastro) FROM stdin;
-12345678901	2025-09-23
-11111111111	2025-10-09
-\.
+INSERT INTO public.cliente VALUES ('12345678901', '2025-09-23');
+INSERT INTO public.cliente VALUES ('11111111111', '2025-10-09');
 
 
 --
 -- TOC entry 3432 (class 0 OID 25279)
 -- Dependencies: 221
--- Data for Name: forma_pagamento; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: forma_pagamento; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.forma_pagamento (id_formadepagamento, nome_formadepagamento) FROM stdin;
-1	dinheiro
-2	pix
-\.
+INSERT INTO public.forma_pagamento VALUES (1, 'dinheiro');
+INSERT INTO public.forma_pagamento VALUES (2, 'pix');
 
 
 --
 -- TOC entry 3425 (class 0 OID 25224)
 -- Dependencies: 214
--- Data for Name: funcionario; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: funcionario; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.funcionario (cpf_pessoa, salario, id_cargo) FROM stdin;
-12345678901	2500.00	1
-22222222222	235.33	3
-\.
+INSERT INTO public.funcionario VALUES ('12345678901', 2500.00, 1);
+INSERT INTO public.funcionario VALUES ('22222222222', 235.33, 3);
 
 
 --
 -- TOC entry 3430 (class 0 OID 25267)
 -- Dependencies: 219
--- Data for Name: pagamento; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: pagamento; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.pagamento (id_pagamento, id_pedido, data_pagamento, valor_total_pagamento) FROM stdin;
-1	1	2025-09-23	100.50
-2	1	2025-09-23	100.50
-\.
+INSERT INTO public.pagamento VALUES (1, 1, '2025-09-23', 100.50);
+INSERT INTO public.pagamento VALUES (2, 1, '2025-09-23', 100.50);
 
 
 --
 -- TOC entry 3433 (class 0 OID 25285)
 -- Dependencies: 222
--- Data for Name: pagamento_has_formadepagamento; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: pagamento_has_formadepagamento; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.pagamento_has_formadepagamento (id_pagamentopedido, id_formadepagamento, valor_pago) FROM stdin;
-\.
 
 
 --
 -- TOC entry 3427 (class 0 OID 25240)
 -- Dependencies: 216
--- Data for Name: pedido; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: pedido; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.pedido (id_pedido, cpf_cliente, data_pedido) FROM stdin;
-1	12345678901	2025-09-23
-\.
+INSERT INTO public.pedido VALUES (1, '12345678901', '2025-09-23');
 
 
 --
 -- TOC entry 3428 (class 0 OID 25251)
 -- Dependencies: 217
--- Data for Name: pedido_has_planta; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: pedido_has_planta; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.pedido_has_planta (id_pedido, id_planta, quantidade, preco_planta) FROM stdin;
-1	1	2	10.50
-\.
+INSERT INTO public.pedido_has_planta VALUES (1, 1, 2, 10.50);
 
 
 --
 -- TOC entry 3422 (class 0 OID 25204)
 -- Dependencies: 211
--- Data for Name: pessoa; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: pessoa; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.pessoa (cpf_pessoa, nome_pessoa, data_nascimento_pessoa) FROM stdin;
-12345678901	Maria Silva	1990-05-10
-11111111111	oksane	2025-09-28
-22222222222	maju	2009-05-23
-\.
+INSERT INTO public.pessoa VALUES ('12345678901', 'Maria Silva', '1990-05-10');
+INSERT INTO public.pessoa VALUES ('11111111111', 'oksane', '2025-09-28');
+INSERT INTO public.pessoa VALUES ('22222222222', 'maju', '2009-05-23');
 
 
 --
 -- TOC entry 3421 (class 0 OID 25193)
 -- Dependencies: 210
--- Data for Name: planta; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: planta; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.planta (id_planta, nome_popular, nome_cientifico, especie, descricao, preco_unitario, quantidade_estoque) FROM stdin;
-1	Lirio	Bulbo	Seila	Bonita	10.00	20
-2	Rosa	Rosa rubiginosa	Rosaceae	Planta com flores vermelhas	10.50	100
-3	Rosa	Rosa rubiginosa	Rosaceae	Planta com flores vermelhas	10.50	100
-4	Rosa	Rosa rubiginosa	Rosaceae	Planta com flores vermelhas	10.50	100
-5	tdrhhs	rhrsh	serhsrthfg	srtrthsrhsrtgfhsrggf	23.00	344
-\.
+INSERT INTO public.planta VALUES (1, 'Lirio', 'Bulbo', 'Seila', 'Bonita', 10.00, 20);
+INSERT INTO public.planta VALUES (2, 'Rosa', 'Rosa rubiginosa', 'Rosaceae', 'Planta com flores vermelhas', 10.50, 100);
+INSERT INTO public.planta VALUES (3, 'Rosa', 'Rosa rubiginosa', 'Rosaceae', 'Planta com flores vermelhas', 10.50, 100);
+INSERT INTO public.planta VALUES (4, 'Rosa', 'Rosa rubiginosa', 'Rosaceae', 'Planta com flores vermelhas', 10.50, 100);
+INSERT INTO public.planta VALUES (5, 'tdrhhs', 'rhrsh', 'serhsrthfg', 'srtrthsrhsrtgfhsrggf', 23.00, 344);
 
 
 --
 -- TOC entry 3443 (class 0 OID 0)
 -- Dependencies: 220
--- Name: forma_pagamento_id_formadepagamento_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: forma_pagamento_id_formadepagamento_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.forma_pagamento_id_formadepagamento_seq', 1, false);
@@ -432,7 +384,7 @@ SELECT pg_catalog.setval('public.forma_pagamento_id_formadepagamento_seq', 1, fa
 --
 -- TOC entry 3444 (class 0 OID 0)
 -- Dependencies: 218
--- Name: pagamento_id_pagamento_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: pagamento_id_pagamento_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.pagamento_id_pagamento_seq', 2, true);
@@ -441,7 +393,7 @@ SELECT pg_catalog.setval('public.pagamento_id_pagamento_seq', 2, true);
 --
 -- TOC entry 3445 (class 0 OID 0)
 -- Dependencies: 215
--- Name: pedido_id_pedido_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: pedido_id_pedido_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.pedido_id_pedido_seq', 1, true);
@@ -450,7 +402,7 @@ SELECT pg_catalog.setval('public.pedido_id_pedido_seq', 1, true);
 --
 -- TOC entry 3446 (class 0 OID 0)
 -- Dependencies: 209
--- Name: planta_id_planta_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: planta_id_planta_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.planta_id_planta_seq', 5, true);
@@ -458,7 +410,7 @@ SELECT pg_catalog.setval('public.planta_id_planta_seq', 5, true);
 
 --
 -- TOC entry 3259 (class 2606 OID 25223)
--- Name: cargo cargo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cargo cargo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cargo
@@ -467,7 +419,7 @@ ALTER TABLE ONLY public.cargo
 
 --
 -- TOC entry 3257 (class 2606 OID 25213)
--- Name: cliente cliente_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cliente cliente_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cliente
@@ -476,7 +428,7 @@ ALTER TABLE ONLY public.cliente
 
 --
 -- TOC entry 3269 (class 2606 OID 25284)
--- Name: forma_pagamento forma_pagamento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: forma_pagamento forma_pagamento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.forma_pagamento
@@ -485,7 +437,7 @@ ALTER TABLE ONLY public.forma_pagamento
 
 --
 -- TOC entry 3261 (class 2606 OID 25228)
--- Name: funcionario funcionario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: funcionario funcionario_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.funcionario
@@ -494,7 +446,7 @@ ALTER TABLE ONLY public.funcionario
 
 --
 -- TOC entry 3271 (class 2606 OID 25289)
--- Name: pagamento_has_formadepagamento pagamento_has_formadepagamento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pagamento_has_formadepagamento pagamento_has_formadepagamento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pagamento_has_formadepagamento
@@ -503,7 +455,7 @@ ALTER TABLE ONLY public.pagamento_has_formadepagamento
 
 --
 -- TOC entry 3267 (class 2606 OID 25272)
--- Name: pagamento pagamento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pagamento pagamento_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pagamento
@@ -512,7 +464,7 @@ ALTER TABLE ONLY public.pagamento
 
 --
 -- TOC entry 3265 (class 2606 OID 25255)
--- Name: pedido_has_planta pedido_has_planta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pedido_has_planta pedido_has_planta_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pedido_has_planta
@@ -521,7 +473,7 @@ ALTER TABLE ONLY public.pedido_has_planta
 
 --
 -- TOC entry 3263 (class 2606 OID 25245)
--- Name: pedido pedido_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pedido pedido_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pedido
@@ -530,7 +482,7 @@ ALTER TABLE ONLY public.pedido
 
 --
 -- TOC entry 3255 (class 2606 OID 25208)
--- Name: pessoa pessoa_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pessoa pessoa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pessoa
@@ -539,7 +491,7 @@ ALTER TABLE ONLY public.pessoa
 
 --
 -- TOC entry 3253 (class 2606 OID 25200)
--- Name: planta planta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: planta planta_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.planta
@@ -548,7 +500,7 @@ ALTER TABLE ONLY public.planta
 
 --
 -- TOC entry 3272 (class 2606 OID 25214)
--- Name: cliente fk_cliente_pessoa; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cliente fk_cliente_pessoa; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.cliente
@@ -557,7 +509,7 @@ ALTER TABLE ONLY public.cliente
 
 --
 -- TOC entry 3274 (class 2606 OID 25234)
--- Name: funcionario fk_funcionario_cargo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: funcionario fk_funcionario_cargo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.funcionario
@@ -566,7 +518,7 @@ ALTER TABLE ONLY public.funcionario
 
 --
 -- TOC entry 3273 (class 2606 OID 25229)
--- Name: funcionario fk_funcionario_pessoa; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: funcionario fk_funcionario_pessoa; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.funcionario
@@ -575,7 +527,7 @@ ALTER TABLE ONLY public.funcionario
 
 --
 -- TOC entry 3278 (class 2606 OID 25273)
--- Name: pagamento fk_pagamento_pedido; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pagamento fk_pagamento_pedido; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pagamento
@@ -584,7 +536,7 @@ ALTER TABLE ONLY public.pagamento
 
 --
 -- TOC entry 3280 (class 2606 OID 25295)
--- Name: pagamento_has_formadepagamento fk_pagamentoforma_forma; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pagamento_has_formadepagamento fk_pagamentoforma_forma; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pagamento_has_formadepagamento
@@ -593,7 +545,7 @@ ALTER TABLE ONLY public.pagamento_has_formadepagamento
 
 --
 -- TOC entry 3279 (class 2606 OID 25290)
--- Name: pagamento_has_formadepagamento fk_pagamentoforma_pagamento; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pagamento_has_formadepagamento fk_pagamentoforma_pagamento; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pagamento_has_formadepagamento
@@ -602,7 +554,7 @@ ALTER TABLE ONLY public.pagamento_has_formadepagamento
 
 --
 -- TOC entry 3275 (class 2606 OID 25246)
--- Name: pedido fk_pedido_cliente; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pedido fk_pedido_cliente; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pedido
@@ -611,7 +563,7 @@ ALTER TABLE ONLY public.pedido
 
 --
 -- TOC entry 3276 (class 2606 OID 25256)
--- Name: pedido_has_planta fk_pedidoplanta_pedido; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pedido_has_planta fk_pedidoplanta_pedido; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pedido_has_planta
@@ -620,14 +572,14 @@ ALTER TABLE ONLY public.pedido_has_planta
 
 --
 -- TOC entry 3277 (class 2606 OID 25261)
--- Name: pedido_has_planta fk_pedidoplanta_planta; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pedido_has_planta fk_pedidoplanta_planta; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pedido_has_planta
     ADD CONSTRAINT fk_pedidoplanta_planta FOREIGN KEY (id_planta) REFERENCES public.planta(id_planta);
 
 
--- Completed on 2025-11-25 09:09:58 -03
+-- Completed on 2025-11-25 09:31:25 -03
 
 --
 -- PostgreSQL database dump complete
