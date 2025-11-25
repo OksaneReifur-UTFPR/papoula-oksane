@@ -4,11 +4,11 @@ const { Pool } = require('pg');
 const dbConfig = {
   host: 'localhost',
   port: 5432, // Porta padrão do PostgreSQL
-  // user: 'postgres', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
- //  password: 'admin',
+   user: 'postgres', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
+   password: 'admin',
   
-  user: 'radames', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
-  password: 'Lageado001.',
+ // user: 'radames', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
+ // password: 'Lageado001.',
 
   database: 'papoula',
   // Configurações específicas do PostgreSQL

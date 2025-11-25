@@ -193,6 +193,7 @@ async function salvarOperacao() {
     
     try {
         const pagamentoData = {
+            id_formadepagamento: currentId,
             nome_formadepagamento: nome
         };
         

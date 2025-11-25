@@ -52,7 +52,7 @@ exports.obterFormaPagamento = async (req, res) => {
 exports.criarFormaPagamento = async (req, res) => {
   console.log((req))
   try {
-    const { nome_formadepagamento } = req.body;
+    const {id_formadepagamento, nome_formadepagamento } = req.body;
 
     if (!nome_formadepagamento) {
       return res.status(400).json({
@@ -61,8 +61,8 @@ exports.criarFormaPagamento = async (req, res) => {
     }
 
     const result = await query(
-      'INSERT INTO forma_pagamento (nome_formadepagamento) VALUES ($1) RETURNING *',
-      [nome_formadepagamento]
+      'INSERT INTO forma_pagamento (id_formadepagamento, nome_formadepagamento) VALUES ($1,$2) RETURNING *',
+      [id_formadepagamento, nome_formadepagamento]
     );
 
     res.status(201).json(result.rows[0]);
