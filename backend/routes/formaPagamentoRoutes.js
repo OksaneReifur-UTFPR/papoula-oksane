@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const formaPagamentoController = require('../controllers/formaPagamentoController');
 
+
+router.get('/abrirCrudFormaDePagamento', formaPagamentoController.abrirCrudFormaDePagamento);
+
 // Listar todas as formas de pagamento
 router.get('/', formaPagamentoController.listarFormasPagamento);
 

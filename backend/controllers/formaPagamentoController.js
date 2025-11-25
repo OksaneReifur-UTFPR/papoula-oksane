@@ -11,6 +11,14 @@ CREATE TABLE public.forma_pagamento (
 
 */
 
+const path = require('path');
+
+exports.abrirCrudFormaDePagamento = (req, res) => {
+ console.log("formadepagamento "+__dirname)
+  
+    res.sendFile(path.join(__dirname, '../../frontend/gerenciamento/formadepagamento/formadepagamento.html'));
+ 
+}
 
 exports.listarFormasPagamento = async (req, res) => {
   try {
