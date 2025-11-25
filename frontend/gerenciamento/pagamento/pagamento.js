@@ -10,7 +10,7 @@ let operacao = null;        // 'incluir' | 'alterar'
 
 // --- Elementos do DOM ---
 const searchId = document.getElementById('searchId');
-const nomeInput = document.getElementById('nome_forma_pagamento');
+const nomeInput = document.getElementById('nome_formadepagamento');
 
 // Botões
 const btnBuscar = document.getElementById('btnBuscar');
@@ -150,10 +150,10 @@ async function buscarForma_pagamento() {
         
         if (res.ok) {
             const pagamento = await res.json();
-            currentId = pagamento.id_forma_pagamento;
+            currentId = pagamento.id_formadepagamento;
             
             // Popula campos
-            nomeInput.value = pagamento.nome_forma_pagamento;
+            nomeInput.value = pagamento.nome_formadepagamento;
             
             // Estado de registro existente
             setFormState(false);
@@ -193,7 +193,7 @@ async function salvarOperacao() {
     
     try {
         const pagamentoData = {
-            nome_forma_pagamento: nome
+            nome_formadepagamento: nome
         };
         
         let method = isNew ? 'POST' : 'PUT';
@@ -201,7 +201,7 @@ async function salvarOperacao() {
         
         // Se for inclusão e o ID foi preenchido, adiciona o ID no body (se a API suportar)
         if (isNew && currentId !== null && !isNaN(currentId)) {
-             pagamentoData.id_forma_pagamento = currentId;
+             pagamentoData.id_formadepagamento = currentId;
         }
 
         const res = await fetch(url, {
@@ -259,18 +259,20 @@ async function carregarForma_pagamentos() {
         if (!res.ok) throw new Error('Falha ao carregar lista de formas de pagamento.');
         const pagamentos = await res.json();
         
+console.log(pagamentos)
+
         forma_pagamentosTableBody.innerHTML = '';
         
         pagamentos.forEach(p => {
             const row = document.createElement('tr');
             
             row.innerHTML = `
-                <td>${escapeHtml(p.id_forma_pagamento)}</td>
-                <td>${escapeHtml(p.nome_forma_pagamento)}</td>
+                <td>${escapeHtml(p.id_formadepagamento)}</td>
+                <td>${escapeHtml(p.nome_formadepagamento)}</td>
             `;
             // Adiciona evento de clique para carregar o registro na tabela
             row.onclick = () => {
-                searchId.value = p.id_forma_pagamento;
+                searchId.value = p.id_formadepagamento;
                 buscarForma_pagamento();
             };
             forma_pagamentosTableBody.appendChild(row);

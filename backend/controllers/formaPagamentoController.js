@@ -1,10 +1,21 @@
 const { query } = require('../database');
 
 // Listar todas as formas de pagamento
+
+/*
+CREATE TABLE public.forma_pagamento (
+	id_formadepagamento serial4 NOT NULL,
+	nome_formadepagamento varchar(50) NOT NULL,
+	CONSTRAINT forma_pagamento_pkey PRIMARY KEY (id_formadepagamento)
+);
+
+*/
+
+
 exports.listarFormasPagamento = async (req, res) => {
   try {
     const result = await query(
-      'SELECT * FROM Forma_pagamento ORDER BY id_formaDePagamento'
+      'SELECT * FROM forma_pagamento ORDER BY id_formadepagamento'
     );
     res.json(result.rows);
   } catch (error) {
@@ -22,7 +33,7 @@ exports.obterFormaPagamento = async (req, res) => {
     }
 
     const result = await query(
-      'SELECT * FROM Forma_pagamento WHERE id_formaDePagamento = $1',
+      'SELECT * FROM forma_pagamento WHERE id_formadepagamento = $1',
       [id]
     );
 
@@ -41,17 +52,17 @@ exports.obterFormaPagamento = async (req, res) => {
 exports.criarFormaPagamento = async (req, res) => {
   console.log((req))
   try {
-    const { nome_formaDePagamento } = req.body;
+    const { nome_formadepagamento } = req.body;
 
-    if (!nome_formaDePagamento) {
+    if (!nome_formadepagamento) {
       return res.status(400).json({
-        error: 'nome_formaDePagamento é obrigatório'
+        error: 'nome_formadepagamento é obrigatório'
       });
     }
 
     const result = await query(
-      'INSERT INTO Forma_pagamento (nome_formaDePagamento) VALUES ($1) RETURNING *',
-      [nome_formaDePagamento]
+      'INSERT INTO forma_pagamento (nome_formadepagamento) VALUES ($1) RETURNING *',
+      [nome_formadepagamento]
     );
 
     res.status(201).json(result.rows[0]);
@@ -65,7 +76,7 @@ exports.criarFormaPagamento = async (req, res) => {
 exports.atualizarFormaPagamento = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { nome_formaDePagamento } = req.body;
+    const { nome_formadepagamento } = req.body;
 
     if (isNaN(id)) {
       return res.status(400).json({ error: 'ID deve ser um número válido' });
@@ -73,7 +84,7 @@ exports.atualizarFormaPagamento = async (req, res) => {
 
     // Verifica se existe
     const existing = await query(
-      'SELECT * FROM Forma_pagamento WHERE id_formaDePagamento = $1',
+      'SELECT * FROM forma_pagamento WHERE id_formadepagamento = $1',
       [id]
     );
     if (existing.rows.length === 0) {
@@ -81,8 +92,8 @@ exports.atualizarFormaPagamento = async (req, res) => {
     }
 
     const result = await query(
-      'UPDATE Forma_pagamento SET nome_formaDePagamento = $1 WHERE id_formaDePagamento = $2 RETURNING *',
-      [nome_formaDePagamento !== undefined ? nome_formaDePagamento : existing.rows[0].nome_formaDePagamento, id]
+      'UPDATE forma_pagamento SET nome_formadepagamento = $1 WHERE id_formadepagamento = $2 RETURNING *',
+      [nome_formadepagamento !== undefined ? nome_formadepagamento : existing.rows[0].nome_formadepagamento, id]
     );
 
     res.json(result.rows[0]);
@@ -103,7 +114,7 @@ exports.deletarFormaPagamento = async (req, res) => {
 
     // Verifica se existe
     const existing = await query(
-      'SELECT * FROM Forma_pagamento WHERE id_formaDePagamento = $1',
+      'SELECT * FROM forma_pagamento WHERE id_formadepagamento = $1',
       [id]
     );
     if (existing.rows.length === 0) {
@@ -111,7 +122,7 @@ exports.deletarFormaPagamento = async (req, res) => {
     }
 
     await query(
-      'DELETE FROM Forma_pagamento WHERE id_formaDePagamento = $1',
+      'DELETE FROM forma_pagamento WHERE id_formadepagamento = $1',
       [id]
     );
     res.status(204).send(); // No Content
