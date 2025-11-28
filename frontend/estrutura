@@ -1,18 +1,6 @@
 oksane_papoula_flores/
 
 
-agora vou te enviar a tela de login e vou enviar as especificaçoes do que eu quero:
-
-quero que quando um usuario nao logado, se cadastrar, salve no banco de dados o usuario, e quamdo  ele for efetuar
- o pagamento nao precise fazer o login novamente.
-Agora, se o usuario nao estiver logado, e apertar no botao finalizar pedido, ele deve
- fazer login, assim que o usuario terminar de se cadastrar, ele deve ser direcionado para
-  a tela de pagamento
-
-
-
-
-
 │
 ├── backend/
 │   └── controllers/
