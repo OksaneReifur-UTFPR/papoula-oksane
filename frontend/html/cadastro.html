@@ -49,6 +49,8 @@
                 <button class="tab active" id="btn-login" type="button">Entrar</button>
                 <button class="tab" id="btn-cadastrar" type="button">Cadastrar</button>
             </div>
+
+            <!-- FORMULÁRIO DE LOGIN -->
             <form class="form" id="form-login">
                 <label for="email-login">E-mail</label>
                 <input type="email" id="email-login" name="email-login" required placeholder="Digite seu e-mail">
@@ -59,6 +61,8 @@
                     <a href="#">Esqueceu a senha?</a>
                 </div>
             </form>
+
+            <!-- FORMULÁRIO DE CADASTRO -->
             <form class="form hidden" id="form-cadastro">
                 <label for="nome-cadastro">Nome completo</label>
                 <input type="text" id="nome-cadastro" name="nome-cadastro" required placeholder="Seu nome">
@@ -68,7 +72,7 @@
                 <input type="password" id="senha-cadastro" name="senha-cadastro" required placeholder="Crie uma senha">
                 <label for="confirmar-senha">Confirmar senha</label>
                 <input type="password" id="confirmar-senha" name="confirmar-senha" required placeholder="Repita a senha">
-                <button type="submit" class="btn-primary">Cadastrar</button>
+                <button type="submit" class="btn-primary" id="btn-submit-cadastro">Cadastrar</button>
             </form>
         </div>
     </main>
@@ -80,8 +84,9 @@
         <span class="heart-btn">💖</span>
     </button>
 
+    <!-- Script: comportamento das abas + autenticação -->
     <script>
-        // Alternância de abas
+        // Alternância de abas (mantive o seu código e deixo a lógica principal no auth.js)
         const btnLogin = document.getElementById('btn-login');
         const btnCadastro = document.getElementById('btn-cadastrar');
         const formLogin = document.getElementById('form-login');
@@ -100,5 +105,8 @@
             formLogin.classList.add('hidden');
         });
     </script>
+
+    <!-- Script que implementa login/cadastro, fluxo 'finalizar pedido' e modal do gerente -->
+    <script src="../js/auth.js"></script>
 </body>
 </html>

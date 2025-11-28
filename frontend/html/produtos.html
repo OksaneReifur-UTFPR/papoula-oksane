@@ -8,12 +8,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Recadinho carinhoso -->
     <div id="cart-message" style="display:none"></div>
 
-    <!-- Corações flutuantes decorativos -->
     <div class="floating-hearts"></div>
     <div class="side-hearts"></div>
 
@@ -29,18 +28,11 @@
                     <li><a href="menu.html">Início</a></li>
                     <li><a href="produtos.html" class="active">Produtos</a></li>
                     <li><a href="sobre.html">Sobre</a></li>
-                    <li><a href="contato.html">Contato</a></li>
-
-                    <!-- ===================================================================== -->
-                    <!-- BOTÃO DE GERENCIAMENTO ADICIONADO AQUI (COMEÇA ESCONDIDO) -->
-                    <!-- ===================================================================== -->
                     <li>
-                        <a href="/frontend/gerenciamento/gerenciamento.html" id="btn-gerenciamento" style="display: none;">
-                            Gerenciamento
+                        <a href="gerenciamento.html" id="btn-gerenciamento" style="display:none" class="nav-button">
+                            Gerenciar
                         </a>
                     </li>
-                    <!-- ===================================================================== -->
-
                     <li><a href="cadastro.html">Cadastro</a></li>
                     <li>
                         <a href="carrinho.html">
@@ -55,12 +47,16 @@
     <main>
         <div class="container">
             <h2 class="produtos-titulo">Nossas Mudas de Flores <span>💗</span></h2>
-            <div class="products-grid" id="products-grid">
-                <!-- Os produtos serão carregados via JavaScript -->
+            
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="🌸 Digite o nome da flor que você procura (ex: Rosa, Orquídea)..." autocomplete="off">
+                <i class="fas fa-search search-icon"></i>
             </div>
+            <div class="products-grid" id="products-grid">
+                </div>
         </div>
     </main>
-      💞💗💖💘💝🩷
+     
     <footer>
         <div class="footer-content">
             <div class="footer-hearts">

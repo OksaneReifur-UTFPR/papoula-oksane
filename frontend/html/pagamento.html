@@ -4,31 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento - Lindos Detalles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="../css/pagamento.css">
-    <!-- Ícones para os botões (usando a biblioteca Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
    
-    <!-- Botão de Voltar para o carrinho -->
-    <a href="carrinho.html" class="back-button">← Voltar para o Carrinho</a>
+    <a href="carrinho.html" class="back-button">
+        <i class="fas fa-chevron-left"></i> Voltar para o Carrinho
+    </a>
 
-    <!-- Corações flutuantes para manter a identidade -->
     <div class="floating-hearts"></div>
 
     <header>
-        <h1>Quase lá!</h1>
+        <h1>✨ Quase lá!</h1>
         <p class="subtitle">Escolha a forma de pagamento para concluir seu pedido</p>
     </header>
 
-    <main>
+    <main class="payment-container">
         <section class="payment-section">
             <h2>Forma de Pagamento</h2>
 
-            <!-- Botões de seleção da forma de pagamento -->
             <div class="payment-options">
                 <button id="btn-cartao" class="payment-option active" data-target="cartao">
-                    <i class="fas fa-credit-card"></i> Cartão de Crédito
+                    <i class="fas fa-credit-card"></i> Cartão
                 </button>
                 <button id="btn-pix" class="payment-option" data-target="pix">
                     <i class="fa-brands fa-pix"></i> Pix
@@ -38,9 +38,7 @@
                 </button>
             </div>
 
-            <!-- Conteúdo dinâmico que muda conforme a seleção -->
             <div class="payment-content">
-                <!-- Seção Cartão de Crédito (visível por padrão ) -->
                 <div id="content-cartao" class="payment-details active">
                     <form id="form-cartao">
                         <div class="form-group">
@@ -52,11 +50,11 @@
                             <input type="text" id="card-name" placeholder="Como está impresso no cartão" required>
                         </div>
                         <div class="form-row">
-                            <div class="form-group">
+                            <div class="form-group form-half">
                                 <label for="card-expiry">Validade</label>
                                 <input type="text" id="card-expiry" placeholder="MM/AA" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group form-half">
                                 <label for="card-cvv">CVV</label>
                                 <input type="text" id="card-cvv" placeholder="123" required>
                             </div>
@@ -64,26 +62,36 @@
                     </form>
                 </div>
 
-                <!-- Seção Pix (escondida) -->
                 <div id="content-pix" class="payment-details">
-                    <p>Para pagar com Pix, escaneie o QR Code abaixo com o app do seu banco:</p>
+                    <p class="pix-instruction">
+                        Para pagar com Pix, escaneie o **QR Code** abaixo com o app do seu banco ou use a chave Copia e Cola.
+                    </p>
                     <div class="qr-code-container">
-                        <!-- A imagem do QR Code seria gerada pelo seu backend -->
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=EsteEhUmExemploDePayloadPix" alt="QR Code para pagamento Pix">
                     </div>
-                    <p class="pix-status">Aguardando pagamento...</p>
+                    <button class="btn-copy">
+                        <i class="fas fa-copy"></i> Copiar Chave Pix
+                    </button>
+                    <p class="pix-status">Aguardando pagamento ser confirmado...</p>
                 </div>
 
-                <!-- Seção Boleto (escondida ) -->
                 <div id="content-boleto" class="payment-details">
-                    <p>Seu boleto foi gerado! Clique no botão abaixo para visualizar e imprimir.</p>
-                    <button class="btn-secondary"><i class="fas fa-print"></i> Visualizar e Imprimir Boleto</button>
-                    <p class="info-text">O pagamento pode levar até 3 dias úteis para ser confirmado.</p>
+                    <p class="boleto-instruction">
+                        Seu boleto foi gerado com sucesso! Salve o código de barras ou clique para imprimir.
+                    </p>
+                    <div class="barcode-container">
+                        <span>12345.67890 12345.67890 12345.67890 1 12345678901234</span>
+                    </div>
+                    <button class="btn-secondary" id="btn-imprimir-boleto">
+                        <i class="fas fa-print"></i> Visualizar e Imprimir Boleto
+                    </button>
+                    <p class="info-text">
+                        O pagamento pode levar até **3 dias úteis** para ser confirmado.
+                    </p>
                 </div>
             </div>
         </section>
 
-        <!-- Botão final para confirmar o pagamento -->
         <div class="finalize-button-container">
             <button id="btn-finalizar-pagamento" class="btn-primary">
                 Finalizar Pagamento

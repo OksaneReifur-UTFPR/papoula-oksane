@@ -70,8 +70,8 @@ app.use((err, req, res, next) => {
 // só mexa nessa parte
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Importando as rotas
-// const loginRoutes = require('./routes/loginRoutes');
-// app.use('/login', loginRoutes);
+const loginRoutes = require('./routes/loginRoutes');
+app.use('/login', loginRoutes);
 
 //  const menuRoutes = require('./routes/menuRoutes');
 //  app.use('/menu', menuRoutes);
@@ -105,6 +105,9 @@ app.use('/pedido', pedidoRoutes);
 
 const pedidoHasPlantaRoutes = require('./routes/pedidoHasPlantaRoutes');
 app.use('/pedido_has_planta', pedidoHasPlantaRoutes);
+
+const relatorioFloresRoutes = require('./routes/relatorioFloresRoutes');
+app.use('/relatorio_flores', relatorioFloresRoutes);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Rota padrão
