@@ -1,0 +1,105 @@
+/* Adaptado a partir do exemplo enviado pelo usuário.
+   Estilos responsáveis por aparência de "Meus Pedidos". */
+
+/* Reset/variáveis */
+* { box-sizing: border-box; margin:0; padding:0; }
+:root{
+  --rosa:#ff6b9d;
+  --fundo:#fff7fb;
+  --texto:#3b2b2b;
+  --suave:#ffeef6;
+  --shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+
+/* Layout */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#fdf2f8 0%,#fce7f3 100%);
+  color: var(--texto);
+  min-height:100vh;
+}
+
+/* Floating hearts (posicionamento definido no HTML) */
+.floating-hearts { position:fixed; inset:0; pointer-events:none; z-index:1; }
+.heart { position:absolute; font-size:1.3rem; opacity:0.5; }
+
+/* Header */
+header {
+  background: linear-gradient(135deg,#fff 0%,var(--suave) 100%);
+  padding:1rem 0;
+  box-shadow: var(--shadow);
+  position:sticky; top:0; z-index:100;
+}
+.header-container{ max-width:1200px; margin:0 auto; padding:0 1.5rem; }
+.header-top { display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+.logo { display:flex; gap:1rem; align-items:center; }
+.logo img { width:56px; height:56px; border-radius:8px; object-fit:cover; box-shadow: var(--shadow); }
+.logo-text { font-family:'Dancing Script', cursive; font-size:1.6rem; color:var(--rosa); }
+.store-subtitle { font-size:0.85rem; color:#666; }
+
+.user-section select {
+  padding:0.6rem 1rem; border-radius:12px; border:2px solid var(--rosa); background:#fff;
+}
+
+/* Nav */
+.nav { margin-top:0.8rem; background: #fff; border-radius:40px; padding:0.4rem; box-shadow: var(--shadow); }
+.nav__menu { display:flex; gap:1rem; list-style:none; justify-content:center; flex-wrap:wrap; }
+.nav__menu-item a { display:block; padding:0.6rem 1rem; text-decoration:none; color:var(--texto); border-radius:18px; transition:all .2s; }
+.nav__menu-item a:hover, .nav__menu-item.active > a { background: linear-gradient(135deg,var(--rosa),#ff8db8); color:#fff; transform:translateY(-2px); }
+
+/* Page title */
+main { max-width:1200px; margin:2rem auto; padding:0 1.5rem; position:relative; z-index:2; }
+.page-title { text-align:center; margin-bottom:1.8rem; }
+.page-title h1 { font-family:'Dancing Script', cursive; font-size:2.4rem; color:var(--rosa); }
+.page-subtitle { color:#777; margin-top:0.3rem; }
+
+/* Container */
+.pedidos-container { background:#fff; border-radius:16px; padding:1.4rem; box-shadow: var(--shadow); border:1px solid rgba(255,107,157,0.06); }
+.pedidos-content { min-height:160px; }
+
+/* Empty state */
+.empty-state { text-align:center; padding:2rem 1rem; color:#777; }
+.empty-icon { font-size:3.5rem; margin-bottom:1rem; color:var(--rosa); }
+.empty-title { font-family:'Dancing Script', cursive; font-size:1.6rem; margin-bottom:0.5rem; }
+.empty-description { color:#666; margin-bottom:1rem; }
+
+/* Lista de pedidos (quando houver) */
+.pedidos-list { display:flex; flex-direction:column; gap:0.8rem; }
+.pedido-card {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:12px 14px; border-radius:12px; background:linear-gradient(135deg,#fff,#fff); border:1px solid rgba(0,0,0,0.03);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+.pedido-info { display:flex; gap:14px; align-items:flex-start; }
+.pedido-meta { font-weight:700; color:var(--texto); }
+.pedido-data { font-size:0.9rem; color:#777; }
+.pedido-valor { font-weight:800; color:var(--rosa); font-size:1rem; }
+
+.pedido-actions { display:flex; gap:8px; align-items:center; }
+.btn-small {
+  padding:0.5rem 0.9rem; border-radius:8px; border:none; cursor:pointer; background:#f5f5f5; color:var(--texto);
+}
+.btn-primary { background:linear-gradient(135deg,var(--rosa),#ff8db8); color:#fff; }
+
+/* Modal detalhes */
+.modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); z-index:300; }
+.modal-inner { background:#fff; padding:1.2rem; border-radius:12px; max-width:720px; width:95%; box-shadow:var(--shadow); position:relative; }
+.modal-close { position:absolute; top:10px; right:10px; background:transparent; border:none; font-size:1.1rem; cursor:pointer; }
+
+/* Tabela itens no modal */
+.table-itens { width:100%; border-collapse:collapse; margin-top:8px; }
+.table-itens th, .table-itens td { padding:8px 10px; border-bottom:1px solid #eee; text-align:left; font-size:0.95rem; }
+.table-itens th { background:#fafafa; font-weight:700; }
+
+/* Messages */
+.message-container { position:fixed; top:100px; right:20px; z-index:400; }
+
+/* Footer */
+footer { text-align:center; padding:1.6rem; margin-top:2rem; color:#aaa; }
+
+/* Responsivo */
+@media(max-width:768px){
+  .header-top{ flex-direction:column; gap:0.7rem; text-align:center; }
+  .pedido-card{ flex-direction:column; align-items:stretch; gap:8px; }
+  .pedido-actions{ justify-content:flex-end; }
+}

@@ -1,349 +1,247 @@
-// =========================================================
-// pagamento.js - Código Completo
-// Implementa CRUD para Forma de Pagamento com controle de estado.
-// =========================================================
+// Front-end adaptado ao seu controller / rota: formadepagamento
+// Ajuste API_BASE_URL se necessário
+const API_BASE_URL = 'http://localhost:3000';
+const BASE_PATH = '/formadepagamento'; // monte o router no backend com este caminho
 
-const API_BASE_URL = 'http://localhost:3000'; // Ajuste conforme a porta do seu servidor
+let currentId = null;
+let operacao = null;
 
-let currentId = null;       // ID da forma de pagamento atualmente carregada
-let operacao = null;        // 'incluir' | 'alterar'
-
-// --- Elementos do DOM ---
+// DOM
+const form = document.getElementById('formadePagamentoForm');
 const searchId = document.getElementById('searchId');
-const nomeInput = document.getElementById('nome_formadepagamento');
+const inputId = document.getElementById('id_formadepagamento');
+const inputNome = document.getElementById('nome_formadepagamento');
 
-// Botões
 const btnBuscar = document.getElementById('btnBuscar');
-const btnCancelar = document.getElementById('btnCancelar');
 const btnIncluir = document.getElementById('btnIncluir');
 const btnAlterar = document.getElementById('btnAlterar');
 const btnExcluir = document.getElementById('btnExcluir');
 const btnSalvar = document.getElementById('btnSalvar');
+const btnCancelar = document.getElementById('btnCancelar');
 
-// Listagem e Mensagens
-const forma_pagamentosTableBody = document.getElementById('forma_pagamentosTableBody');
+const tableBody = document.getElementById('formadepagamentoTableBody');
 const messageContainer = document.getElementById('messageContainer');
 
-// =================================================================
-// FUNÇÕES DE CONTROLE DE ESTADO E UI (Interface)
-// =================================================================
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  bindEvents();
+  carregarFormaPagamentos();
+  resetUI();
+});
 
-/**
- * Gerencia a visibilidade dos botões de ação.
- */
-const gerenciarBotoes = ({ incluir = false, alterar = false, excluir = false, salvar = false }) => {
-    if (btnIncluir) btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
-    if (btnAlterar) btnAlterar.style.display = alterar ? 'inline-flex' : 'none';
-    if (btnExcluir) btnExcluir.style.display = excluir ? 'inline-flex' : 'none';
-    if (btnSalvar) btnSalvar.style.display = salvar ? 'inline-flex' : 'none';
-};
-
-/**
- * Exibe uma mensagem de notificação temporária.
- */
-const mostrarMensagem = (texto, tempo = 3500) => {
-    if (!messageContainer) return;
-    messageContainer.textContent = texto;
-    messageContainer.classList.add('show');
-    setTimeout(() => messageContainer.classList.remove('show'), tempo);
-};
-
-/**
- * Habilita ou desabilita os campos comuns para edição.
- */
-function setFormState(isEditable) {
-    nomeInput.disabled = !isEditable;
-    searchId.disabled = isEditable; // Desabilita busca se estiver editando
-
-    if (!isEditable) {
-        operacao = null;
-        gerenciarBotoes({}); // Limpa todos os botões
-    }
-}
-
-/**
- * Reseta o formulário para o estado inicial de busca.
- */
-function limparFormulario(clearSearch = true) {
-    currentId = null;
-    operacao = null;
-    
-    // Limpa campos
-    if (clearSearch) searchId.value = '';
-    nomeInput.value = '';
-    
-    // Configura estado inicial (somente busca habilitada)
-    setFormState(false);
-    searchId.disabled = false;
-    searchId.focus();
-    
-    // Recarrega a lista
-    carregarForma_pagamentos();
-}
-
-/**
- * Prepara o formulário para a inclusão de um novo registro.
- */
-function prepararInclusao() {
-    if (searchId.value.trim() === '') {
-        mostrarMensagem('O ID (ou deixe o campo vazio para inclusão automática, se suportado pela API) precisa ser considerado para inclusão.');
-        // Se a API gerar ID, apenas limpe o campo e passe para edição
-        limparFormulario(true); 
-        currentId = null;
-    } else {
-        // Se o usuário digitou um ID, use-o
-        currentId = parseInt(searchId.value);
-    }
-    
-    nomeInput.value = '';
-    operacao = 'incluir';
-    setFormState(true);
-    nomeInput.focus();
-    gerenciarBotoes({ salvar: true });
-    mostrarMensagem('Modo Inclusão: Preencha o nome e salve.');
-}
-
-/**
- * Prepara o formulário para a alteração de um registro existente.
- */
-function prepararAlteracao() {
-    if (currentId === null) {
-        mostrarMensagem('Busque uma forma de pagamento primeiro para alterar.');
-        return;
-    }
-    operacao = 'alterar';
-    setFormState(true);
-    nomeInput.focus();
-    // No modo alteração, a exclusão também deve ser possível
-    gerenciarBotoes({ salvar: true, excluir: true });
-    mostrarMensagem('Modo Alteração: Edite o nome e clique em Salvar.');
-}
-
-/**
- * Prepara para exclusão (apenas um passo de confirmação).
- */
-function prepararExclusao() {
-    if (currentId === null) {
-        mostrarMensagem('Busque uma forma de pagamento primeiro para excluir.');
-        return;
-    }
-    excluirForma_pagamento();
-}
-
-// =================================================================
-// FUNÇÕES DE COMUNICAÇÃO COM A API (CRUD)
-// =================================================================
-
-/**
- * Busca uma forma de pagamento na API pelo ID.
- */
-async function buscarForma_pagamento() {
-    const id = searchId.value.trim();
-    if (id === '') {
-        mostrarMensagem('Por favor, digite o ID para buscar ou clique em Limpar para incluir.');
-        limparFormulario(false);
-        return;
-    }
-
-    try {
-        const res = await fetch(`${API_BASE_URL}/forma_pagamento/${id}`);
-        
-        if (res.ok) {
-            const pagamento = await res.json();
-            currentId = pagamento.id_formadepagamento;
-            
-            // Popula campos
-            nomeInput.value = pagamento.nome_formadepagamento;
-            
-            // Estado de registro existente
-            setFormState(false);
-            gerenciarBotoes({ alterar: true, excluir: true });
-            mostrarMensagem(`Forma de Pagamento (ID ${currentId}) encontrada.`);
-        } else if (res.status === 404) {
-            // Não encontrado, prepara para inclusão com o ID digitado
-            currentId = parseInt(id);
-            prepararInclusao();
-            mostrarMensagem(`ID ${id} não encontrado. Preencha o nome para incluí-lo.`);
-        } else {
-            throw new Error('Erro ao buscar forma de pagamento.');
-        }
-    } catch (err) {
-        mostrarMensagem(err.message || 'Erro de comunicação com o servidor.');
-        limparFormulario();
-    }
-}
-
-
-/**
- * Salva (inclui ou altera) o registro.
- */
-async function salvarOperacao() {
-    if (operacao !== 'incluir' && operacao !== 'alterar') return;
-
-    const nome = nomeInput.value.trim();
-    
-    // Validação básica
-    if (!nome) {
-        mostrarMensagem('O Nome da Forma de Pagamento é obrigatório.');
-        return;
-    }
-
-    const isNew = operacao === 'incluir';
-    let msgSuccess = isNew ? 'Forma de Pagamento incluída com sucesso!' : 'Forma de Pagamento alterada com sucesso!';
-    
-    try {
-        const pagamentoData = {
-            id_formadepagamento: currentId,
-            nome_formadepagamento: nome
-        };
-        
-        let method = isNew ? 'POST' : 'PUT';
-        let url = isNew ? `${API_BASE_URL}/forma_pagamento` : `${API_BASE_URL}/forma_pagamento/${currentId}`;
-        
-        // Se for inclusão e o ID foi preenchido, adiciona o ID no body (se a API suportar)
-        if (isNew && currentId !== null && !isNaN(currentId)) {
-             pagamentoData.id_formadepagamento = currentId;
-        }
-
-        const res = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(pagamentoData)
-        });
-
-        if (!res.ok) {
-            const errorBody = await res.text();
-            throw new Error(`Falha na API: ${res.statusText}. Detalhe: ${errorBody.substring(0, 100)}...`);
-        }
-        
-        mostrarMensagem(msgSuccess);
-        limparFormulario();
-    } catch (error) {
-        mostrarMensagem(`Erro ao salvar: ${error.message}`);
-    }
-}
-
-
-/**
- * Exclui a forma de pagamento pelo ID.
- */
-async function excluirForma_pagamento() {
-    if (currentId === null) return;
-
-    if (!confirm(`Tem certeza que deseja EXCLUIR PERMANENTEMENTE a Forma de Pagamento ID ${currentId} (${nomeInput.value})?`)) {
-        return;
-    }
-
-    try {
-        const res = await fetch(`${API_BASE_URL}/forma_pagamento/${currentId}`, {
-            method: 'DELETE'
-        });
-
-        if (!res.ok) {
-            throw new Error('Falha ao excluir o registro.');
-        }
-
-        mostrarMensagem('Forma de Pagamento excluída com sucesso!');
-        limparFormulario();
-    } catch (err) {
-        mostrarMensagem(err.message || 'Erro ao tentar excluir a forma de pagamento.');
-    }
-}
-
-
-/**
- * Carrega a lista de formas de pagamento para a tabela.
- */
-async function carregarForma_pagamentos() {
-    try {
-        const res = await fetch(`${API_BASE_URL}/forma_pagamento`);
-        if (!res.ok) throw new Error('Falha ao carregar lista de formas de pagamento.');
-        const pagamentos = await res.json();
-        
-console.log(pagamentos)
-
-        forma_pagamentosTableBody.innerHTML = '';
-        
-        pagamentos.forEach(p => {
-            const row = document.createElement('tr');
-            
-            row.innerHTML = `
-                <td>${escapeHtml(p.id_formadepagamento)}</td>
-                <td>${escapeHtml(p.nome_formadepagamento)}</td>
-            `;
-            // Adiciona evento de clique para carregar o registro na tabela
-            row.onclick = () => {
-                searchId.value = p.id_formadepagamento;
-                buscarForma_pagamento();
-            };
-            forma_pagamentosTableBody.appendChild(row);
-        });
-    } catch (err) {
-        mostrarMensagem('Erro ao carregar lista: ' + err.message, 5000);
-    }
-}
-
-
-// =================================================================
-// FUNÇÕES AUXILIARES E INICIALIZAÇÃO
-// =================================================================
-
-/**
- * Escapa HTML para prevenir XSS.
- */
-function escapeHtml(s) {
-  return String(s || '').replace(/[&<>\"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"\'":'&#39;'}[m]));
-}
-
-/**
- * Cria corações flutuantes para o efeito visual do tema.
- */
-function createFloatingHearts() {
-    const container = document.querySelector('.floating-hearts');
-    if (!container) return;
-    const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨', '💖', '💕', '🌸', '💓', '💞']; 
-    for (let i = 0; i < 20; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-        // Posicionamento levemente lateral e com top variado para dar o efeito de flutuação
-        heart.style.left = `${Math.random() * 100}vw`; 
-        heart.style.top = `${5 + Math.random() * 90}vh`;
-        heart.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
-        heart.style.animationDelay = (Math.random() * 10) + 's';
-        container.appendChild(heart);
-    }
-}
-
-/**
- * Associa todos os eventos aos elementos do DOM.
- */
+// Bind events
 function bindEvents() {
-    btnBuscar.addEventListener('click', buscarForma_pagamento);
-    btnCancelar.addEventListener('click', limparFormulario);
-    btnIncluir.addEventListener('click', prepararInclusao);
-    btnAlterar.addEventListener('click', prepararAlteracao);
-    btnExcluir.addEventListener('click', prepararExclusao);
-    btnSalvar.addEventListener('click', salvarOperacao);
-    
-    // permitir buscar ao pressionar Enter no campo de busca
-    searchId.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            buscarForma_pagamento();
-        }
-    });
+  btnBuscar.addEventListener('click', buscarFormaPagamento);
+  btnIncluir.addEventListener('click', iniciarInclusao);
+  btnAlterar.addEventListener('click', iniciarAlteracao);
+  btnExcluir.addEventListener('click', iniciarExclusao);
+  btnSalvar.addEventListener('click', salvarOperacao);
+  btnCancelar.addEventListener('click', cancelarOperacao);
+
+  // Enter in search
+  searchId.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); buscarFormaPagamento(); } });
 }
 
-/**
- * Função de inicialização principal.
- */
-async function inicializar() {
-    bindEvents();
-    await carregarForma_pagamentos();
-    limparFormulario(); // Define o estado inicial após carregar os dados
-    createFloatingHearts();
+// UI helpers
+function showMessage(text, type = 'info', timeout = 3500) {
+  if (!messageContainer) return;
+  messageContainer.innerHTML = `<div class="message ${type}">${text}</div>`;
+  if (timeout > 0) setTimeout(() => { messageContainer.innerHTML = ''; }, timeout);
 }
 
-// Inicia a aplicação ao carregar o DOM
-document.addEventListener('DOMContentLoaded', inicializar);
+function resetUI() {
+  currentId = null;
+  operacao = null;
+  form.reset();
+  inputId.disabled = false;
+  searchId.disabled = false;
+  toggleButtons({ buscar: true, incluir: true, alterar: false, excluir: false, salvar: false, cancelar: true });
+}
+
+function toggleButtons({ buscar = true, incluir = true, alterar = false, excluir = false, salvar = false, cancelar = true }) {
+  btnBuscar.style.display = buscar ? 'inline-block' : 'none';
+  btnIncluir.style.display = incluir ? 'inline-block' : 'none';
+  btnAlterar.style.display = alterar ? 'inline-block' : 'none';
+  btnExcluir.style.display = excluir ? 'inline-block' : 'none';
+  btnSalvar.style.display = salvar ? 'inline-block' : 'none';
+  btnCancelar.style.display = cancelar ? 'inline-block' : 'none';
+}
+
+function setEditable(editable) {
+  inputNome.disabled = !editable;
+  inputId.disabled = !editable; // allow editing ID only in inclusion mode if desired
+}
+
+// CRUD operations
+async function carregarFormaPagamentos() {
+  try {
+    const resp = await fetch(`${API_BASE_URL}${BASE_PATH}`);
+    if (!resp.ok) throw new Error(`Status ${resp.status}`);
+    const data = await resp.json();
+    const list = Array.isArray(data) ? data : (data.rows || []);
+    renderTabela(list);
+  } catch (err) {
+    console.error('Erro carregar formas:', err);
+    showMessage('Erro ao carregar formas de pagamento', 'error', 5000);
+  }
+}
+
+function renderTabela(items = []) {
+  tableBody.innerHTML = '';
+  items.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><button class="btn-id" data-id="${item.id_formadepagamento}">${escapeHtml(item.id_formadepagamento)}</button></td>
+      <td>${escapeHtml(item.nome_formadepagamento)}</td>
+    `;
+    tr.querySelector('.btn-id').addEventListener('click', () => selecionarFormaPagamento(item.id_formadepagamento));
+    tableBody.appendChild(tr);
+  });
+}
+
+async function buscarFormadePagamento() {
+  const id = searchId.value.trim();
+  if (!id) { showMessage('Digite um ID para buscar', 'warning'); return; }
+  try {
+    const resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${id}`);
+    if (resp.ok) {
+      const data = await resp.json();
+      preencherFormulario(data);
+      showMessage('Registro encontrado', 'success');
+      toggleButtons({ buscar: true, incluir: false, alterar: true, excluir: true, salvar: false, cancel: false });
+      inputId.disabled = true;
+      setEditable(false);
+      currentId = data.id_formadepagamento;
+    } else if (resp.status === 404) {
+      // prepare for inclusion with given id
+      form.reset();
+      searchId.value = id;
+      inputId.value = id;
+      inputNome.focus();
+      operacao = 'incluir';
+      toggleButtons({ buscar: true, incluir: false, alterar: false, excluir: false, salvar: true, cancelar: true });
+      setEditable(true);
+      showMessage('Registro não encontrado. Preencha os dados para incluir.', 'info');
+    } else {
+      const err = await resp.json().catch(()=>({error:'Erro'}));
+      throw new Error(err.error || 'Erro na busca');
+    }
+  } catch (err) {
+    console.error(err);
+    showMessage('Erro ao buscar registro', 'error');
+  }
+}
+
+function preencherFormulario(data) {
+  currentId = data.id_formadepagamento;
+  inputId.value = data.id_formadepagamento;
+  inputNome.value = data.nome_formadepagamento || '';
+}
+
+function iniciarInclusao() {
+  operacao = 'incluir';
+  form.reset();
+  inputId.value = '';
+  setEditable(true);
+  inputId.disabled = false;
+  inputNome.focus();
+  toggleButtons({ buscar: false, incluir: false, alterar: false, excluir: false, salvar: true, cancelar: true });
+  showMessage('Modo inclusão ativado', 'info');
+}
+
+function iniciarAlteracao() {
+  if (!currentId) { showMessage('Busque um registro primeiro', 'warning'); return; }
+  operacao = 'alterar';
+  setEditable(true);
+  inputId.disabled = true;
+  inputNome.focus();
+  toggleButtons({ buscar: false, incluir: false, alterar: false, excluir: false, salvar: true, cancelar: true });
+  showMessage('Modo alteração ativado', 'info');
+}
+
+function iniciarExclusao() {
+  if (!currentId) { showMessage('Busque um registro primeiro', 'warning'); return; }
+  operacao = 'excluir';
+  toggleButtons({ buscar: false, incluir: false, alterar: false, excluir: false, salvar: true, cancelar: true });
+  showMessage('Confirme exclusão clicando em Salvar', 'warning');
+}
+
+async function salvarOperacao() {
+  const payload = {
+    id_formadepagamento: inputId.value ? Number(inputId.value) : undefined,
+    nome_formadepagamento: inputNome.value && inputNome.value.trim() !== '' ? inputNome.value.trim() : undefined
+  };
+
+  try {
+    if (operacao === 'incluir') {
+      if (!payload.nome_formadepagamento) { showMessage('Nome é obrigatório', 'warning'); return; }
+      const resp = await fetch(`${API_BASE_URL}${BASE_PATH}`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if (resp.ok || resp.status === 201) {
+        const created = await resp.json().catch(()=>null);
+        showMessage('Registro incluído com sucesso', 'success');
+        resetAfterChange();
+      } else {
+        const err = await resp.json().catch(()=>({error:'Erro'}));
+        throw new Error(err.error || 'Erro ao incluir');
+      }
+    } else if (operacao === 'alterar') {
+      if (!currentId) { showMessage('Nenhum registro selecionado', 'warning'); return; }
+      if (!payload.nome_formadepagamento) { showMessage('Nome é obrigatório', 'warning'); return; }
+      const resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${currentId}`, {
+        method: 'PUT',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ nome_formadepagamento: payload.nome_formadepagamento })
+      });
+      if (resp.ok) {
+        showMessage('Registro atualizado com sucesso', 'success');
+        resetAfterChange();
+      } else {
+        const err = await resp.json().catch(()=>({error:'Erro'}));
+        throw new Error(err.error || 'Erro ao atualizar');
+      }
+    } else if (operacao === 'excluir') {
+      if (!currentId) { showMessage('Nenhum registro selecionado', 'warning'); return; }
+      const resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${currentId}`, {
+        method: 'DELETE'
+      });
+      if (resp.status === 204 || resp.ok) {
+        showMessage('Registro excluído com sucesso', 'success');
+        resetAfterChange();
+      } else {
+        const err = await resp.json().catch(()=>({error:'Erro'}));
+        throw new Error(err.error || 'Erro ao excluir');
+      }
+    } else {
+      showMessage('Nenhuma operação ativa', 'warning');
+    }
+  } catch (err) {
+    console.error(err);
+    showMessage(err.message || 'Erro na operação', 'error', 6000);
+  }
+}
+
+function cancelarOperacao() {
+  resetUI();
+  showMessage('Operação cancelada', 'info');
+}
+
+function resetAfterChange() {
+  carregarFormadePagamentos();
+  resetUI();
+}
+
+// selecionar via tabela
+async function selecionarFormadePagamento(id) {
+  searchId.value = id;
+  await buscarFormadePagamento();
+}
+
+// util
+function escapeHtml(s) {
+  if (s === undefined || s === null) return '';
+  return String(s).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}

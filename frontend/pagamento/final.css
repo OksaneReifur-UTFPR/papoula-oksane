@@ -1,0 +1,72 @@
+/* Finalização de pagamento — ajustes aplicados ao seu projeto */
+/* Use este arquivo no lugar do example final.css se desejar */
+/* Mantive a estética padaria já usada no seu projeto */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --primary:#8b6f47;
+  --accent:#f5e6d3;
+  --cream:#faf8f3;
+  --text-dark:#3e2723;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background: linear-gradient(135deg,#faf8f3 0%, #f5e6d3 50%, #e8d5bf 100%);
+  min-height:100vh;
+  padding:15px;
+  color:var(--text-dark);
+}
+
+.container{ max-width:1100px; margin:0 auto; position:relative; z-index:2; }
+
+/* header */
+.header-finalizacao{
+  background: rgba(255,255,255,0.95);
+  border-radius:18px;
+  padding:1rem 1.3rem;
+  margin-bottom:1.2rem;
+  box-shadow:0 8px 25px rgba(139,111,71,0.15);
+  border: 2px solid rgba(139,111,71,0.08);
+}
+.header-content{ display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap; }
+.header-info h1{ font-family:'Pacifico',cursive; color:var(--primary); font-size:1.6rem; margin-bottom:6px; }
+
+/* layout grid */
+.content-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-bottom:1.2rem; }
+.content-section{ background:#fff; border-radius:18px; padding:1.2rem; box-shadow:0 8px 25px rgba(139,111,71,0.08); border:2px solid rgba(139,111,71,0.06); }
+.section-title{ font-family:'Pacifico',cursive; color:var(--primary); font-size:1.3rem; margin-bottom:1rem; padding-bottom:8px; border-bottom:2px solid rgba(139,111,71,0.12); }
+
+/* pedido */
+.pedido-itens{ max-height:320px; overflow-y:auto; padding-right:8px; }
+.item-pedido{ display:flex; justify-content:space-between; align-items:center; padding:0.8rem; border-bottom:1px solid rgba(139,111,71,0.08); transition:background .2s; }
+.item-pedido:hover{ background: linear-gradient(135deg,var(--cream),var(--accent)); border-radius:12px; }
+.item-info-nome{ font-weight:600; font-size:0.95rem; }
+
+/* formas */
+.formas-pagamento-grid{ display:flex; flex-direction:column; gap:0.8rem; }
+.forma-pagamento-card{ background:#fff; border-radius:15px; padding:1rem; border:2px solid rgba(139,111,71,0.12); display:flex; gap:1rem; align-items:center; cursor:pointer; }
+.forma-pagamento-card.selected{ border-color:var(--primary); background: linear-gradient(135deg,var(--cream),var(--accent)); box-shadow:0 10px 30px rgba(139,111,71,0.08); }
+
+/* modal / loading / messages (kept from your design) */
+.modal-overlay{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.6); z-index:1000; }
+.modal-content{ background:#fff; padding:2rem; border-radius:20px; max-width:600px; width:90%; }
+.loading-container{ min-height:100vh; display:flex; align-items:center; justify-content:center; }
+.loading-card{ background:#fff; padding:40px; border-radius:20px; box-shadow:0 10px 40px rgba(139,111,71,0.08); }
+
+/* ações */
+.acoes-container{ display:flex; gap:15px; margin-top:12px; }
+.btn{ padding:1rem 1.5rem; border-radius:50px; border:none; cursor:pointer; font-weight:600; }
+.btn-voltar{ background:rgba(139,111,71,0.08); color:var(--primary); border:2px solid rgba(139,111,71,0.08); }
+.btn-confirmar{ background:linear-gradient(135deg,#27ae60,#2ecc71); color:#fff; }
+
+/* responsive */
+@media (max-width:1024px){ .content-grid{ grid-template-columns:1fr; } }
+@media (max-width:768px){
+  body{ padding:10px; }
+  .header-content{ flex-direction:column; text-align:center; }
+  .btn{ width:100%; }
+}

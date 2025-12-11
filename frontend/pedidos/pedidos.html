@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Meus Pedidos - Padaria / Lindos Detalles</title>
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Estilos adaptados -->
+  <link rel="stylesheet" href="./pedidos.css">
+</head>
+<body>
+  <!-- Corações flutuantes -->
+  <div class="floating-hearts" aria-hidden="true">
+    <div class="heart heart-1">💖</div>
+    <div class="heart heart-2">💕</div>
+    <div class="heart heart-3">💗</div>
+    <div class="heart heart-4">💝</div>
+    <div class="heart heart-5">💖</div>
+    <div class="heart heart-6">💕</div>
+    <div class="heart heart-7">💗</div>
+    <div class="heart heart-8">💝</div>
+  </div>
+
+  <header>
+    <div class="header-container">
+      <div class="header-top">
+        <div class="logo">
+          <img src="../images/logo.jpg" alt="Padaria / Lindos Detalhes">
+          <div>
+            <div class="logo-text">PADARIA AVAP</div>
+            <div class="store-subtitle">☕ Produtos fresquinhos para você</div>
+          </div>
+        </div>
+
+        <div class="user-section">
+          <div class="user-dropdown">
+            <select id="userMenu" aria-label="Menu do usuário">
+              <option value="">👤 Usuário</option>
+              <option value="menu">🏠 Menu</option>
+              <option value="sair">🚪 Sair</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <ul class="nav__menu">
+          <li class="nav__menu-item"><a href="../menu.html">🏠 Home</a></li>
+          <li class="nav__menu-item"><a href="../produtos/produtos.html">🌺 Produtos</a></li>
+          <li class="nav__menu-item"><a href="../carrinho/carrinho.html">🛒 Carrinho</a></li>
+          <li class="nav__menu-item active"><a href="#">📦 Meus Pedidos</a></li>
+          <li class="nav__menu-item"><a href="../auth/login.html">🔐 Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-title">
+      <h1>Meus Pedidos</h1>
+      <p class="page-subtitle">Acompanhe o histórico dos seus pedidos e visualize os detalhes</p>
+    </div>
+
+    <div class="pedidos-container">
+      <div class="pedidos-content">
+        <div id="pedidos-lista" aria-live="polite">
+          <!-- Conteúdo carregado dinamicamente -->
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">📦</div>
+            <h2 class="empty-title">Carregando seus pedidos...</h2>
+            <p class="empty-description">Aguarde enquanto buscamos seu histórico.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-hearts">
+        <span>💖</span>
+        <span>💕</span>
+        <span>💗</span>
+      </div>
+      <p>&copy; 2025 Padaria AVAP / Lindos Detalles</p>
+    </div>
+  </footer>
+
+  <!-- Modal de detalhes do pedido -->
+  <div id="pedidoModal" class="modal" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal-inner">
+      <button id="closePedidoModal" class="modal-close" aria-label="Fechar">✕</button>
+      <h3 id="modalPedidoTitle">Pedido #</h3>
+      <div id="modalPedidoBody"></div>
+    </div>
+  </div>
+
+  <div id="messageContainer" class="message-container" aria-live="polite"></div>
+
+  <script src="./pedidos.js" defer></script>
+</body>
+</html>

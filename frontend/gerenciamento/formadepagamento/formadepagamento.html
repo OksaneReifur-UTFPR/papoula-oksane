@@ -1,81 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gerenciamento de Pagamentos 💗 - Lindos Detalles</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CRUD - Forma de Pagamento</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="formadepagamento.css">
+  <!-- Estilos: ajuste o caminho se necessário -->
+  <link rel="stylesheet" href="/forma_pagamento/forma_pagamento.css">
+
+  <!-- Script principal -->
+  <script src="/forma_pagamento/forma_pagamento.js" defer></script>
 </head>
-
 <body>
-    <a href="#" onclick="history.back(); return false;" class="back-button" aria-label="Voltar">
-        <span>« Voltar 🌸</span>
-    </a>
+  <header>
+    <h1>CRUD Forma de Pagamento</h1>
+  </header>
 
-    <div class="floating-hearts" aria-hidden="true"></div>
+  <main>
+    <section class="form-section" aria-labelledby="titulo-forma">
+      <h2 id="titulo-forma">Cadastro de Forma de Pagamento</h2>
 
-    <header>
-        <h1>Gerenciamento de Formas de Pagamento 💗</h1>
-        <p>Organize seus métodos de pagamento com carinho ✨</p>
-    </header>
+      <form id="formaPagamentoForm" novalidate>
+        <div class="search-container" aria-live="polite">
+          <label for="searchId">Buscar por ID:</label>
+          <div class="search-input-group">
+            <input type="number" id="searchId" placeholder="Digite o ID para buscar" inputmode="numeric" aria-label="ID da forma de pagamento">
+            <button type="button" id="btnBuscar">🔍 Buscar</button>
 
-    <main>
-        <section class="form-section">
-            <form id="forma_pagamentoForm" autocomplete="off" onsubmit="return false;">
+            <button type="button" id="btnIncluir" class="btn-primary">Incluir</button>
+            <button type="button" id="btnAlterar" class="btn-secondary" style="display:none;">Alterar</button>
+            <button type="button" id="btnExcluir" class="btn-danger" style="display:none;">Excluir</button>
+            <button type="button" id="btnSalvar" class="btn-save" style="display:none;">Salvar</button>
+            <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+          </div>
+        </div>
 
-                <div class="search-container">
-                    <label for="searchId">Buscar por ID:</label>
-                    <div class="input-group">
-                        <input type="number" id="searchId" class="form-input" placeholder="Digite o ID" inputmode="numeric">
+        <fieldset id="formFields">
+          <legend>Dados da Forma de Pagamento</legend>
 
-                        <button type="button" id="btnBuscar">🔎 Buscar</button>
-                        <button type="button" id="btnCancelar" class="cancel-button">Limpar</button>
-                    </div>
-                </div>
+          <div class="form-group">
+            <label for="id_formadepagamento">ID (opcional)</label>
+            <input type="number" id="id_formadepagamento" name="id_formadepagamento" placeholder="ID (deixe vazio para auto-incremento)" inputmode="numeric" />
+          </div>
 
-                <fieldset id="formFields">
-                    <legend>Dados da Forma de Pagamento 💞</legend>
+          <div class="form-group">
+            <label for="nome_formadepagamento">Nome da Forma de Pagamento</label>
+            <input type="text" id="nome_formadepagamento" name="nome_formadepagamento" required />
+          </div>
+        </fieldset>
+      </form>
+    </section>
 
-                    <div class="form-group">
-                        <label for="nome_formadepagamento">Nome da forma de pagamento:</label>
-                        <input type="text" id="nome_formadepagamento" class="form-input" required disabled placeholder="Ex: Cartão de Crédito, Pix, Dinheiro">
-                    </div>
-                </fieldset>
+    <section class="list-section" aria-labelledby="lista-formas">
+      <h2 id="lista-formas">Lista de Formas de Pagamento</h2>
+      <div class="table-container" role="region" aria-label="Tabela de formas de pagamento">
+        <table id="forma_pagamentosTable" aria-describedby="lista-formas">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nome</th>
+            </tr>
+          </thead>
+          <tbody id="forma_pagamentosTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
-                <div class="button-group">
-                    <button type="button" id="btnIncluir" style="display: none;">✨ Incluir Novo</button>
-                    <button type="button" id="btnAlterar" style="display: none;">✏️ Alterar</button>
-                    <button type="button" id="btnExcluir" style="display: none;">🗑️ Excluir</button>
-                    <button type="button" id="btnSalvar" style="display: none;">💖 Salvar Alterações</button>
-                </div>
-            </form>
-        </section>
+  <footer>
+    <p>&copy; 2025 CRUD Forma de Pagamento</p>
+  </footer>
 
-        <section class="list-section">
-            <h2>Lista de Formas de Pagamento</h2>
-            <div class="table-container">
-                <table id="forma_pagamentosTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                        </tr>
-                    </thead>
-                    <tbody id="forma_pagamentosTableBody"></tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>💗 Sistema de Gerenciamento • Lindos Detalles 💖</p>
-    </footer>
-
-    <div id="messageContainer" class="message-container" role="status" aria-live="polite"></div>
-
-    <script src="formadepagamento.js"></script>
+  <div id="messageContainer" class="message-container" role="status" aria-live="polite"></div>
 </body>
 </html>

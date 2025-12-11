@@ -1,4 +1,4 @@
-/* Reset e configurações básicas */
+/* Reset e configurações básicas (mantive o estilo que você já usava) */
 * {
     margin: 0;
     padding: 0;
@@ -156,21 +156,9 @@ button {
     color: #fff;
 }
 
-.btn-primary:hover {
-    background: linear-gradient(135deg, #c18f4e, #a67c39);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(193, 143, 78, 0.4);
-}
-
 .btn-secondary {
     background: linear-gradient(135deg, #6d4c41, #5d4037);
     color: white;
-}
-
-.btn-secondary:hover {
-    background: linear-gradient(135deg, #5d4037, #4e342e);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.4);
 }
 
 .btn-save {
@@ -178,53 +166,14 @@ button {
     color: white;
 }
 
-.btn-save:hover {
-    background: linear-gradient(135deg, #c7922f, #d7a55a);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(193, 143, 78, 0.4);
-}
-
 .btn-danger {
     background: linear-gradient(135deg, #b23a48, #8e2b34);
     color: white;
 }
 
-.btn-danger:hover {
-    background: linear-gradient(135deg, #8e2b34, #6a1b24);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(178, 58, 72, 0.4);
-}
-
 .btn-cancel {
     background: linear-gradient(135deg, #8d6e63, #6d4c41);
     color: white;
-}
-
-.btn-cancel:hover {
-    background: linear-gradient(135deg, #6d4c41, #4e342e);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(141, 110, 99, 0.4);
-}
-
-.btn-small {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
-    min-width: auto;
-}
-
-.btn-id {
-    background: #efebe9;
-    color: #4e342e;
-    padding: 0.3rem 0.8rem;
-    font-size: 0.9rem;
-    font-weight: bold;
-    min-width: auto;
-    border-radius: 4px;
-}
-
-.btn-id:hover {
-    background: #d7ccc8;
-    transform: scale(1.05);
 }
 
 /* Table styles */
@@ -264,19 +213,7 @@ table th {
     letter-spacing: 0.5px;
 }
 
-table tbody tr {
-    transition: background-color 0.2s ease;
-}
-
-table tbody tr:hover {
-    background-color: #f5eee9;
-}
-
-table tbody tr:nth-child(even) {
-    background-color: #fdfdfc;
-}
-
-table tbody tr:nth-child(even):hover {
+.table-container tr:hover {
     background-color: #f5eee9;
 }
 
@@ -309,18 +246,6 @@ table tbody tr:nth-child(even):hover {
     border: 1px solid #f8bbd0;
 }
 
-.message.warning {
-    background: linear-gradient(135deg, #fff8e1, #ffe082);
-    color: #8d6e63;
-    border: 1px solid #ffe082;
-}
-
-.message.info {
-    background: linear-gradient(135deg, #ede7f6, #d1c4e9);
-    color: #4527a0;
-    border: 1px solid #d1c4e9;
-}
-
 @keyframes slideIn {
     from {
         transform: translateX(100%);
@@ -332,16 +257,7 @@ table tbody tr:nth-child(even):hover {
     }
 }
 
-/* Footer */
-footer {
-    background: #4e342e;
-    color: white;
-    text-align: center;
-    padding: 1.5rem;
-    margin-top: 1rem;
-}
-
-/* Responsive design */
+/* Responsive */
 @media (max-width: 768px) {
     main {
         padding: 0 1rem;
@@ -382,16 +298,5 @@ footer {
         top: 10px;
         right: 10px;
         left: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    section {
-        padding: 1rem;
-    }
-
-    .search-container,
-    fieldset {
-        padding: 1rem;
     }
 }

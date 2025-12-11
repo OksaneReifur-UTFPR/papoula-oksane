@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Carrinho | Lindos Detalles</title>
-    <link rel="stylesheet" href="../css/carrinho.css">
+    <link rel="stylesheet" href="carrinho.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -38,14 +38,14 @@
     </div>
 
     <!-- Botão Voltar -->
-    <a href="menu.html" class="btn-voltar" title="Voltar">
+    <a href="../menu.html" class="btn-voltar" title="Voltar">
         <span class="voltar-emoji">💗💕</span> Voltar
     </a>
 
     <main>
         <div class="carrinho-container">
             <div class="logo-box">
-                <img src="../images/logo.jpg" alt="Logo Lindos Detalles">
+                <img src="../images/logo.jpg" alt="Logo Lindos Detalles" onerror="this.onerror=null;this.src='https://via.placeholder.com/74'">
                 <h1 class="logo-text">LINDOS DETALLES</h1>
                 <div class="carrinho-subtitle">Seu carrinho de flores e presentes 💐</div>
             </div>
@@ -53,17 +53,21 @@
                 <h2>Meu Carrinho <span class="cart-emoji">🛒💖</span></h2>
                 <p>Veja os produtos escolhidos para encantar alguém especial!</p>
             </div>
-            <!-- Aqui os itens do carrinho serão exibidos pelo JS -->
+
+            <!-- Itens (renderizados pelo JS) -->
             <div class="carrinho-itens" id="carrinho-lista">
                 <!-- Itens do carrinho vão aparecer aqui dinamicamente -->
             </div>
+
             <div class="carrinho-total">
                 <span>Total:</span>
                 <span class="total-valor">R$ 0,00</span>
             </div>
-            <button class="btn-finalizar">Finalizar pedido 💗</button>
+
+            <button class="btn-finalizar" id="btn-finalizar">Finalizar pedido 💗</button>
         </div>
     </main>
-    <script src="../js/carrinho.js"></script>
+
+    <script src="carrinho.js"></script>
 </body>
 </html>

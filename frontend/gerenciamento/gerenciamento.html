@@ -1,52 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Gerenciamento - Lindos Detalles</title>
-    
-    <!-- Link para o arquivo de estilos CSS -->
-    <link rel="stylesheet" href="gerenciamento.css">
-    
-    <!-- Importa a fonte 'Dancing Script' do Google Fonts para o título -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Gerenciamento - Lindos Detalles</title>
+
+<!-- Link para o arquivo de estilos CSS -->
+<link rel="stylesheet" href="gerenciamento.css">
+
+<!-- Importa a fonte 'Dancing Script' do Google Fonts para o título -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- BOTÃO DE VOLTAR -->
-    <a href="javascript:history.back()" class="back-button">🌸 Voltar 🌸</a>
+<!-- BOTÃO DE VOLTAR -->
+<a href="javascript:history.back()" class="back-button">🌸 Voltar 🌸</a>
 
-    <!-- Contêiner onde o JavaScript irá criar os corações flutuantes -->
-    <div class="emoji-container"></div>
+<!-- Contêiner onde o JavaScript irá criar os corações flutuantes -->
+<div class="emoji-container"></div>
 
-    <!-- Painel central com o menu -->
-    <div class="menu-container">
-        <!-- Título estilizado -->
-        <h1>🌸 O que será gerenciado hoje? 🌸</h1>
+<!-- Painel central com o menu -->
+<div class="menu-container">
+  <!-- Título estilizado -->
+  <h1>🌸 O que será gerenciado hoje? 🌸</h1>
 
-        <div class="button-wrapper">
-            <!-- Botão 1: Leva para a tela de pedidos -->
-            <button onclick="location.href='/frontend/gerenciamento/crud-pedidos/pedido.html'">Gerenciamento de Pedidos</button>
+  <div class="button-wrapper">
+    <!-- Botão 1: Leva para a tela de pedidos -->
+    <button onclick="location.href='/frontend/gerenciamento/crud-pedidos/pedido.html'">Gerenciamento de Pedidos</button>
 
-            <!-- Botão 2: agora leva para a tela de plantas (substitui Produtos) -->
-            <button onclick="location.href='/frontend/gerenciamento/planta/planta.html'">Gerenciamento de Plantas</button>
+    <!-- Botão 2: agora leva para a tela de plantas -->
+    <button onclick="location.href='/frontend/gerenciamento/planta/planta.html'">Gerenciamento de Plantas</button>
 
-            <!-- Botão 3: Leva para a tela de cargos -->
-            <button onclick="location.href='/frontend/gerenciamento/cargo/cargo.html'">Gerenciamento de Cargos</button>
+    <!-- Botão 3: Leva para a tela de cargos -->
+    <button onclick="location.href='/frontend/gerenciamento/cargo/cargo.html'">Gerenciamento de Cargos</button>
 
-            <!-- Botão 4: Leva para a tela de pessoas -->
-            <button onclick="location.href='/frontend/gerenciamento/cadastro-pessoa/cadastro-pessoa.html'">Gerenciamento de Pessoas</button>
+    <!-- Botão 4: Leva para a tela de pessoas -->
+    <button onclick="location.href='/frontend/gerenciamento/cadastro-pessoa/cadastro-pessoa.html'">Gerenciamento de Pessoas</button>
 
-            <!-- Botão 5: Leva para a tela de formas de pagamento (adicionado) -->
-            <button onclick="location.href='http://localhost:3000/forma_pagamento/abrirCrudFormaDePagamento'">Forma de Pagamento</button>
-
-            <!-- Botão 6: Gerenciamento de Relatórios (novo) -->
-            <button onclick="location.href='/frontend/gerenciamento/relatorios/relatorios.html'">Gerenciamento de Relatórios</button>
-        </div>
+    <!-- Botão 5: Gerenciamento de Pagamento com combobox -->
+    <button id="btnPagamento">Gerenciamento de Pagamento</button>
+    <div id="comboPagamento" style="display:none; margin-top:10px;">
+      <button onclick="location.href='/frontend/gerenciamento/formadepagamento/formadepagamento.html'">Formas de Pagamento</button>
+      <button onclick="location.href='/frontend/gerenciamento/pagamento_has_formapagamento/pagamento_has_formapagamento.html'">Pagamento_has_FormaDePagamento</button>
+      <button onclick="location.href='/frontend/gerenciamento/pagamento-ok/pagamento.html'">Pagamento</button>
     </div>
 
-    <!-- Link para o arquivo JavaScript no final do body para melhor performance -->
-    <script src="gerenciamento.js"></script> 
+    <!-- Botão 6: Relatórios -->
+    <button id="btnRelatorios">Gerenciamento de Relatórios</button>
+    <div id="comboRelatorios" style="display:none; margin-top:10px;">
+      <button onclick="location.href='/frontend/gerenciamento/relatorios/mes-maior-venda.html'">Relatório por mês</button>
+      <button onclick="location.href='/frontend/gerenciamento/relatorios/flores-mais-vendidas.html'">Flores mais vendidas</button>
+    </div>
+  </div>
+</div>
+
+<!-- Link para o arquivo JavaScript -->
+<script src="gerenciamento.js"></script>
+<script>
+  // Combobox Relatórios
+  document.getElementById('btnRelatorios').addEventListener('click', function() {
+    var combo = document.getElementById('comboRelatorios');
+    combo.style.display = combo.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // Combobox Pagamento
+  document.getElementById('btnPagamento').addEventListener('click', function() {
+    var combo = document.getElementById('comboPagamento');
+    combo.style.display = combo.style.display === 'none' ? 'block' : 'none';
+  });
+</script>
 </body>
 </html>

@@ -5,18 +5,57 @@
 
 // ==================== DADOS: LISTA SIMULADA DE PRODUTOS ====================
 // Esta lista é usada para popular a grade e será filtrada pela pesquisa.
-const produtos = [
-  { nome: "Rosa Vermelha", descricao: "Símbolo de amor intenso. Perfeita para presentear.", preco: "R$ 35,00", imagem: "../images/rosa-vermelha.jpg" },
-  { nome: "Orquídea Phalaenopsis", descricao: "Elegante e duradoura. Ideal para ambientes internos.", preco: "R$ 78,90", imagem: "../images/orquidea.jpg" },
-  { nome: "Girassol", descricao: "Traz alegria e energia. Segue a luz do sol.", preco: "R$ 42,50", imagem: "../images/girassol.jpg" },
-  { nome: "Lavanda", descricao: "Aroma calmante e relaxante. Atrai tranquilidade.", preco: "R$ 28,00", imagem: "../images/lavanda.jpg" },
-  { nome: "Margarida", descricao: "Pequena e delicada. Simboliza a inocência.", preco: "R$ 22,90", imagem: "../images/margarida.jpg" },
-  { nome: "Violeta Africana", descricao: "Fácil de cuidar. Floresce o ano todo.", preco: "R$ 18,50", imagem: "../images/violeta.jpg" },
-  { nome: "Jasmim Manga", descricao: "Perfume intenso e marcante. Mudas de porte médio.", preco: "R$ 65,00", imagem: "../images/jasmim.jpg" },
-  { nome: "Tulipa", descricao: "Cores vibrantes para a primavera. Efeito único.", preco: "R$ 49,90", imagem: "../images/tulipa.jpg" },
-];
-// ============================================================================
+const produtos = carregarProdutos();
 
+
+// ============================================================================
+async function carregarProdutos() {
+    const url = 'http://localhost:3000/planta';
+    
+    try {
+        // 1. Acionar a rota e buscar os dados
+        const response = await fetch(url);
+
+        // Verifica se a resposta foi bem-sucedida (status 200-299)
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+        }
+
+        // 2. Converter a resposta para JSON
+        const dadosDoBanco = await response.json();
+
+        // 3. Ajustar/Mapear os dados e preencher a variável 'produtos'
+        // Criamos o novo array de produtos no formato desejado
+        produtos = dadosDoBanco.map(planta => {
+            return {
+                // Mapeando do JSON para o objeto 'produto'
+                nome: planta.nome_popular, // nome_popular -> nome
+                nomeCientifico: planta.nome_cientifico,
+                descricao: planta.descricao,
+                // Garantir que o preço esteja formatado (pode ser ajustado conforme sua preferência de display)
+                preco: parseFloat(planta.preco_unitario).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                // Adicionamos um placeholder de imagem ou um caminho padrão (você deve ajustar isso)
+                // Se você não tiver uma URL de imagem no seu JSON, isso usará o placeholder.
+                imagem: planta.url_imagem || 'https://placehold.co/300x200/ffd6e0/ffffff?text=Planta',
+                // Outros dados importantes
+                id: planta.id_planta,
+                estoque: planta.quantidade_estoque
+            };
+        });
+
+        // 4. Preencher a variável const produtos = []; (isso já foi feito na linha acima)
+
+        // 5. Exibir os produtos na interface
+        exibirProdutos(produtos);
+
+    } catch (error) {
+        console.error("Houve um erro ao carregar os produtos:", error);
+        // Exibe uma mensagem de erro no container se a requisição falhar
+        if (container) {
+            container.innerHTML = `<p class="error-message">Não foi possível carregar os produtos. Verifique o servidor.</p>`;
+        }
+    }
+}
 
 // ==================== LÓGICA DE GERENCIAMENTO ====================
 function exibeBotaoGerenciamento() {

@@ -80,7 +80,7 @@
 
 
 // Configuração da API, IP e porta.
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:3000';
 let currentPedidoId = null;
 let operacao = null;
 

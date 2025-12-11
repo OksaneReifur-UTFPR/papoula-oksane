@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Entrar ou Cadastrar | Lindos Detalles</title>
+  <link rel="stylesheet" href="../css/login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Corações flutuantes -->
+  <div class="floating-hearts">
+    <span class="heart heart-1">💗</span>
+    <span class="heart heart-2">💕</span>
+    <span class="heart heart-3">💞</span>
+    <span class="heart heart-4">💖</span>
+    <span class="heart heart-5">💗</span>
+    <span class="heart heart-6">💕</span>
+    <span class="heart heart-7">💞</span>
+    <span class="heart heart-8">💖</span>
+    <span class="heart heart-9">💗</span>
+    <span class="heart heart-10">💕</span>
+    <span class="heart heart-11">💞</span>
+    <span class="heart heart-12">💖</span>
+  </div>
+  <div class="side-hearts">
+    <span class="side-heart left-1">💗</span>
+    <span class="side-heart left-2">💕</span>
+    <span class="side-heart left-3">💖</span>
+    <span class="side-heart left-4">💞</span>
+    <span class="side-heart left-5">💗</span>
+    <span class="side-heart right-1">💕</span>
+    <span class="side-heart right-2">💖</span>
+    <span class="side-heart right-3">💞</span>
+    <span class="side-heart right-4">💗</span>
+    <span class="side-heart right-5">💕</span>
+  </div>
+
+  <main>
+    <div id="login-message" style="display:none"></div>
+
+    <div class="login-container" role="main">
+      <div class="logo-box">
+        <h1 class="logo-text">LINDOS DETALLES</h1>
+        <div class="store-subtitle">🌸 Espalhe amor com flores! 🌸</div>
+      </div>
+
+      <div class="tab-group" role="tablist" aria-label="Entrar ou Cadastrar">
+        <button class="tab active" id="btn-login" type="button" aria-selected="true">Entrar</button>
+        <button class="tab" id="btn-cadastrar" type="button" aria-selected="false">Cadastrar</button>
+      </div>
+
+      <!-- Login form -->
+      <form class="form" id="form-login" autocomplete="on">
+        <label for="email-login">E-mail</label>
+        <input type="email" id="email-login" name="email" required placeholder="seu@exemplo.com">
+        <label for="senha-login">Senha</label>
+        <input type="password" id="senha-login" name="senha" required placeholder="••••••••">
+        <button type="submit" class="btn-primary" id="btn-login-submit">Entrar</button>
+        <div class="form-link" style="margin-top:12px">
+          <a href="forgot-password.html">Esqueceu a senha?</a>
+        </div>
+      </form>
+
+      <!-- Cadastro form -->
+      <form class="form hidden" id="form-cadastro" autocomplete="on">
+        <label for="nome-cadastro">Nome completo</label>
+        <input type="text" id="nome-cadastro" name="nome" required placeholder="Seu nome">
+        <label for="email-cadastro">E-mail</label>
+        <input type="email" id="email-cadastro" name="email" required placeholder="seu@exemplo.com">
+        <label for="senha-cadastro">Senha</label>
+        <input type="password" id="senha-cadastro" name="senha" required minlength="6" maxlength="20" placeholder="Crie uma senha">
+        <label for="confirmar-senha">Confirmar senha</label>
+        <input type="password" id="confirmar-senha" name="confirmar" required minlength="6" maxlength="20" placeholder="Repita a senha">
+        <button type="submit" class="btn-primary" id="btn-submit-cadastro">Cadastrar</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Voltar -->
+  <button class="btn-voltar" onclick="window.history.back()"><span class="heart-btn">💗</span> Voltar <span class="heart-btn">💖</span></button>
+
+  <!-- Script modular que usa auth.js -->
+  <script type="module" src="../js/login-app.js"></script>
+</body>
+</html>

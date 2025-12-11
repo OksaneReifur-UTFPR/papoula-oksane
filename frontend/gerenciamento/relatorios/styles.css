@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap');
+
+/* Variáveis de cores e sombras UNIFICADAS com o padrão Lindos Detalles */
+:root {
+    --cor-primaria: #ff6b9d; /* Pink */
+    --cor-secundaria: #ffeef6; /* Lightest pink */
+    --cor-branca: #ffffff;
+    --cor-texto: #2d2d2d;
+    --cor-texto-claro: #666;
+    --cor-rosa-suave: #ffe4f1;
+    --sombra-suave: 0 4px 20px rgba(255, 107, 157, 0.13);
+    --sombra-hover: 0 8px 30px rgba(255, 107, 157, 0.20);
+    
+    /* Variáveis específicas para o painel de relatórios */
+    --text: var(--cor-texto);
+    --muted: var(--cor-texto-claro);
+    --accent: var(--cor-primaria);
+    --accent-2: #e9598a; /* Um tom um pouco mais escuro para gradiente */
+    --soft-border: var(--cor-rosa-suave);
+}
+
+/* ===== BASE E LAYOUT ===== */
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); /* Fundo Unificado */
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 28px auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===== CORAÇÕES FLUTUANTES (Estilo Unificado) ===== */
+.floating-hearts,
+.side-hearts {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+.heart, .side-heart {
+    position: absolute;
+    user-select: none;
+    font-size: 1.5rem;
+    color: var(--cor-primaria);
+    opacity: 0.5;
+    animation: float 10s ease-in-out infinite;
+}
+@keyframes float {
+    0% { transform: translateY(0px); opacity: 0.5; }
+    50% { transform: translateY(-20px); opacity: 0.8; }
+    100% { transform: translateY(0px); opacity: 0.5; }
+}
+
+/* ===== BOTÃO DE VOLTAR (Adicionado para consistência) ===== */
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--accent-2);
+    color: var(--cor-branca);
+    padding: 8px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
+    margin-bottom: 20px;
+    transition: all 0.3s;
+}
+.back-button:hover {
+    background-color: var(--accent);
+    transform: translateY(-1px);
+}
+.back-button i {
+    margin-right: 5px;
+}
+
+/* ===== HEADER E CONTROLES ===== */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 25px;
+    background-color: var(--cor-branca);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--sombra-suave);
+}
+.brand {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.logo {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: var(--cor-rosa-suave);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    color: var(--accent);
+}
+.title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    color: var(--accent);
+    line-height: 1.1;
+}
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 400;
+}
+.controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.controls .small {
+    font-size: 0.9rem;
+    color: var(--accent-2);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+.controls .small:hover {
+    color: var(--accent);
+}
+
+/* ===== CARDS E GRID ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+.card {
+    background: var(--cor-branca);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--sombra-suave);
+    transition: transform 0.3s;
+    height: fit-content;
+}
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-hover);
+}
+.card h3 {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--soft-border);
+    padding-bottom: 8px;
+    font-weight: 600;
+}
+.chart-card {
+    grid-column: span 2;
+}
+.transactions-card {
+    grid-column: 1 / span 2;
+}
+.top-buyer {
+    grid-row: 2 / span 2; /* Ocupa as linhas 2 e 3 */
+}
+
+
+/* ===== KPI e Valores ===== */
+.kpi-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.kpi-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 500;
+}
+.kpi-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+}
+.highlight-kpi {
+    color: var(--accent);
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.2rem;
+}
+
+/* ===== BOTÕES E INPUTS ===== */
+.button {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: var(--cor-branca);
+    padding: 10px 18px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: var(--sombra-suave);
+    transition: all 0.3s;
+}
+.button:hover {
+    box-shadow: var(--sombra-hover);
+    transform: translateY(-1px);
+}
+.button-icon {
+    background: none;
+    border: 1px solid var(--soft-border);
+    color: var(--accent);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 8px;
+}
+.button-icon:hover {
+    background-color: var(--cor-rosa-suave);
+}
+.select-filter, .input-search {
+    padding: 8px 12px;
+    border: 1px solid var(--soft-border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text);
+    transition: border-color 0.3s;
+}
+.input-search {
+    flex-grow: 1;
+}
+.input-search:focus, .select-filter:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(255, 107, 157, 0.2);
+}
+.search-row{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* ===== TABELAS E DETALHES ===== */
+.avatar {
+    width: 56px; height: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--cor-rosa-suave), #ffdae9);
+    display: flex;
+    align-items: center; justify-content: center;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+.table-wrap {
+    overflow: auto;
+    border-radius: 10px;
+    border: 1px solid var(--soft-border);
+    margin-top: 10px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--soft-border);
+}
+th {
+    background: var(--cor-secundaria);
+    color: var(--text);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    cursor: pointer;
+}
+th:hover {
+    background: #ffebf3;
+}
+tr:nth-child(even) {
+    background-color: var(--cor-rosa-suave);
+}
+tr:hover {
+    background-color: #ffdae9 !important;
+}
+.footer-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Estilo para links de navegação dentro dos relatórios */
+.small {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 1000px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .chart-card {
+        grid-column: span 1;
+    }
+    .transactions-card {
+        grid-column: span 2;
+    }
+    .top-buyer {
+        grid-row: auto; /* Volta ao fluxo normal */
+        grid-column: span 2;
+    }
+}
+@media (max-width: 650px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .controls {
+        margin-top: 15px;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    .controls .button, .controls .small {
+        width: 100%;
+        text-align: center;
+    }
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    .chart-card, .transactions-card, .top-buyer {
+        grid-column: span 1;
+    }
+    .kpi-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .kpi-row > div:last-child {
+        margin-left: 0 !important;
+        text-align: left !important;
+    }
+}

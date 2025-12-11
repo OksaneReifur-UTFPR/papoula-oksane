@@ -220,7 +220,10 @@ Resolving deltas: 100% (161/161), done.
 oksane@oksane-Infoway:~/Documentos$ 
 
 
-
+os arquivos da emili
+pagamento = um crud q mostra os pagamentos realizados
+pagamento has forma de pagamento = crud que mostra os paganentos realizados e sua sformas de pagamentos
+forma_pagamento = um crud  que mostra as formas de pagamento
 
 
 / Lista de produtos do seu projeto original

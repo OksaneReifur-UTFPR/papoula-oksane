@@ -1,5 +1,5 @@
 // =========================================================
-// cadastro-pessoa.js - Código Completo
+// cadastro-pessoa.js - Código Completo (Atualizado com Email/Senha)
 // Implementa CRUD e gerenciamento de estados com tema delicado.
 // =========================================================
 
@@ -21,9 +21,11 @@ const btnAlterar = document.getElementById('btnAlterar');
 const btnExcluir = document.getElementById('btnExcluir');
 const btnSalvar = document.getElementById('btnSalvar');
 
-// Campos Comuns
+// Campos Comuns (Adicionados Email e Senha)
 const nomeInput = document.getElementById('nome_pessoa');
 const nascInput = document.getElementById('data_nascimento_pessoa');
+const emailInput = document.getElementById('email_pessoa'); // Novo
+const senhaInput = document.getElementById('senha_pessoa'); // Novo
 const tipoSelect = document.getElementById('tipo_pessoa');
 
 // Campos de Funcionário
@@ -44,7 +46,7 @@ const messageContainer = document.getElementById('messageContainer');
 // =================================================================
 
 /**
- * Gerencia a visibilidade dos botões de ação (Novo padrão de tema).
+ * Gerencia a visibilidade dos botões de ação.
  */
 const gerenciarBotoes = ({ incluir = false, alterar = false, excluir = false, salvar = false }) => {
     if (btnIncluir) btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
@@ -104,8 +106,10 @@ function handleTipoChange() {
 function setFormState(isEditable) {
     nomeInput.disabled = !isEditable;
     nascInput.disabled = !isEditable;
+    emailInput.disabled = !isEditable; // Novo
+    senhaInput.disabled = !isEditable; // Novo
     tipoSelect.disabled = !isEditable;
-    searchId.disabled = isEditable; // Desabilita busca se estiver editando
+    searchId.disabled = isEditable; 
 
     if (!isEditable) {
         currentOperacao = null;
@@ -128,6 +132,8 @@ function limparFormulario(clearSearch = true) {
     if (clearSearch) searchId.value = '';
     nomeInput.value = '';
     nascInput.value = '';
+    emailInput.value = ''; // Novo
+    senhaInput.value = ''; // Novo
     tipoSelect.value = '';
     salarioInput.value = '';
     dataCadastroInput.value = '';
@@ -153,7 +159,7 @@ function prepararInclusao() {
         mostrarMensagem('O CPF precisa ser preenchido para inclusão.');
         return;
     }
-    limparFormulario(false); // Mantém o CPF
+    limparFormulario(false); // Mantém o CPF digitado
     currentOperacao = 'incluir';
     setFormState(true);
     nomeInput.focus();
@@ -173,7 +179,7 @@ function prepararAlteracao() {
     setFormState(true);
     nomeInput.focus();
     gerenciarBotoes({ salvar: true, excluir: true });
-    toggleFields(currentTipo); // Garante que os campos atuais estejam visíveis e habilitados
+    toggleFields(currentTipo); 
     mostrarMensagem('Modo Alteração: Edite e clique em Salvar.');
 }
 
@@ -182,9 +188,6 @@ function prepararAlteracao() {
 // FUNÇÕES DE COMUNICAÇÃO COM A API (CRUD)
 // =================================================================
 
-/**
- * Carrega a lista de cargos da API para o <select> de cargo.
- */
 async function loadCargos() {
     try {
         const res = await fetch(`${API_BASE_URL}/cargo`);
@@ -203,9 +206,6 @@ async function loadCargos() {
     }
 }
 
-/**
- * Carrega CPFs existentes para a lista de sugestões (datalist).
- */
 async function loadCpfs() {
     try {
         const res = await fetch(`${API_BASE_URL}/pessoa`);
@@ -219,7 +219,7 @@ async function loadCpfs() {
             cpfsList.appendChild(option);
         });
     } catch (err) {
-        // Silencioso, pois é uma função de UX
+        // Silencioso
     }
 }
 
@@ -245,6 +245,8 @@ async function buscarPessoa() {
             // Popula campos comuns
             nomeInput.value = pessoa.nome_pessoa;
             nascInput.value = pessoa.data_nascimento_pessoa ? pessoa.data_nascimento_pessoa.split('T')[0] : '';
+            emailInput.value = pessoa.email_pessoa || ''; // Novo: Preenche Email
+            senhaInput.value = pessoa.senha_pessoa || ''; // Novo: Preenche Senha
             tipoSelect.value = pessoa.tipo_pessoa;
             
             // Exibe e popula campos condicionais
@@ -268,9 +270,8 @@ async function buscarPessoa() {
             // Estado de registro existente
             setFormState(false);
             gerenciarBotoes({ alterar: true, excluir: true });
-            mostrarMensagem(`Pessoa (CPF ${cpf}) encontrada! Tipo: ${currentTipo}.`);
+            mostrarMensagem(`Pessoa (CPF ${cpf}) encontrada!`);
         } else if (res.status === 404) {
-            // Não encontrado, prepara para inclusão
             currentCPF = cpf;
             prepararInclusao();
             mostrarMensagem('CPF não encontrado. Preencha os dados para incluir.');
@@ -285,7 +286,7 @@ async function buscarPessoa() {
 
 
 /**
- * Salva (inclui ou altera) o registro da pessoa e seus dados específicos.
+ * Salva (inclui ou altera) o registro.
  */
 async function salvarPessoa() {
     if (currentOperacao !== 'incluir' && currentOperacao !== 'alterar') return;
@@ -293,11 +294,13 @@ async function salvarPessoa() {
     const cpf = currentCPF;
     const nome = nomeInput.value.trim();
     const dataNasc = nascInput.value;
+    const email = emailInput.value.trim(); // Novo
+    const senha = senhaInput.value.trim(); // Novo
     const tipo = tipoSelect.value;
     
-    // Validação básica
-    if (!nome || !tipo) {
-        mostrarMensagem('Nome e Tipo de Pessoa são obrigatórios.');
+    // Validação
+    if (!nome || !tipo || !email || !senha) {
+        mostrarMensagem('Nome, Email, Senha e Tipo são obrigatórios.');
         return;
     }
     if (tipo === 'funcionario' && (!salarioInput.value || !cargoSelect.value)) {
@@ -314,6 +317,8 @@ async function salvarPessoa() {
             cpf_pessoa: cpf,
             nome_pessoa: nome,
             data_nascimento_pessoa: dataNasc,
+            email_pessoa: email, // Novo: Envia para API
+            senha_pessoa: senha, // Novo: Envia para API
             tipo_pessoa: tipo
         };
         
@@ -323,7 +328,7 @@ async function salvarPessoa() {
             body: JSON.stringify(pessoaData)
         });
 
-        // 2. CRUD na tabela específica (Cliente/Funcionário)
+        // 2. CRUD na tabela específica (Cliente/Funcionário) - Lógica mantida
         if (tipo === 'funcionario') {
             const funcionarioData = {
                 cpf_funcionario: cpf,
@@ -331,7 +336,6 @@ async function salvarPessoa() {
                 id_cargo: parseInt(cargoSelect.value)
             };
             
-            // Tenta ALTERAR, se falhar (404), tenta INCLUIR
             let funcMethod = 'PUT';
             let funcUrl = `${API_BASE_URL}/funcionario/${cpf}`;
 
@@ -342,10 +346,8 @@ async function salvarPessoa() {
             });
 
             if (!res.ok && res.status === 404) {
-                 funcMethod = 'POST';
-                 funcUrl = `${API_BASE_URL}/funcionario`;
-                 await fetch(funcUrl, {
-                    method: funcMethod,
+                 await fetch(`${API_BASE_URL}/funcionario`, {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(funcionarioData)
                 });
@@ -357,7 +359,6 @@ async function salvarPessoa() {
                 data_cadastro: dataCadastroInput.value
             };
             
-            // Tenta ALTERAR, se falhar (404), tenta INCLUIR
             let cliMethod = 'PUT';
             let cliUrl = `${API_BASE_URL}/cliente/${cpf}`;
             
@@ -368,10 +369,8 @@ async function salvarPessoa() {
             });
 
             if (!res.ok && res.status === 404) {
-                 cliMethod = 'POST';
-                 cliUrl = `${API_BASE_URL}/cliente`;
-                 await fetch(cliUrl, {
-                    method: cliMethod,
+                 await fetch(`${API_BASE_URL}/cliente`, {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(clienteData)
                 });
@@ -380,16 +379,12 @@ async function salvarPessoa() {
         
         mostrarMensagem(msgSuccess);
         limparFormulario();
-        loadCpfs(); // Atualiza a lista de sugestões
+        loadCpfs();
     } catch (error) {
         mostrarMensagem(`Erro ao salvar: ${error.message}`);
     }
 }
 
-
-/**
- * Exclui a pessoa (e seus registros relacionados) pelo CPF.
- */
 async function excluirPessoa() {
     if (!currentCPF) {
         mostrarMensagem('Nenhuma pessoa carregada para exclusão.');
@@ -401,30 +396,28 @@ async function excluirPessoa() {
     }
 
     try {
-        // A API deve ter a lógica para excluir registros dependentes (Cliente/Funcionário)
         const res = await fetch(`${API_BASE_URL}/pessoa/${currentCPF}`, {
             method: 'DELETE'
         });
 
-        if (!res.ok) {
-            throw new Error('Falha ao excluir o registro principal da pessoa.');
-        }
+        if (!res.ok) throw new Error('Falha ao excluir o registro principal.');
 
         mostrarMensagem('Pessoa excluída com sucesso!');
         limparFormulario();
-        loadCpfs(); // Atualiza a lista de sugestões
+        loadCpfs();
     } catch (err) {
         mostrarMensagem(err.message || 'Erro ao tentar excluir a pessoa.');
     }
 }
 
-
 /**
- * Carrega a lista de pessoas para a tabela.
+ * Carrega a lista de pessoas para a tabela (Atualizado com coluna Email).
  */
 async function loadPessoas() {
     try {
-        const res = await fetch(`${API_BASE_URL}/pessoa/completo`); // Endpoint para dados completos
+        let rota= `${API_BASE_URL}/pessoa`;
+        console.log(rota)
+        const res = await fetch(rota);
         if (!res.ok) throw new Error('Falha ao carregar lista de pessoas.');
         const pessoas = await res.json();
         
@@ -433,22 +426,22 @@ async function loadPessoas() {
         pessoas.forEach(p => {
             const row = document.createElement('tr');
             
-            // Define o detalhe (Salário ou Data de Cadastro)
             let detalhe = '';
             if (p.tipo_pessoa === 'funcionario' && p.salario) {
                 detalhe = `Salário: ${formatMoney(p.salario)}`;
             } else if (p.tipo_pessoa === 'cliente' && p.data_cadastro) {
                 detalhe = `Cadastro: ${formatDate(p.data_cadastro)}`;
             } else if (p.tipo_pessoa === 'funcionario' && p.nome_cargo) {
-                detalhe = `Cargo: ${p.nome_cargo}`; // Exibe o cargo se o salário não estiver disponível
+                detalhe = `Cargo: ${p.nome_cargo}`;
             }
 
+            // Adicionei p.email_pessoa na tabela
             row.innerHTML = `
                 <td>${escapeHtml(p.cpf_pessoa)}</td>
                 <td>${escapeHtml(p.nome_pessoa)}</td>
+                <td>${escapeHtml(p.email_pessoa || '-')}</td> 
                 <td>${escapeHtml(p.tipo_pessoa)}</td>
                 <td>${detalhe}</td>
-                <td>${formatDate(p.data_nascimento_pessoa)}</td>
             `;
             row.onclick = () => {
                 searchId.value = p.cpf_pessoa;
@@ -461,14 +454,10 @@ async function loadPessoas() {
     }
 }
 
-
 // =================================================================
 // FUNÇÕES AUXILIARES E INICIALIZAÇÃO
 // =================================================================
 
-/**
- * Função debounce para limitar a frequência de chamadas (ex: no input do CPF).
- */
 function debounce(fn, wait) {
     let t;
     return function (...args) {
@@ -477,9 +466,6 @@ function debounce(fn, wait) {
     };
 }
 
-/**
- * Formata strings de data para o padrão brasileiro.
- */
 function formatDate(dateString) {
     if (!dateString) return '';
     const d = new Date(dateString);
@@ -487,24 +473,15 @@ function formatDate(dateString) {
     return d.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
 }
 
-/**
- * Formata valores para moeda Real (R$).
- */
 function formatMoney(v) {
     if (v === undefined || v === null) return 'N/A';
     return Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-/**
- * Escapa HTML para prevenir XSS.
- */
 function escapeHtml(s) {
   return String(s || '').replace(/[&<>\"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"\'":'&#39;'}[m]));
 }
 
-/**
- * Cria corações flutuantes para o efeito visual do tema.
- */
 function createFloatingHearts() {
     const container = document.querySelector('.floating-hearts');
     if (!container) return;
@@ -521,9 +498,6 @@ function createFloatingHearts() {
     }
 }
 
-/**
- * Associa todos os eventos aos elementos do DOM.
- */
 function bindEvents() {
     btnBuscar.addEventListener('click', buscarPessoa);
     btnLimpar.addEventListener('click', limparFormulario);
@@ -534,7 +508,6 @@ function bindEvents() {
     
     tipoSelect.addEventListener('change', handleTipoChange);
     
-    // Atualiza a datalist a cada 300ms enquanto o usuário digita
     searchId.addEventListener('input', debounce(loadCpfs, 300));
     searchId.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -544,16 +517,12 @@ function bindEvents() {
     });
 }
 
-/**
- * Função de inicialização principal.
- */
 async function inicializar() {
+    bindEvents(); // Garante que os eventos sejam associados!
     await loadCargos();
     await loadCpfs();
     await loadPessoas();
-    limparFormulario(); // Define o estado inicial após carregar os dados
+    limparFormulario();
     createFloatingHearts();
 }
-
-// Inicia a aplicação ao carregar o DOM
 document.addEventListener('DOMContentLoaded', inicializar);

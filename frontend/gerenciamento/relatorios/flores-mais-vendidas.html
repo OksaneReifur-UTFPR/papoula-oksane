@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Relatório - Flores mais vendidas | Lindos Detalles</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <div class="floating-hearts"></div>
+  <div class="side-hearts"></div>
+
+  <div class="container">
+    
+    <a href="gerenciamento.html" class="back-button"><i class="fas fa-chevron-left"></i> Voltar ao Gerenciamento</a>
+
+    <div class="header">
+      <div class="brand">
+        <div class="logo">🌹</div>
+        <div>
+          <div class="title">Relatório de Vendas — Flores mais vendidas</div>
+          <div class="subtitle">Análise das mudas mais populares por quantidade</div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="button" id="exportCsv">
+            <i class="fas fa-file-csv"></i> Exportar tabela CSV
+        </button>
+        <a href="mes-maior-venda.html" class="small">
+            Ir para: Vendas por Mês <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="grid">
+      
+      <div class="card chart-card">
+        <h3>Top Flores por Quantidade</h3>
+        <canvas id="chartFlores"></canvas>
+      </div>
+
+      <div class="card chart-card">
+        <h3>Distribuição Percentual (Quantidade)</h3>
+        <canvas id="chartPizzaFlores"></canvas>
+      </div>
+
+      <div class="card transactions-card" style="grid-column: span 3;">
+        <h3>🌼 Tabela de Flores Vendidas</h3>
+        
+        <div class="search-row">
+            <input type="text" id="searchInput" placeholder="Buscar nome da flor..." class="input-search">
+            <select id="metricFilter" class="select-filter">
+                <option value="qty">Ordenar por Quantidade</option>
+                <option value="revenue">Ordenar por Receita</option>
+            </select>
+            <button class="button-icon" id="resetBtn" title="Redefinir Filtros"><i class="fas fa-redo"></i></button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="tableFlores">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th data-sort="flower">Nome da Flor</th>
+                <th data-sort="qty">Quantidade Vendida</th>
+                <th data-sort="revenue">Receita Gerada</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="footer-note">Clique nas colunas para ordenar.</div>
+      </div>
+      
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="utils.js"></script>
+  <script src="flores-mais-vendidas.js"></script>
+</body>
+</html>
