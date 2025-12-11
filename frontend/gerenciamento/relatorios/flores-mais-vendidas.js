@@ -1,277 +1,101 @@
 // flores-mais-vendidas.js
-// Requer: data.js (sales) e utils.js (aggregateFlowers)
 
-// ===================================================
-// NOVO: LÓGICA DE CORAÇÕES FLUTUANTES (Unificada)
-// ===================================================
+// Configuração da API
+const API_BASE_URL = 'http://localhost:3000'; // Ajuste conforme seu backend
+// Rota sugerida: /relatorio/flores-mais-vendidas ou /sales/flowers
+const API_ENDPOINT = `${API_BASE_URL}/relatorio/flores-mais-vendidas`; 
+
+// Variável global para armazenar os dados carregados e filtrados
+let currentData = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicialização visual e eventos
+    createHearts();
+    bindEvents();
+    
+    // Carrega e processa os dados da API
+    loadAndProcessData();
+});
 
 /**
- * Cria os corações flutuantes e laterais para o efeito visual unificado.
+ * Carrega os dados de vendas da API, processa e renderiza os gráficos/tabela.
  */
-function createHearts() {
-    const floating = document.querySelector('.floating-hearts');
-    const side = document.querySelector('.side-hearts');
-    const heartEmojis = ['💗', '💕', '💞', '💖'];
-  
-    if(!floating || !side) return;
-  
-    floating.innerHTML = '';
-    side.innerHTML = '';
-  
-    // Corações flutuantes centrais (Floating-Hearts)
-    const floatHearts = [
-      {top: '8%', left: '2%', delay: '0s'},
-      {top: '15%', right: '3%', delay: '1s'},
-      {top: '25%', left: '5%', delay: '2s'},
-      {top: '35%', right: '7%', delay: '3s'},
-      {top: '45%', left: '3%', delay: '4s'},
-      {top: '55%', right: '4%', delay: '5s'},
-      {top: '65%', left: '6%', delay: '1.5s'},
-      {top: '75%', right: '2%', delay: '2.5s'},
-      {top: '85%', left: '4%', delay: '3.5s'},
-      {top: '20%', left: '8%', delay: '4.5s'},
-      {top: '50%', right: '8%', delay: '0.5s'},
-      {top: '70%', left: '2%', delay: '1.8s'},
-    ];
-    floatHearts.forEach((pos, i) => {
-      const heart = document.createElement('span');
-      heart.className = `heart heart-${i+1}`;
-      heart.innerHTML = heartEmojis[i % heartEmojis.length];
-      Object.assign(heart.style, pos);
-      heart.style.animationDelay = pos.delay;
-      floating.appendChild(heart);
-    });
-  
-    // Corações laterais (Side-Hearts)
-    const leftPositions = [
-      {top: '12%', left: '0.5%', delay: '0s'},
-      {top: '30%', left: '1%', delay: '2s'},
-      {top: '48%', left: '0.8%', delay: '4s'},
-      {top: '66%', left: '1.2%', delay: '6s'},
-      {top: '84%', left: '0.7%', delay: '1s'},
-    ];
-    const rightPositions = [
-      {top: '18%', right: '0.5%', delay: '3s'},
-      {top: '36%', right: '1%', delay: '5s'},
-      {top: '54%', right: '0.8%', delay: '1s'},
-      {top: '72%', right: '1.2%', delay: '3s'},
-      {top: '90%', right: '0.7%', delay: '7s'},
-    ];
-    rightPositions.forEach((pos, i) => {
-      const heart = document.createElement('span');
-      heart.className = `side-heart right-${i+1}`;
-      heart.innerHTML = heartEmojis[(i+1) % heartEmojis.length];
-      Object.assign(heart.style, pos);
-      heart.style.animationDelay = pos.delay;
-      side.appendChild(heart);
-    });
-    leftPositions.forEach((pos, i) => {
-        const heart = document.createElement('span');
-        heart.className = `side-heart left-${i+1}`;
-        heart.innerHTML = heartEmojis[i % heartEmojis.length];
-        Object.assign(heart.style, pos);
-        heart.style.animationDelay = pos.delay;
-        side.appendChild(heart);
-    });
+async function loadAndProcessData() {
+    try {
+        const response = await fetch(API_ENDPOINT);
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar dados: ${response.status} ${response.statusText}. Certifique-se de que o servidor está rodando e o endpoint '${API_ENDPOINT}' existe.`);
+        }
+        
+        // Assume que a API retorna um array de vendas (salesData)
+        // A estrutura deve ser a mesma do seu data.js: 
+        // [{ id: pedidoId, ..., items: [{flower: nomeProduto, qty: quantidade, price: precoUnitario}] }, ...]
+        const salesData = await response.json(); 
+
+        if (!Array.isArray(salesData) || salesData.length === 0) {
+            console.warn("Nenhuma compra registrada ou dados vazios da API.");
+            mostrarMensagem("Nenhuma compra registrada para análise. O relatório está vazio.", 'warning');
+            renderEmptyState();
+            return;
+        }
+        
+        // A função aggregateFlowers (de utils.js) é crucial
+        if (typeof aggregateFlowers !== 'function') {
+             throw new Error("Função 'aggregateFlowers' não está definida. Verifique se 'utils.js' foi carregado corretamente.");
+        }
+
+        // 1. Processa dados (Agregação: nome da flor, qty total, receita total)
+        currentData = aggregateFlowers(salesData);
+
+        // 2. Renderiza os componentes
+        const initialMetric = document.getElementById('metricFilter').value;
+        currentData.sort((a, b) => b[initialMetric] - a[initialMetric]); // Ordena por métrica inicial
+        
+        renderChartBarras(currentData);
+        renderChartPizza(currentData);
+        carregarTabela(currentData);
+        
+    } catch (error) {
+        console.error("Falha ao carregar dados do relatório:", error);
+        mostrarMensagem(`Erro ao carregar dados do relatório. Verifique o servidor e o endpoint: ${error.message}`, 'error', 8000);
+        renderEmptyState();
+    }
 }
 
 
-// ===================================================
-// LÓGICA DO RELATÓRIO DE FLORES
-// ===================================================
-(function(){
+// =================================================================
+// FUNÇÕES DE UI E EVENTOS
+// =================================================================
 
-    // Checa se as dependências foram carregadas
-    if (typeof sales === 'undefined' || typeof aggregateFlowers === 'undefined' || typeof formatCurrency === 'undefined') {
-        console.error("Arquivos de dados (data.js, utils.js) não carregados ou funções não definidas.");
-        // Usa dados de fallback para evitar erro total, mas informa ao usuário (se existisse uma UI para isso)
-        // Por hora, apenas retorna.
-        return;
-    }
-
-    const tableBody = document.querySelector('#tableFlores tbody');
-    const barCtx = document.getElementById('chartFlores');
-    const pieCtx = document.getElementById('chartPizzaFlores');
-    const exportBtn = document.getElementById('exportCsv');
+function bindEvents() {
     const searchInput = document.getElementById('searchInput');
     const metricFilter = document.getElementById('metricFilter');
     const resetBtn = document.getElementById('resetBtn');
+    
+    // Filtro por busca
+    searchInput.addEventListener('input', debounce(filterAndRender, 300));
+    
+    // Filtro por métrica (ordenar)
+    metricFilter.addEventListener('change', filterAndRender);
 
-    let barChartInstance;
-    let pieChartInstance;
-    let currentData = [];
-
-    // Cores (Lindos Detalles Palette)
-    const barColor = '#ff6b9d';
-    const pieColors = ['#ff6b9d', '#ff98c6', '#ffb6d5', '#ffdae9', '#ffeef6', '#fdd8e9', '#f9c5d8']; 
-
-    /**
-     * Filtra e ordena os dados e atualiza a UI.
-     */
-    function buildReport() {
-        // 1. Agrega os dados de vendas para obter a lista de flores
-        let floresVendidas = aggregateFlowers(sales); 
-
-        // 2. Aplica filtro de busca
-        const searchTerm = searchInput.value.toLowerCase();
-        if (searchTerm) {
-            floresVendidas = floresVendidas.filter(f => 
-                f.flower.toLowerCase().includes(searchTerm)
-            );
-        }
-
-        // 3. Aplica ordenação
-        const sortMetric = metricFilter.value;
-        if (sortMetric === 'revenue') {
-             floresVendidas.sort((a, b) => b.revenue - a.revenue);
-        } else { // 'qty' é o padrão
-             floresVendidas.sort((a, b) => b.qty - a.qty);
-        }
-
-        currentData = floresVendidas;
-
-        // 4. Atualiza Tabela e Gráficos
-        carregarTabela(currentData);
-        gerarGraficoBarras(currentData);
-        gerarGraficoPizza(currentData);
-    }
-
-    /**
-     * Popula a tabela com os dados.
-     */
-    function carregarTabela(data) {
-        tableBody.innerHTML = '';
-        if (data.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;">Nenhuma flor encontrada com o filtro atual.</td></tr>';
-            return;
-        }
-
-        data.forEach((flor, index) => {
-            const row = tableBody.insertRow();
-            row.insertCell().textContent = index + 1;
-            row.insertCell().textContent = flor.flower;
-            row.insertCell().textContent = flor.qty;
-            row.insertCell().textContent = formatCurrency(flor.revenue);
-        });
-    }
-
-    /**
-     * Gera o gráfico de barras.
-     */
-    function gerarGraficoBarras(data) {
-        if (!barCtx) return;
-        
-        // Limita ao Top 10 para melhor visualização
-        const topData = data.slice(0, 10);
-
-        if (barChartInstance) barChartInstance.destroy();
-        
-        barChartInstance = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: topData.map(f => f.flower),
-                datasets: [{
-                    label: 'Quantidade vendida',
-                    data: topData.map(f => f.qty),
-                    backgroundColor: barColor,
-                    borderColor: barColor,
-                    borderWidth: 1,
-                    borderRadius: 5,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Top 10 Flores (Quantidade)'
-                    },
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Gera o gráfico de pizza.
-     */
-    function gerarGraficoPizza(data) {
-        if (!pieCtx) return;
-
-        if (pieChartInstance) pieChartInstance.destroy();
-
-        pieChartInstance = new Chart(pieCtx, {
-            type: 'doughnut',
-            data: {
-                labels: data.map(f => f.flower),
-                datasets: [{
-                    data: data.map(f => f.qty),
-                    backgroundColor: pieColors.slice(0, data.length),
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                    }
-                }
-            }
-        });
-    }
-
-    // ===================================================
-    // EVENT LISTENERS
-    // ===================================================
-
-    // Disparadores de reconstrução do relatório
-    searchInput.addEventListener("input", buildReport);
-    metricFilter.addEventListener("change", buildReport);
-
-    // Botão de reset
-    resetBtn.addEventListener("click", ()=>{ 
-        searchInput.value = ""; 
-        metricFilter.value = "qty";
-        buildReport(); 
+    // Botão de reset (limpa busca e volta a ordenar por qty)
+    resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        metricFilter.value = 'qty';
+        filterAndRender();
     });
 
-    // Exportar CSV
-    exportBtn.addEventListener("click", ()=> {
-        if (typeof exportTableToCSV === 'undefined') {
-            alert("Erro: A função exportTableToCSV não foi encontrada no utils.js");
-            return;
-        }
-
-        const rows = [["#", "Nome da Flor", "Quantidade Vendida", "Receita Gerada"]];
-        currentData.forEach((flor, index) => {
-            rows.push([
-                index + 1, 
-                flor.flower, 
-                flor.qty.toString(), 
-                formatCurrency(flor.revenue)
-            ]);
-        });
-        exportTableToCSV("flores-mais-vendidas.csv", rows);
-    });
-
-    // Função de Ordenação de Tabela (adaptada)
-    document.querySelectorAll("#tableFlores th[data-sort]").forEach((th, idx) => {
+    // Função de Ordenação de Tabela (ligada ao event listener no final)
+    document.querySelectorAll("#tableFlores th[data-sort]").forEach((th) => {
         th.style.cursor = "pointer";
         th.addEventListener("click", () => {
             const sortBy = th.getAttribute('data-sort');
             const isAscending = th.dataset.asc === "1" ? false : true;
 
-            currentData.sort((a, b) => {
+            // Filtra os dados se houver busca, senão usa o array completo
+            const dataToSort = searchInput.value ? currentData.filter(item => item.flower.toLowerCase().includes(searchInput.value.toLowerCase())) : currentData;
+
+            dataToSort.sort((a, b) => {
                 if (sortBy === 'flower') {
                     return isAscending ? a.flower.localeCompare(b.flower) : b.flower.localeCompare(a.flower);
                 } else { // 'qty' ou 'revenue'
@@ -281,15 +105,216 @@ function createHearts() {
             
             // Atualiza o estado de ordenação e a tabela
             th.dataset.asc = isAscending ? "1" : "0";
-            carregarTabela(currentData);
+            carregarTabela(dataToSort);
         });
     });
+}
+
+function filterAndRender() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const metricFilter = document.getElementById('metricFilter').value;
+
+    let filteredData = currentData;
+
+    // Aplica filtro de busca
+    if (searchInput) {
+        filteredData = currentData.filter(item => 
+            item.flower.toLowerCase().includes(searchInput)
+        );
+    }
+    
+    // Aplica ordenação
+    filteredData.sort((a, b) => b[metricFilter] - a[metricFilter]);
+
+    // Renderiza a tabela
+    carregarTabela(filteredData); 
+    // OBS: Gráficos não são atualizados no filtro de busca para manter a visão geral.
+}
 
 
-    // Inicializa quando o DOM estiver pronto
-    document.addEventListener('DOMContentLoaded', function() {
-        createHearts(); 
-        buildReport(); 
+// --- Funções de Renderização de Gráfico (Chart.js) ---
+
+let chartBarras = null; 
+function renderChartBarras(data) {
+    const chartCanvas = document.getElementById('chartFlores');
+    if (!chartCanvas) return;
+    
+    if (chartBarras) chartBarras.destroy(); 
+
+    const topData = data.slice(0, 10);
+    
+    const flowerLabels = topData.map(d => d.flower);
+    const flowerQuantities = topData.map(d => d.qty);
+
+    chartBarras = new Chart(chartCanvas, {
+        type: 'bar',
+        data: {
+            labels: flowerLabels,
+            datasets: [{
+                label: 'Quantidade Vendida',
+                data: flowerQuantities,
+                backgroundColor: 'rgba(255, 107, 157, 0.7)', 
+                borderColor: 'rgba(255, 107, 157, 1)',
+                borderWidth: 1,
+                borderRadius: 4,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, 
+            plugins: {
+                legend: { display: false },
+                title: { display: false },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Qtd Vendida' }
+                }
+            }
+        }
     });
+}
 
-})();
+let chartPizza = null; 
+function renderChartPizza(data) {
+    const chartCanvas = document.getElementById('chartPizzaFlores');
+    if (!chartCanvas) return;
+    
+    if (chartPizza) chartPizza.destroy(); 
+    
+    const topData = data.slice(0, 5); 
+    
+    const flowerLabels = topData.map(d => d.flower);
+    const flowerQuantities = topData.map(d => d.qty);
+    const backgroundColors = [
+        '#FF6B9D', 
+        '#FFB4C6', 
+        '#FFDBE5', 
+        '#FFECEF', 
+        '#D8A4B6',
+    ];
+
+    chartPizza = new Chart(chartCanvas, {
+        type: 'doughnut',
+        data: {
+            labels: flowerLabels,
+            datasets: [{
+                label: 'Quantidade Vendida',
+                data: flowerQuantities,
+                backgroundColor: backgroundColors.slice(0, topData.length),
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, 
+            plugins: {
+                legend: { 
+                    position: 'right',
+                    labels: {
+                        font: { family: 'Poppins' }
+                    }
+                },
+                title: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (context) => {
+                            const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                            const value = context.parsed;
+                            const percentage = ((value / total) * 100).toFixed(1) + '%';
+                            return `${context.label}: ${value} (${percentage})`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function carregarTabela(data) {
+    const tableBody = document.querySelector('#tableFlores tbody');
+    if (!tableBody) return;
+    
+    tableBody.innerHTML = ''; 
+
+    if (data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; font-style: italic;">Nenhuma flor encontrada com o filtro atual.</td></tr>';
+        return;
+    }
+
+    data.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${item.flower}</td>
+            <td>${item.qty}</td>
+            <td>${typeof formatCurrency === 'function' ? formatCurrency(item.revenue) : 'R$ ' + item.revenue.toFixed(2)}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function renderEmptyState() {
+    const dashboard = document.querySelector('.dashboard');
+    if (dashboard) {
+        dashboard.innerHTML = '<p style="text-align:center; padding: 50px; font-size: 1.2rem; color: #880e4f;">💔 Não foi possível carregar os dados do relatório. Verifique a conexão com o servidor da API.</p>';
+    }
+}
+
+
+// =================================================================
+// FUNÇÕES AUXILIARES (debounce, mostrarMensagem, createHearts)
+// =================================================================
+
+function debounce(fn, wait) {
+    let t;
+    return function (...args) {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+    };
+}
+
+function mostrarMensagem(texto, tipo = 'info', duration = 4000) {
+    const container = document.createElement('div');
+    container.style.cssText = `
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        padding: 10px 20px; border-radius: 8px; font-family: 'Poppins', sans-serif;
+        font-weight: 600; z-index: 1000; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        opacity: 0; transition: opacity 0.3s;
+    `;
+    
+    switch(tipo) {
+        case 'success': container.style.background = '#e8f5e9'; container.style.color = '#2e7d32'; break;
+        case 'error': container.style.background = '#fce4ec'; container.style.color = '#880e4f'; break;
+        default: container.style.background = '#fff8e1'; container.style.color = '#8d6e63';
+    }
+
+    container.textContent = texto;
+    document.body.appendChild(container);
+
+    setTimeout(() => { container.style.opacity = '1'; }, 10);
+    setTimeout(() => {
+        container.style.opacity = '0';
+        setTimeout(() => { container.remove(); }, 300);
+    }, duration);
+}
+
+function createHearts() {
+    const containers = document.querySelectorAll('.floating-hearts, .side-hearts');
+    const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨']; 
+    
+    containers.forEach(container => {
+        container.innerHTML = ''; 
+        for (let i = 0; i < 8; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add(container.classList.contains('side-hearts') ? 'side-heart' : 'heart');
+            heart.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.top = `${5 + Math.random() * 90}vh`;
+            heart.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
+            heart.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(heart);
+        }
+    });
+}

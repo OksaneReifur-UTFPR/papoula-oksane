@@ -1,265 +1,429 @@
-// Front-end para Pagamento_has_FormaDePagamento
-// Ajuste API_BASE_URL e BASE_PATH conforme onde você montou o router no backend
+// =========================================================
+// pagamento_has_formapagamento.js - Código Completo
+// Implementa CRUD para a tabela de vínculo com chave composta.
+// =========================================================
 
-const API_BASE_URL = 'http://localhost:3000';
-// Ajuste BASE_PATH para o caminho que você usa no backend (ex.: '/pagamento_has_formapagamentos' ou '/pagamento_has_formadepagamento')
-// O router define: GET '/' and '/:id_pagamentoPedido/:id_formaDePagamento' etc.
-// Se no servidor você fez: app.use('/pagamento_has_formapagamentos', router);
-// então BASE_PATH = '/pagamento_has_formapagamentos';
-const BASE_PATH = '/pagamento_has_formapagamentos';
+const API_BASE_URL = 'http://localhost:3000'; 
+// Assumindo que o endpoint para esta tabela seja: /pagamento_has_formapagamento
+const BASE_PATH = '/pagamento_has_formapagamento'; 
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Elementos
-    const form = document.getElementById('pagamentoHasFormForm');
-    const searchPagamentoId = document.getElementById('searchPagamentoId');
-    const searchFormaId = document.getElementById('searchFormaId');
-    const btnBuscar = document.getElementById('btnBuscar');
-    const btnIncluir = document.getElementById('btnIncluir');
-    const btnAlterar = document.getElementById('btnAlterar');
-    const btnExcluir = document.getElementById('btnExcluir');
-    const btnSalvar = document.getElementById('btnSalvar');
-    const btnCancelar = document.getElementById('btnCancelar');
+let currentPagamentoId = null; // ID Pagamento (chave 1)
+let currentFormaId = null;     // ID Forma de Pagamento (chave 2)
+let operacao = null;           // 'incluir' | 'alterar'
 
-    const inputPagamentoPedido = document.getElementById('id_pagamentoPedido');
-    const inputFormaPagamento = document.getElementById('id_formaDePagamento');
-    const inputValorPago = document.getElementById('valor_pago');
+// --- Elementos do DOM ---
+const searchPagamentoId = document.getElementById('searchPagamentoId');
+const searchFormaId = document.getElementById('searchFormaId');
 
-    const tableBody = document.getElementById('pagamentoHasFormTableBody');
-    const messageContainer = document.getElementById('messageContainer');
+const id_pagamentoPedidoInput = document.getElementById('id_pagamentoPedido');
+const id_formaDePagamentoInput = document.getElementById('id_formaDePagamento');
+const valor_pagoInput = document.getElementById('valor_pago');
+const data_pagamentoInput = document.getElementById('data_pagamento');
 
-    let operacao = null;
-    let currentKey = { id_pagamentoPedido: null, id_formaDePagamento: null };
+// Botões
+const btnBuscar = document.getElementById('btnBuscar');
+const btnLimpar = document.getElementById('btnLimpar');
+const btnIncluir = document.getElementById('btnIncluir');
+const btnAlterar = document.getElementById('btnAlterar');
+const btnExcluir = document.getElementById('btnExcluir');
+const btnSalvar = document.getElementById('btnSalvar');
 
-    // Inicializar
-    carregarLista();
+// Listagem e Mensagens
+const tableBody = document.getElementById('pagamentoHasFormTableBody');
+const messageContainer = document.getElementById('messageContainer');
 
-    // Eventos
-    btnBuscar.addEventListener('click', buscar);
-    btnIncluir.addEventListener('click', iniciarInclusao);
-    btnAlterar.addEventListener('click', iniciarAlteracao);
-    btnExcluir.addEventListener('click', iniciarExclusao);
-    btnSalvar.addEventListener('click', salvarOperacao);
-    btnCancelar.addEventListener('click', cancelarOperacao);
+// =================================================================
+// FUNÇÕES DE CONTROLE DE ESTADO E UI (Interface)
+// =================================================================
 
-    // Funções
-    function showMessage(text, type = 'info') {
-        messageContainer.innerHTML = `<div class="message ${type}">${text}</div>`;
-        setTimeout(() => { messageContainer.innerHTML = ''; }, 4000);
-    }
+/**
+ * Gerencia a visibilidade dos botões de ação.
+ */
+const gerenciarBotoes = ({ incluir = false, alterar = false, excluir = false, salvar = false }) => {
+    if (btnIncluir) btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
+    if (btnAlterar) btnAlterar.style.display = alterar ? 'inline-flex' : 'none';
+    if (btnExcluir) btnExcluir.style.display = excluir ? 'inline-flex' : 'none';
+    if (btnSalvar) btnSalvar.style.display = salvar ? 'inline-flex' : 'none';
+};
 
-    function toggleButtons({ buscar = true, incluir = false, alterar = false, excluir = false, salvar = false, cancelar = false }) {
-        btnBuscar.style.display = buscar ? 'inline-block' : 'none';
-        btnIncluir.style.display = incluir ? 'inline-block' : 'none';
-        btnAlterar.style.display = alterar ? 'inline-block' : 'none';
-        btnExcluir.style.display = excluir ? 'inline-block' : 'none';
-        btnSalvar.style.display = salvar ? 'inline-block' : 'none';
-        btnCancelar.style.display = cancelar ? 'inline-block' : 'none';
-    }
+/**
+ * Exibe uma mensagem de notificação temporária.
+ */
+const mostrarMensagem = (texto, tempo = 3500) => {
+    if (!messageContainer) return;
+    messageContainer.textContent = texto;
+    messageContainer.classList.add('show');
+    setTimeout(() => messageContainer.classList.remove('show'), tempo);
+};
 
-    function bloquearCampos(bloquearPK) {
-        // quando bloquearPK=true -> impede editar PKs
-        inputPagamentoPedido.disabled = bloquearPK;
-        inputFormaPagamento.disabled = bloquearPK;
-        inputValorPago.disabled = !bloquearPK ? false : false; // valorPago sempre editável quando operação ativa
-    }
+/**
+ * Habilita ou desabilita os campos do formulário para edição.
+ * Nota: Os campos de ID (chave) só devem ser habilitados na Inclusão.
+ */
+function setFormState(isEditable) {
+    valor_pagoInput.disabled = !isEditable;
+    data_pagamentoInput.disabled = !isEditable;
 
-    async function carregarLista() {
-        try {
-            const resp = await fetch(`${API_BASE_URL}${BASE_PATH}`);
-            if (!resp.ok) throw new Error('Erro ao carregar lista');
-            const list = await resp.json();
-            renderizarTabela(list);
-        } catch (err) {
-            console.error(err);
-            showMessage('Erro ao carregar lista.', 'error');
-        }
-    }
+    // Campos de busca sempre desabilitados se estiver no modo edição
+    searchPagamentoId.disabled = isEditable;
+    searchFormaId.disabled = isEditable;
 
-    function renderizarTabela(items) {
-        tableBody.innerHTML = '';
-        items.forEach(item => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><button class="btn-id" data-p="${item.id_pagamentoPedido}" data-f="${item.id_formaDePagamento}">${item.id_pagamentoPedido}</button></td>
-                <td>${item.id_formaDePagamento}</td>
-                <td>${item.valor_pago}</td>
-                <td>${item.data_pagamento ? item.data_pagamento.split('T')[0] : ''}</td>
-                <td>${item.nome_formaDePagamento || ''}</td>
-            `;
-            // click on first button to select row
-            const btn = tr.querySelector('.btn-id');
-            btn.addEventListener('click', () => selecionar(item.id_pagamentoPedido, item.id_formaDePagamento));
-            tableBody.appendChild(tr);
-        });
-    }
-
-    async function buscar() {
-        const pId = searchPagamentoId.value.trim();
-        const fId = searchFormaId.value.trim();
-        if (!pId || !fId) {
-            showMessage('Informe ambos os IDs para buscar (Pagamento e Forma).', 'warning');
-            return;
-        }
-        try {
-            const resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${pId}/${fId}`);
-            if (resp.ok) {
-                const data = await resp.json();
-                preencherFormulario(data);
-                operacao = null;
-                currentKey = { id_pagamentoPedido: data.id_pagamentoPedido, id_formaDePagamento: data.id_formaDePagamento };
-                toggleButtons({ buscar: true, incluir: false, alterar: true, excluir: true, salvar: false, cancel: false });
-                bloquearCampos(true);
-                showMessage('Registro encontrado.', 'success');
-            } else if (resp.status === 404) {
-                limparFormulario();
-                searchPagamentoId.value = pId;
-                searchFormaId.value = fId;
-                toggleButtons({ buscar: true, incluir: true, alterar: false, excluir: false, salvar: false, cancel: false });
-                bloquearCampos(false);
-                showMessage('Relação não encontrada. Você pode incluir um novo registro.', 'info');
-            } else {
-                const err = await resp.json().catch(()=>({error:'Erro'}));
-                showMessage(err.error || 'Erro na busca', 'error');
-            }
-        } catch (err) {
-            console.error(err);
-            showMessage('Erro ao buscar registro', 'error');
-        }
-    }
-
-    function preencherFormulario(data) {
-        inputPagamentoPedido.value = data.id_pagamentoPedido || '';
-        inputFormaPagamento.value = data.id_formaDePagamento || '';
-        inputValorPago.value = data.valor_pago || '';
-    }
-
-    function limparFormulario() {
-        form.reset();
-        currentKey = { id_pagamentoPedido: null, id_formaDePagamento: null };
-    }
-
-    function iniciarInclusao() {
-        operacao = 'incluir';
-        limparFormulario();
-        // manter os valores de busca (ids) para ajudar
-        inputPagamentoPedido.value = searchPagamentoId.value;
-        inputFormaPagamento.value = searchFormaId.value;
-        toggleButtons({ buscar: false, incluir: false, alterar: false, excluir: false, salvar: true, cancelar: true });
-        bloquearCampos(false); // permitir editar PKs para inclusão
-        inputPagamentoPedido.focus();
-    }
-
-    function iniciarAlteracao() {
-        if (!currentKey.id_pagamentoPedido || !currentKey.id_formaDePagamento) {
-            showMessage('Selecione um registro primeiro.', 'warning');
-            return;
-        }
-        operacao = 'alterar';
-        toggleButtons({ buscar: false, incluir: false, alterar: false, excluir: false, salvar: true, cancelar: true });
-        bloquearCampos(true); // manter PKs bloqueados
-    }
-
-    function iniciarExclusao() {
-        if (!currentKey.id_pagamentoPedido || !currentKey.id_formaDePagamento) {
-            showMessage('Selecione um registro primeiro.', 'warning');
-            return;
-        }
-        operacao = 'excluir';
-        toggleButtons({ buscar: false, incluir: false, alterar: false, excluir: false, salvar: true, cancelar: true });
-        bloquearCampos(true);
-    }
-
-    async function salvarOperacao() {
-        const payload = {
-            id_pagamentoPedido: Number(inputPagamentoPedido.value),
-            id_formaDePagamento: Number(inputFormaPagamento.value),
-            valor_pago: Number(inputValorPago.value)
-        };
-
-        try {
-            let resp;
-            if (operacao === 'incluir') {
-                resp = await fetch(`${API_BASE_URL}${BASE_PATH}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (resp.ok) {
-                    const created = await resp.json();
-                    showMessage('Registro incluído com sucesso.', 'success');
-                    limparFormulario();
-                    carregarLista();
-                } else {
-                    const err = await resp.json().catch(()=>({error:'Erro'}));
-                    showMessage(err.error || 'Erro ao incluir', 'error');
-                }
-            } else if (operacao === 'alterar') {
-                // PUT to composite key path
-                const pKey = currentKey.id_pagamentoPedido;
-                const fKey = currentKey.id_formaDePagamento;
-                resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${pKey}/${fKey}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ valor_pago: payload.valor_pago })
-                });
-                if (resp.ok) {
-                    const updated = await resp.json();
-                    showMessage('Registro atualizado com sucesso.', 'success');
-                    limparFormulario();
-                    carregarLista();
-                } else {
-                    const err = await resp.json().catch(()=>({error:'Erro'}));
-                    showMessage(err.error || 'Erro ao atualizar', 'error');
-                }
-            } else if (operacao === 'excluir') {
-                const pKey = currentKey.id_pagamentoPedido;
-                const fKey = currentKey.id_formaDePagamento;
-                resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${pKey}/${fKey}`, { method: 'DELETE' });
-                if (resp.status === 204) {
-                    showMessage('Registro excluído com sucesso.', 'success');
-                    limparFormulario();
-                    carregarLista();
-                } else {
-                    const err = await resp.json().catch(()=>({error:'Erro'}));
-                    showMessage(err.error || 'Erro ao excluir', 'error');
-                }
-            } else {
-                showMessage('Nenhuma operação selecionada.', 'warning');
-            }
-        } catch (err) {
-            console.error(err);
-            showMessage('Erro na operação com o servidor.', 'error');
-        } finally {
-            operacao = null;
-            toggleButtons({ buscar: true, incluir: false, alterar: false, excluir: false, salvar: false, cancelar: false });
-            bloquearCampos(false);
-        }
-    }
-
-    function cancelarOperacao() {
+    if (!isEditable) {
         operacao = null;
-        limparFormulario();
-        toggleButtons({ buscar: true, incluir: false, alterar: false, excluir: false, salvar: false, cancelar: false });
-        bloquearCampos(false);
-        showMessage('Operação cancelada.', 'info');
-    }
-
-    async function selecionar(id_pagamentoPedido, id_formaDePagamento) {
-        // preencher com dados da API
-        try {
-            const resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${id_pagamentoPedido}/${id_formaDePagamento}`);
-            if (resp.ok) {
-                const data = await resp.json();
-                preencherFormulario(data);
-                currentKey = { id_pagamentoPedido: data.id_pagamentoPedido, id_formaDePagamento: data.id_formaDePagamento };
-                toggleButtons({ buscar: true, incluir: false, alterar: true, excluir: true, salvar: false, cancelar: false });
-                bloquearCampos(true);
-            } else {
-                showMessage('Erro ao selecionar o registro.', 'error');
-            }
-        } catch (err) {
-            console.error(err);
-            showMessage('Erro ao selecionar registro.', 'error');
+        // Os IDs (chave composta) são sempre desabilitados se não estiver salvando
+        id_pagamentoPedidoInput.disabled = true;
+        id_formaDePagamentoInput.disabled = true;
+        gerenciarBotoes({}); // Limpa todos os botões
+    } else {
+        // Modo edição
+        gerenciarBotoes({ salvar: true });
+        // Se for Alteração, IDs continuam desabilitados
+        if (operacao === 'alterar') {
+             id_pagamentoPedidoInput.disabled = true;
+             id_formaDePagamentoInput.disabled = true;
+        } else if (operacao === 'incluir') {
+             // Na inclusão, os IDs devem ser preenchidos e estão habilitados
+             id_pagamentoPedidoInput.disabled = false;
+             id_formaDePagamentoInput.disabled = false;
         }
     }
-});
+}
+
+/**
+ * Preenche os campos do formulário com os dados do registro.
+ */
+function preencherFormulario(data) {
+    id_pagamentoPedidoInput.value = data.id_pagamentoPedido;
+    id_formaDePagamentoInput.value = data.id_formaDePagamento;
+    valor_pagoInput.value = data.valor_pago;
+    data_pagamentoInput.value = data.data_pagamento ? data.data_pagamento.split('T')[0] : '';
+}
+
+/**
+ * Reseta o formulário para o estado inicial de busca.
+ */
+function limparFormulario() {
+    currentPagamentoId = null;
+    currentFormaId = null;
+    operacao = null;
+    
+    // Limpa campos
+    searchPagamentoId.value = '';
+    searchFormaId.value = '';
+    id_pagamentoPedidoInput.value = '';
+    id_formaDePagamentoInput.value = '';
+    valor_pagoInput.value = '';
+    data_pagamentoInput.value = '';
+    
+    // Configura estado inicial (somente busca habilitada)
+    setFormState(false);
+    searchPagamentoId.disabled = false;
+    searchFormaId.disabled = false;
+    searchPagamentoId.focus();
+    
+    // Recarrega a lista
+    carregarRegistros();
+}
+
+/**
+ * Prepara o formulário para a inclusão de um novo registro.
+ */
+function prepararInclusao() {
+    const pId = searchPagamentoId.value.trim();
+    const fId = searchFormaId.value.trim();
+
+    if (!pId || !fId) {
+        mostrarMensagem('O ID do Pagamento e o ID da Forma de Pagamento devem ser preenchidos para iniciar a inclusão.');
+        return;
+    }
+    
+    // Define os IDs da chave primária composta
+    currentPagamentoId = parseInt(pId);
+    currentFormaId = parseInt(fId);
+
+    // Limpa apenas os campos de dados e busca
+    valor_pagoInput.value = '';
+    data_pagamentoInput.value = '';
+    
+    // Preenche os campos de chave primária para a inclusão
+    id_pagamentoPedidoInput.value = currentPagamentoId;
+    id_formaDePagamentoInput.value = currentFormaId;
+
+    operacao = 'incluir';
+    setFormState(true); // Habilita todos os campos, incluindo IDs
+    valor_pagoInput.focus();
+    gerenciarBotoes({ salvar: true });
+    mostrarMensagem('Modo Inclusão: Preencha o Valor Pago e Data, e salve.');
+}
+
+/**
+ * Prepara o formulário para a alteração de um registro existente.
+ */
+function prepararAlteracao() {
+    if (currentPagamentoId === null || currentFormaId === null) {
+        mostrarMensagem('Busque um registro primeiro para alterar.');
+        return;
+    }
+    operacao = 'alterar';
+    setFormState(true);
+    valor_pagoInput.focus();
+    gerenciarBotoes({ salvar: true, excluir: true });
+    mostrarMensagem('Modo Alteração: Edite o Valor/Data e clique em Salvar.');
+}
+
+/**
+ * Prepara para exclusão (apenas um passo de confirmação).
+ */
+function prepararExclusao() {
+    if (currentPagamentoId === null || currentFormaId === null) {
+        mostrarMensagem('Busque um registro primeiro para excluir.');
+        return;
+    }
+    excluirRegistro();
+}
+
+// =================================================================
+// FUNÇÕES DE COMUNICAÇÃO COM A API (CRUD)
+// =================================================================
+
+/**
+ * Busca um registro na API pela chave composta.
+ */
+async function buscarRegistro() {
+    const pId = searchPagamentoId.value.trim();
+    const fId = searchFormaId.value.trim();
+
+    if (!pId || !fId) {
+        mostrarMensagem('Preencha os IDs do Pagamento e da Forma para buscar.');
+        limparFormulario();
+        return;
+    }
+
+    try {
+        // Endpoint: BASE_PATH/:id_pagamentoPedido/:id_formaDePagamento
+        const url = `${API_BASE_URL}${BASE_PATH}/${pId}/${fId}`;
+        const res = await fetch(url);
+        
+        if (res.ok) {
+            const registro = await res.json();
+            currentPagamentoId = parseInt(pId);
+            currentFormaId = parseInt(fId);
+            
+            preencherFormulario(registro);
+            
+            // Estado de registro existente
+            setFormState(false);
+            gerenciarBotoes({ alterar: true, excluir: true });
+            mostrarMensagem(`Vínculo ID Pagamento ${pId} / ID Forma ${fId} encontrado.`);
+        } else if (res.status === 404) {
+            // Não encontrado, prepara para inclusão com as chaves digitadas
+            prepararInclusao();
+            mostrarMensagem('Vínculo não encontrado. Preencha os dados para incluí-lo.');
+        } else {
+            throw new Error('Erro ao buscar o registro.');
+        }
+    } catch (err) {
+        mostrarMensagem(err.message || 'Erro de comunicação com o servidor.');
+        limparFormulario();
+    }
+}
+
+
+/**
+ * Salva (inclui ou altera) o registro.
+ */
+async function salvarOperacao() {
+    if (operacao !== 'incluir' && operacao !== 'alterar') return;
+    
+    const pId = parseInt(id_pagamentoPedidoInput.value);
+    const fId = parseInt(id_formaDePagamentoInput.value);
+    const valorPago = parseFloat(valor_pagoInput.value);
+    const dataPagamento = data_pagamentoInput.value;
+    
+    // Validação básica
+    if (isNaN(pId) || isNaN(fId) || isNaN(valorPago) || !dataPagamento) {
+        mostrarMensagem('Todos os campos (IDs, Valor Pago e Data) são obrigatórios.');
+        return;
+    }
+
+    const isNew = operacao === 'incluir';
+    let msgSuccess = isNew ? 'Vínculo incluído com sucesso!' : 'Vínculo alterado com sucesso!';
+    
+    try {
+        const registroData = {
+            id_pagamentoPedido: pId,
+            id_formaDePagamento: fId,
+            valor_pago: valorPago,
+            data_pagamento: dataPagamento
+        };
+        
+        let method = isNew ? 'POST' : 'PUT';
+        // Para POST, o endpoint é a rota base. Para PUT, o endpoint é a chave composta.
+        let url = isNew 
+            ? `${API_BASE_URL}${BASE_PATH}` 
+            : `${API_BASE_URL}${BASE_PATH}/${pId}/${fId}`;
+        
+        const res = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(registroData)
+        });
+
+        if (!res.ok) {
+            const errorBody = await res.text();
+            throw new Error(`Falha na API: ${res.statusText}. Detalhe: ${errorBody.substring(0, 100)}...`);
+        }
+        
+        mostrarMensagem(msgSuccess);
+        limparFormulario();
+    } catch (error) {
+        mostrarMensagem(`Erro ao salvar: ${error.message}`);
+    }
+}
+
+
+/**
+ * Exclui o registro pela chave composta.
+ */
+async function excluirRegistro() {
+    if (currentPagamentoId === null || currentFormaId === null) return;
+
+    if (!confirm(`Tem certeza que deseja EXCLUIR PERMANENTEMENTE o vínculo Pagamento ${currentPagamentoId} e Forma ${currentFormaId}?`)) {
+        return;
+    }
+
+    try {
+        const url = `${API_BASE_URL}${BASE_PATH}/${currentPagamentoId}/${currentFormaId}`;
+        const res = await fetch(url, {
+            method: 'DELETE'
+        });
+
+        if (!res.ok) {
+            throw new Error('Falha ao excluir o registro.');
+        }
+
+        mostrarMensagem('Vínculo excluído com sucesso!');
+        limparFormulario();
+    } catch (err) {
+        mostrarMensagem(err.message || 'Erro ao tentar excluir o registro.');
+    }
+}
+
+
+/**
+ * Carrega a lista de todos os registros para a tabela.
+ */
+async function carregarRegistros() {
+    try {
+        const res = await fetch(`${API_BASE_URL}${BASE_PATH}`);
+        if (!res.ok) throw new Error('Falha ao carregar lista de registros.');
+        const registros = await res.json();
+        
+        tableBody.innerHTML = '';
+        
+        registros.forEach(r => {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${escapeHtml(r.id_pagamentoPedido)}</td>
+                <td>${escapeHtml(r.id_formaDePagamento)}</td>
+                <td>${formatMoney(r.valor_pago)}</td>
+                <td>${formatDate(r.data_pagamento)}</td>
+            `;
+            // Adiciona evento de clique para carregar o registro na tabela
+            row.onclick = () => {
+                searchPagamentoId.value = r.id_pagamentoPedido;
+                searchFormaId.value = r.id_formaDePagamento;
+                buscarRegistro();
+            };
+            tableBody.appendChild(row);
+        });
+    } catch (err) {
+        mostrarMensagem('Erro ao carregar lista de registros: ' + err.message, 5000);
+    }
+}
+
+
+// =================================================================
+// FUNÇÕES AUXILIARES E INICIALIZAÇÃO
+// =================================================================
+
+/**
+ * Formata strings de data para o padrão brasileiro.
+ */
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return dateString.split('T')[0] || dateString;
+    return d.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+/**
+ * Formata valores para moeda Real (R$).
+ */
+function formatMoney(v) {
+    if (v === undefined || v === null) return 'N/A';
+    return Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+/**
+ * Escapa HTML para prevenir XSS.
+ */
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>\"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"\'":'&#39;'}[m]));
+}
+
+/**
+ * Cria corações flutuantes para o efeito visual do tema.
+ */
+function createFloatingHearts() {
+    const container = document.querySelector('.floating-hearts');
+    if (!container) return;
+    const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨']; 
+    for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.top = `${5 + Math.random() * 90}vh`;
+        heart.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
+        heart.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(heart);
+    }
+}
+
+/**
+ * Associa todos os eventos aos elementos do DOM.
+ */
+function bindEvents() {
+    btnBuscar.addEventListener('click', buscarRegistro);
+    btnLimpar.addEventListener('click', limparFormulario);
+    btnIncluir.addEventListener('click', prepararInclusao);
+    btnAlterar.addEventListener('click', prepararAlteracao);
+    btnExcluir.addEventListener('click', prepararExclusao);
+    btnSalvar.addEventListener('click', salvarOperacao);
+    
+    // permitir buscar ao pressionar Enter nos campos de busca
+    const searchInputs = [searchPagamentoId, searchFormaId];
+    searchInputs.forEach(input => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarRegistro();
+            }
+        });
+    });
+}
+
+/**
+ * Função de inicialização principal.
+ */
+async function inicializar() {
+    bindEvents();
+    await carregarRegistros();
+    limparFormulario(); // Define o estado inicial após carregar os dados
+    createFloatingHearts();
+}
+
+// Inicia a aplicação ao carregar o DOM
+document.addEventListener('DOMContentLoaded', inicializar);

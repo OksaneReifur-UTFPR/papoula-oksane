@@ -1,260 +1,408 @@
-// Front-end para /pagamento (adaptado ao controller fornecido)
-// Ajuste API_BASE_URL se necessário (ex.: 'http://localhost:3001')
-const API_BASE_URL = 'http://localhost:3001';
-const BASE_PATH = '/pagamento'; // rota montada no backend (use exatamente o mount do router)
+// =========================================================
+// pagamento.js - Código Completo
+// Implementa CRUD para a tabela de Pagamento.
+// =========================================================
 
-let currentPagamentoId = null;
-let operacao = null;
+const API_BASE_URL = 'http://localhost:3000'; 
+const BASE_PATH = '/pagamento'; 
 
-// DOM elements
-const form = document.getElementById('pagamentoForm');
+let currentPagamentoId = null; // ID Pagamento (chave primária)
+let operacao = null;           // 'incluir' | 'alterar'
+
+// --- Elementos do DOM ---
 const searchId = document.getElementById('searchId');
+
+const id_pagamentoInput = document.getElementById('id_pagamento');
+const id_pedidoInput = document.getElementById('id_pedido');
+const data_pagamentoInput = document.getElementById('data_pagamento');
+const valor_total_pagamentoInput = document.getElementById('valor_total_pagamento');
+
+// Botões
 const btnBuscar = document.getElementById('btnBuscar');
+const btnLimpar = document.getElementById('btnLimpar');
 const btnIncluir = document.getElementById('btnIncluir');
 const btnAlterar = document.getElementById('btnAlterar');
 const btnExcluir = document.getElementById('btnExcluir');
-const btnCancelar = document.getElementById('btnCancelar');
 const btnSalvar = document.getElementById('btnSalvar');
-const pagamentosTableBody = document.getElementById('pagamentosTableBody');
+
+// Listagem e Mensagens
+const tableBody = document.getElementById('pagamentosTableBody');
 const messageContainer = document.getElementById('messageContainer');
 
-// inicialização
-document.addEventListener('DOMContentLoaded', () => {
-    carregarPagamentos();
-    bindEvents();
-    mostrarBotoes(true, false, false, false, false, false);
-    bloquearCampos(false);
-});
+// =================================================================
+// FUNÇÕES DE CONTROLE DE ESTADO E UI (Interface)
+// =================================================================
 
-function bindEvents() {
-    if (btnBuscar) btnBuscar.addEventListener('click', buscarPagamento);
-    if (btnIncluir) btnIncluir.addEventListener('click', incluirPagamento);
-    if (btnAlterar) btnAlterar.addEventListener('click', alterarPagamento);
-    if (btnExcluir) btnExcluir.addEventListener('click', excluirPagamento);
-    if (btnCancelar) btnCancelar.addEventListener('click', cancelarOperacao);
-    if (btnSalvar) btnSalvar.addEventListener('click', salvarOperacao);
-}
+/**
+ * Gerencia a visibilidade dos botões de ação.
+ */
+const gerenciarBotoes = ({ buscar = true, limpar = true, incluir = false, alterar = false, excluir = false, salvar = false }) => {
+    if (btnBuscar) btnBuscar.style.display = buscar ? 'inline-flex' : 'none';
+    if (btnLimpar) btnLimpar.style.display = limpar ? 'inline-flex' : 'none';
+    if (btnIncluir) btnIncluir.style.display = incluir ? 'inline-flex' : 'none';
+    if (btnAlterar) btnAlterar.style.display = alterar ? 'inline-flex' : 'none';
+    if (btnExcluir) btnExcluir.style.display = excluir ? 'inline-flex' : 'none';
+    if (btnSalvar) btnSalvar.style.display = salvar ? 'inline-flex' : 'none';
+};
 
-// helpers de UI
-function mostrarMensagem(texto, tipo = 'info', duration = 4000) {
+/**
+ * Exibe uma mensagem de notificação temporária.
+ */
+const mostrarMensagem = (texto, tempo = 3500) => {
     if (!messageContainer) return;
-    messageContainer.innerHTML = `<div class="message ${tipo}">${texto}</div>`;
-    if (duration > 0) setTimeout(() => { messageContainer.innerHTML = ''; }, duration);
+    messageContainer.textContent = texto;
+    messageContainer.classList.add('show');
+    setTimeout(() => messageContainer.classList.remove('show'), tempo);
+};
+
+/**
+ * Habilita ou desabilita os campos do formulário para edição.
+ */
+function setFormState(isEditable) {
+    // Campos de dados
+    id_pedidoInput.disabled = !isEditable;
+    data_pagamentoInput.disabled = !isEditable;
+    valor_total_pagamentoInput.disabled = !isEditable;
+
+    // Campo de busca e ID PK
+    searchId.disabled = isEditable;
+    id_pagamentoInput.disabled = true; // PK nunca é editável, só preenchido
+    
+    // Na alteração, ID Pedido também fica bloqueado para manter a integridade
+    if (operacao === 'alterar') {
+        id_pedidoInput.disabled = true;
+    }
+
+    if (!isEditable) {
+        operacao = null;
+        gerenciarBotoes({ incluir: true, buscar: true, limpar: true }); // Estado inicial
+    } else {
+        // Modo edição/inclusão
+        gerenciarBotoes({ salvar: true, limpar: true });
+    }
 }
 
-function mostrarBotoes(btBuscar, btIncluir, btAlterar, btExcluir, btSalvar, btCancelar) {
-    btnBuscar.style.display = btBuscar ? 'inline-block' : 'none';
-    btnIncluir.style.display = btIncluir ? 'inline-block' : 'none';
-    btnAlterar.style.display = btAlterar ? 'inline-block' : 'none';
-    btnExcluir.style.display = btExcluir ? 'inline-block' : 'none';
-    btnSalvar.style.display = btSalvar ? 'inline-block' : 'none';
-    btnCancelar.style.display = btCancelar ? 'inline-block' : 'none';
+/**
+ * Preenche os campos do formulário com os dados do registro.
+ */
+function preencherFormulario(data) {
+    id_pagamentoInput.value = data.id_pagamento;
+    id_pedidoInput.value = data.id_pedido;
+    valor_total_pagamentoInput.value = data.valor_total_pagamento;
+    // Formata data para o input type="date"
+    data_pagamentoInput.value = data.data_pagamento ? data.data_pagamento.split('T')[0] : '';
 }
 
-function bloquearCampos(bloquearPrimeiro) {
-    const inputs = form.querySelectorAll('input');
-    inputs.forEach((input, index) => {
-        if (index === 0) {
-            input.disabled = bloquearPrimeiro;
-        } else {
-            input.disabled = !bloquearPrimeiro;
-        }
-    });
-}
-
+/**
+ * Reseta o formulário para o estado inicial de busca.
+ */
 function limparFormulario() {
-    form.reset();
     currentPagamentoId = null;
     operacao = null;
-}
-
-// CRUD functions
-async function carregarPagamentos() {
-    try {
-        const resp = await fetch(`${API_BASE_URL}${BASE_PATH}`, { credentials: 'include' });
-        if (!resp.ok) throw new Error(`Status ${resp.status}`);
-        const data = await resp.json();
-        renderizarTabelaPagamentos(Array.isArray(data) ? data : (data.rows || []));
-    } catch (err) {
-        console.error('Erro carregar pagamentos:', err);
-        mostrarMensagem('Erro ao carregar lista de pagamentos', 'error', 6000);
-    }
-}
-
-function renderizarTabelaPagamentos(pagamentos = []) {
-    pagamentosTableBody.innerHTML = '';
-    pagamentos.forEach(p => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><button class="btn-id" data-id="${p.id_pagamento}">${p.id_pagamento}</button></td>
-            <td>${escapeHtml(p.id_pedido)}</td>
-            <td>${p.data_pagamento ? escapeHtml(p.data_pagamento.split('T')[0]) : ''}</td>
-            <td>${escapeHtml(Number(p.valor_total_pagamento).toFixed(2))}</td>
-            <td>${escapeHtml(p.cpf_cliente || '')}</td>
-            <td>${p.data_pedido ? escapeHtml(p.data_pedido.split('T')[0]) : ''}</td>
-        `;
-        const btn = tr.querySelector('.btn-id');
-        btn.addEventListener('click', () => selecionarPagamento(p.id_pagamento));
-        pagamentosTableBody.appendChild(tr);
-    });
-}
-
-async function buscarPagamento() {
-    const id = searchId.value.trim();
-    if (!id) {
-        mostrarMensagem('Digite um ID para buscar', 'warning');
-        return;
-    }
-    try {
-        const resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${id}`, { credentials: 'include' });
-        if (resp.ok) {
-            const pagamento = await resp.json();
-            preencherFormulario(pagamento);
-            mostrarBotoes(true, false, true, true, false, false);
-            mostrarMensagem('Pagamento encontrado!', 'success');
-            bloquearCampos(true);
-        } else if (resp.status === 404) {
-            limparFormulario();
-            searchId.value = id;
-            mostrarBotoes(true, true, false, false, false, false);
-            mostrarMensagem('Pagamento não encontrado. Você pode incluir um novo.', 'info');
-            bloquearCampos(false);
-            document.getElementById('id_pedido').focus();
-        } else {
-            const err = await resp.json().catch(()=>({error:'Erro'}));
-            throw new Error(err.error || 'Erro ao buscar pagamento');
-        }
-    } catch (err) {
-        console.error('Erro buscar pagamento:', err);
-        mostrarMensagem('Erro ao buscar pagamento', 'error');
-    }
-}
-
-function preencherFormulario(pagamento) {
-    currentPagamentoId = pagamento.id_pagamento;
-    searchId.value = pagamento.id_pagamento;
-    document.getElementById('id_pedido').value = pagamento.id_pedido || '';
-    document.getElementById('data_pagamento').value = pagamento.data_pagamento ? pagamento.data_pagamento.split('T')[0] : '';
-    document.getElementById('valor_total_pagamento').value = pagamento.valor_total_pagamento || '';
-}
-
-function incluirPagamento() {
-    mostrarMensagem('Digite os dados do novo pagamento', 'info');
-    limparFormulario();
-    bloquearCampos(true);
-    mostrarBotoes(false, false, false, false, true, true);
-    document.getElementById('id_pedido').focus();
-    operacao = 'incluir';
-}
-
-function alterarPagamento() {
-    if (!currentPagamentoId) {
-        mostrarMensagem('Busque um pagamento primeiro', 'warning');
-        return;
-    }
-    mostrarMensagem('Altere os dados do pagamento', 'info');
-    bloquearCampos(true);
-    mostrarBotoes(false, false, false, false, true, true);
-    document.getElementById('id_pedido').focus();
-    operacao = 'alterar';
-}
-
-function excluirPagamento() {
-    if (!currentPagamentoId) {
-        mostrarMensagem('Busque um pagamento primeiro', 'warning');
-        return;
-    }
-    mostrarMensagem('Excluindo pagamento...', 'warning');
-    mostrarBotoes(false, false, false, false, true, true);
-    operacao = 'excluir';
-}
-
-async function salvarOperacao() {
-    const formData = new FormData(form);
-    const pagamentoPayload = {
-        id_pedido: formData.get('id_pedido'),
-        data_pagamento: formData.get('data_pagamento'),
-        valor_total_pagamento: Number(formData.get('valor_total_pagamento'))
-    };
-
-    try {
-        let resp;
-        if (operacao === 'incluir') {
-            resp = await fetch(`${API_BASE_URL}${BASE_PATH}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(pagamentoPayload)
-            });
-            if (resp.status === 201 || resp.ok) {
-                mostrarMensagem('Pagamento incluído com sucesso!', 'success');
-                limparFormulario();
-                carregarPagamentos();
-            } else {
-                const err = await resp.json().catch(()=>({error:'Erro'}));
-                throw new Error(err.error || 'Erro ao incluir pagamento');
-            }
-        } else if (operacao === 'alterar') {
-            if (!currentPagamentoId) { mostrarMensagem('Nenhum pagamento selecionado', 'warning'); return; }
-            resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${currentPagamentoId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(pagamentoPayload)
-            });
-            if (resp.ok) {
-                mostrarMensagem('Pagamento atualizado com sucesso!', 'success');
-                limparFormulario();
-                carregarPagamentos();
-            } else {
-                const err = await resp.json().catch(()=>({error:'Erro'}));
-                throw new Error(err.error || 'Erro ao atualizar pagamento');
-            }
-        } else if (operacao === 'excluir') {
-            if (!currentPagamentoId) { mostrarMensagem('Nenhum pagamento selecionado', 'warning'); return; }
-            resp = await fetch(`${API_BASE_URL}${BASE_PATH}/${currentPagamentoId}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-            if (resp.status === 204 || resp.ok) {
-                mostrarMensagem('Pagamento excluído com sucesso!', 'success');
-                limparFormulario();
-                carregarPagamentos();
-            } else {
-                const err = await resp.json().catch(()=>({error:'Erro'}));
-                throw new Error(err.error || 'Erro ao excluir pagamento');
-            }
-        } else {
-            mostrarMensagem('Nenhuma operação selecionada', 'warning');
-        }
-    } catch (err) {
-        console.error('Erro salvarOperacao:', err);
-        mostrarMensagem(err.message || 'Erro na operação', 'error', 6000);
-    } finally {
-        mostrarBotoes(true, false, false, false, false, false);
-        bloquearCampos(false);
-        searchId.disabled = false;
-        searchId.focus();
-        operacao = null;
-    }
-}
-
-function cancelarOperacao() {
-    limparFormulario();
-    mostrarBotoes(true, false, false, false, false, false);
-    bloquearCampos(false);
-    searchId.disabled = false;
+    
+    // Limpa campos
+    searchId.value = '';
+    id_pagamentoInput.value = '';
+    id_pedidoInput.value = '';
+    data_pagamentoInput.value = '';
+    valor_total_pagamentoInput.value = '';
+    
+    // Configura estado inicial 
+    setFormState(false);
     searchId.focus();
-    mostrarMensagem('Operação cancelada', 'info');
+    
+    // Recarrega a lista
+    carregarRegistros();
 }
 
-async function selecionarPagamento(id) {
-    searchId.value = id;
-    await buscarPagamento();
+/**
+ * Prepara o formulário para a inclusão de um novo registro.
+ */
+function prepararInclusao() {
+    // Limpa apenas os campos de dados e IDs, mas mantém o estado de busca limpo
+    id_pagamentoInput.value = '';
+    id_pedidoInput.value = '';
+    data_pagamentoInput.value = '';
+    valor_total_pagamentoInput.value = '';
+    currentPagamentoId = null; // Garante que será um POST (nova inclusão)
+
+    // Se o usuário digitou um ID na busca, usamos ele para a inclusão da PK
+    const suggestedId = searchId.value.trim();
+    if (suggestedId) {
+        id_pagamentoInput.value = suggestedId;
+        currentPagamentoId = parseInt(suggestedId);
+    }
+
+    operacao = 'incluir';
+    setFormState(true); // Habilita campos de dados (incluindo ID Pedido)
+    id_pedidoInput.focus();
+    gerenciarBotoes({ salvar: true, limpar: true });
+    mostrarMensagem('Modo Inclusão: Preencha os dados e salve.');
 }
 
-// util
+/**
+ * Prepara o formulário para a alteração de um registro existente.
+ */
+function prepararAlteracao() {
+    if (currentPagamentoId === null) {
+        mostrarMensagem('Busque um registro primeiro para alterar.');
+        return;
+    }
+    operacao = 'alterar';
+    // Habilita os campos editáveis (Data e Valor Total)
+    data_pagamentoInput.disabled = false;
+    valor_total_pagamentoInput.disabled = false;
+    
+    // Bloqueia ID e ID Pedido (o Pagamento deve ser imutável após a criação)
+    id_pagamentoInput.disabled = true;
+    id_pedidoInput.disabled = true;
+    searchId.disabled = true;
+    
+    data_pagamentoInput.focus();
+    gerenciarBotoes({ salvar: true, excluir: true, limpar: true });
+    mostrarMensagem('Modo Alteração: Edite a Data/Valor e clique em Salvar.');
+}
+
+// =================================================================
+// FUNÇÕES DE COMUNICAÇÃO COM A API (CRUD)
+// =================================================================
+
+/**
+ * Busca um registro na API pelo ID.
+ */
+async function buscarRegistro() {
+    const pId = searchId.value.trim();
+
+    if (!pId) {
+        mostrarMensagem('Preencha o ID do Pagamento para buscar.');
+        limparFormulario();
+        return;
+    }
+
+    try {
+        const url = `${API_BASE_URL}${BASE_PATH}/${pId}`;
+        const res = await fetch(url);
+        
+        if (res.ok) {
+            const registro = await res.json();
+            currentPagamentoId = parseInt(pId);
+            
+            preencherFormulario(registro);
+            
+            // Estado de registro existente
+            setFormState(false);
+            gerenciarBotoes({ alterar: true, excluir: true, limpar: true, buscar: true });
+            mostrarMensagem(`Pagamento ID ${pId} encontrado.`);
+        } else if (res.status === 404) {
+            // Não encontrado, prepara para inclusão
+            limparFormulario();
+            searchId.value = pId;
+            prepararInclusao();
+            mostrarMensagem('Pagamento não encontrado. Preencha os dados para incluí-lo.');
+        } else {
+            throw new Error('Erro ao buscar o registro.');
+        }
+    } catch (err) {
+        mostrarMensagem(err.message || 'Erro de comunicação com o servidor.');
+        limparFormulario();
+    }
+}
+
+
+/**
+ * Salva (inclui ou altera) o registro.
+ */
+async function salvarOperacao() {
+    if (operacao !== 'incluir' && operacao !== 'alterar') return;
+    
+    const pId = parseInt(id_pagamentoInput.value);
+    const idPedido = parseInt(id_pedidoInput.value);
+    const valorTotal = parseFloat(valor_total_pagamentoInput.value);
+    const dataPagamento = data_pagamentoInput.value;
+    
+    // Validação básica
+    if (isNaN(pId) || isNaN(idPedido) || isNaN(valorTotal) || !dataPagamento) {
+        mostrarMensagem('Todos os campos (ID, ID Pedido, Valor Total e Data) são obrigatórios.');
+        return;
+    }
+
+    const isNew = operacao === 'incluir';
+    let msgSuccess = isNew ? 'Pagamento incluído com sucesso!' : 'Pagamento alterado com sucesso!';
+    
+    try {
+        const registroData = {
+            id_pagamento: pId,
+            id_pedido: idPedido,
+            data_pagamento: dataPagamento,
+            valor_total_pagamento: valorTotal
+        };
+        
+        let method = isNew ? 'POST' : 'PUT';
+        let url = isNew 
+            ? `${API_BASE_URL}${BASE_PATH}` 
+            : `${API_BASE_URL}${BASE_PATH}/${currentPagamentoId}`;
+        
+        const res = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(registroData)
+        });
+
+        if (!res.ok) {
+            const errorBody = await res.text();
+            throw new Error(`Falha na API: ${res.statusText}. Detalhe: ${errorBody.substring(0, 100)}...`);
+        }
+        
+        mostrarMensagem(msgSuccess);
+        limparFormulario();
+    } catch (error) {
+        mostrarMensagem(`Erro ao salvar: ${error.message}`);
+    }
+}
+
+
+/**
+ * Exclui o registro pelo ID.
+ */
+async function excluirRegistro() {
+    if (currentPagamentoId === null) return;
+
+    if (!confirm(`Tem certeza que deseja EXCLUIR PERMANENTEMENTE o Pagamento ID ${currentPagamentoId}? Esta ação é irreversível.`)) {
+        return;
+    }
+
+    try {
+        const url = `${API_BASE_URL}${BASE_PATH}/${currentPagamentoId}`;
+        const res = await fetch(url, {
+            method: 'DELETE'
+        });
+
+        if (res.status === 204 || res.ok) {
+            mostrarMensagem('Pagamento excluído com sucesso!');
+            limparFormulario();
+        } else {
+            throw new Error('Falha ao excluir o registro.');
+        }
+
+    } catch (err) {
+        mostrarMensagem(err.message || 'Erro ao tentar excluir o registro.');
+    }
+}
+
+
+/**
+ * Carrega a lista de todos os registros para a tabela.
+ */
+async function carregarRegistros() {
+    try {
+        const res = await fetch(`${API_BASE_URL}${BASE_PATH}`);
+        if (!res.ok) throw new Error('Falha ao carregar lista de pagamentos.');
+        const registros = await res.json();
+        
+        tableBody.innerHTML = '';
+        
+        registros.forEach(r => {
+            const row = document.createElement('tr');
+            
+            // Colunas no HTML: ID, ID Pedido, Valor Total, Data Pagamento
+            row.innerHTML = `
+                <td>${escapeHtml(r.id_pagamento)}</td>
+                <td>${escapeHtml(r.id_pedido)}</td>
+                <td>${formatMoney(r.valor_total_pagamento)}</td>
+                <td>${formatDate(r.data_pagamento)}</td>
+            `;
+            // Adiciona evento de clique para carregar o registro na tabela
+            row.onclick = () => {
+                searchId.value = r.id_pagamento;
+                buscarRegistro();
+            };
+            tableBody.appendChild(row);
+        });
+    } catch (err) {
+        mostrarMensagem('Erro ao carregar lista de pagamentos: ' + err.message, 5000);
+    }
+}
+
+
+// =================================================================
+// FUNÇÕES AUXILIARES E INICIALIZAÇÃO
+// =================================================================
+
+/**
+ * Formata strings de data para o padrão brasileiro.
+ */
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return dateString.split('T')[0] || dateString;
+    return d.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+/**
+ * Formata valores para moeda Real (R$).
+ */
+function formatMoney(v) {
+    if (v === undefined || v === null) return 'N/A';
+    return Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+/**
+ * Escapa HTML para prevenir XSS.
+ */
 function escapeHtml(s) {
-    if (s === undefined || s === null) return '';
-    return String(s).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  return String(s || '').replace(/[&<>\"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"\'":'&#39;'}[m]));
 }
+
+/**
+ * Cria corações flutuantes para o efeito visual do tema.
+ */
+function createFloatingHearts() {
+    const container = document.querySelector('.floating-hearts');
+    if (!container) return;
+    const EMOJIS = ['💖', '💕', '🌸', '💓', '💞', '✨']; 
+    for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerText = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.top = `${5 + Math.random() * 90}vh`;
+        heart.style.fontSize = `${0.8 + Math.random() * 0.8}rem`;
+        heart.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(heart);
+    }
+}
+
+/**
+ * Associa todos os eventos aos elementos do DOM.
+ */
+function bindEvents() {
+    btnBuscar.addEventListener('click', buscarRegistro);
+    btnLimpar.addEventListener('click', limparFormulario);
+    btnIncluir.addEventListener('click', prepararInclusao);
+    btnAlterar.addEventListener('click', prepararAlteracao);
+    btnExcluir.addEventListener('click', excluirRegistro); // Exclusão direta com confirmação
+    btnSalvar.addEventListener('click', salvarOperacao);
+    
+    // permitir buscar ao pressionar Enter nos campos de busca
+    if (searchId) {
+        searchId.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarRegistro();
+            }
+        });
+    }
+}
+
+/**
+ * Função de inicialização principal.
+ */
+async function inicializar() {
+    bindEvents();
+    await carregarRegistros();
+    limparFormulario(); // Define o estado inicial após carregar os dados
+    createFloatingHearts();
+}
+
+// Inicia a aplicação ao carregar o DOM
+document.addEventListener('DOMContentLoaded', inicializar);

@@ -1,63 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD - Pagamento</title>
-    <link rel="stylesheet" href="/pagamento/pagamento.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Gerenciamento de Pagamentos 💖 - Lindos Detalles</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./pagamento.css">
 </head>
 <body>
+    <a href="#" onclick="history.back(); return false;" class="back-button" aria-label="Voltar">
+        <span>« Voltar 🌸</span>
+    </a>
+
+    <div class="floating-hearts" aria-hidden="true"></div>
+
     <header>
-        <h1>CRUD Pagamento</h1>
+        <h1>Gerenciamento de Pagamentos 💖</h1>
+        <p>Registre e acompanhe todos os pagamentos dos pedidos ✨</p>
     </header>
 
     <main>
         <section class="form-section">
-            <h2>Cadastro de Pagamento</h2>
-            <form id="pagamentoForm" novalidate>
+            <form id="pagamentoForm" autocomplete="off" onsubmit="return false;">
+
                 <div class="search-container">
-                    <label for="searchId">Buscar por ID:</label>
-                    <div class="search-input-group">
-                        <input type="number" id="searchId" placeholder="Digite o ID">
-                        <button type="button" id="btnBuscar">🔍 Buscar</button>
-                        <button type="button" id="btnIncluir" class="btn-primary">Incluir</button>
-                        <button type="button" id="btnAlterar" class="btn-secondary" style="display: none;">Alterar</button>
-                        <button type="button" id="btnExcluir" class="btn-danger" style="display: none;">Excluir</button>
-                        <button type="button" id="btnSalvar" class="btn-save" style="display: none;">Salvar</button>
-                        <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+                    <label for="searchId">Buscar Pagamento por ID:</label>
+                    <div class="input-group">
+                        <input type="number" id="searchId" class="form-input search-input" placeholder="Digite o ID do Pagamento">
+                        
+                        <button type="button" id="btnBuscar">🔎 Buscar</button>
+                        <button type="button" id="btnLimpar" class="cancel-button">Limpar</button>
                     </div>
                 </div>
 
                 <fieldset id="formFields">
-                    <legend>Dados do Pagamento</legend>
+                    <legend>Detalhes do Pagamento 💞</legend>
 
                     <div class="form-group">
-                        <label for="id_pedido">ID Pedido:</label>
-                        <input type="number" id="id_pedido" name="id_pedido" required>
+                        <label for="id_pagamento">ID Pagamento:</label>
+                        <input type="number" id="id_pagamento" name="id_pagamento" class="form-input" required disabled>
                     </div>
+
                     <div class="form-group">
-                        <label for="data_pagamento">Data Pagamento:</label>
-                        <input type="date" id="data_pagamento" name="data_pagamento" required>
+                        <label for="id_pedido">ID Pedido (FK):</label>
+                        <input type="number" id="id_pedido" name="id_pedido" class="form-input" required disabled>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="data_pagamento">Data do Pagamento:</label>
+                        <input type="date" id="data_pagamento" name="data_pagamento" class="form-input" required disabled>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="valor_total_pagamento">Valor Total (R$):</label>
-                        <input type="number" id="valor_total_pagamento" name="valor_total_pagamento" step="0.01" required>
+                        <input type="number" step="0.01" id="valor_total_pagamento" name="valor_total_pagamento" class="form-input" required disabled>
                     </div>
+
                 </fieldset>
+
+                <div class="button-group">
+                    <button type="button" id="btnIncluir" style="display: none;">✨ Incluir Novo Pagamento</button>
+                    <button type="button" id="btnAlterar" style="display: none;">✏️ Alterar Pagamento</button>
+                    <button type="button" id="btnExcluir" style="display: none;">🗑️ Excluir Pagamento</button>
+                    <button type="button" id="btnSalvar" style="display: none;">💖 Salvar Alterações</button>
+                </div>
             </form>
         </section>
 
         <section class="list-section">
+            <h2>Registros de Pagamentos</h2>
             <div class="table-container">
                 <table id="pagamentosTable">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>ID Pedido</th>
-                            <th>Data Pagamento</th>
                             <th>Valor Total</th>
-                            <th>CPF Cliente</th>
-                            <th>Data Pedido</th>
+                            <th>Data Pagamento</th>
                         </tr>
                     </thead>
                     <tbody id="pagamentosTableBody"></tbody>
@@ -67,10 +87,11 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 CRUD Pagamento</p>
+        <p>💗 Sistema de Gerenciamento • Lindos Detalles 💖</p>
     </footer>
 
-    <div id="messageContainer" class="message-container" aria-live="polite"></div>
-    <script src="/pagamento/pagamento.js" defer></script>
+    <div id="messageContainer" class="message-container" role="status" aria-live="polite"></div>
+
+    <script src="./pagamento.js"></script>
 </body>
 </html>

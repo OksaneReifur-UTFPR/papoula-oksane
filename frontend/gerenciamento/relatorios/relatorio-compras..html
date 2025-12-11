@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Relatório - Compras Detalhadas | Lindos Detalles 💖</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+  <link rel="stylesheet" href="./relatorio-compras.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <div class="floating-hearts"></div>
+  <div class="side-hearts"></div>
+
+  <div class="container">
+    
+    <a href="#" onclick="history.back(); return false;" class="back-button"><i class="fas fa-chevron-left"></i> Voltar</a>
+
+    <header class="header">
+      <div class="brand">
+        <div class="logo">🌸</div>
+        <div>
+          <div class="title">Relatório de Compras por Cliente 💖</div>
+          <div class="subtitle">Detalhes dos pedidos pagos e valores gastos ✨</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      
+      <section class="card chart-card chart-single">
+        <h3>💰 Top 10 — Total Gasto por Cliente</h3>
+        <div class="chart-wrap">
+          <canvas id="chartGastoCliente"></canvas>
+          <p id="chartStatus" style="text-align:center; padding:20px; color:#888;">Carregando gráfico...</p>
+        </div>
+        <div class="footer-note">Valores baseados em pedidos com pagamento registrado.</div>
+      </section>
+
+      <section class="card transactions-card full-width">
+        <h3>📋 Detalhes dos Itens Vendidos (Cliente, Produto, Qtd, Valor)</h3>
+        
+        <div class="table-wrap">
+          <table id="tableCompras">
+            <thead>
+              <tr>
+                                <th>#</th> 
+                <th data-sort="cliente">Cliente (Nome/Login)</th>
+                <th data-sort="produto">Produto Comprado</th>
+                <th data-sort="quantidade">Qtd</th>
+                <th data-sort="valor_unitario">Preço Unitário</th>
+                <th data-sort="subtotal">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody><tr><td colspan="6" style="text-align:center; padding:20px;">Carregando dados...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="footer-note">Clique nas colunas para ordenar.</div>
+      </section>
+      
+    </main>
+  </div>
+
+  <script src="utils.js"></script> 
+  <script src="./relatorio-compras.js"></script>
+</body>
+</html>
