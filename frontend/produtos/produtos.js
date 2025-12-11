@@ -6,13 +6,16 @@
 // ==================== DADOS: LISTA SIMULADA DE PRODUTOS ====================
 // Esta lista é usada para popular a grade e será filtrada pela pesquisa.
 const produtos = carregarProdutos();
-
+// alert( "produtos " + JSON.stringify(produtos));
 
 // ============================================================================
 async function carregarProdutos() {
-    const url = 'http://localhost:3000/planta';
+
+
+  const url = 'http://localhost:3000/planta';
+ 
     
-    try {
+    try {      
         // 1. Acionar a rota e buscar os dados
         const response = await fetch(url);
 
@@ -26,27 +29,34 @@ async function carregarProdutos() {
 
         // 3. Ajustar/Mapear os dados e preencher a variável 'produtos'
         // Criamos o novo array de produtos no formato desejado
-        produtos = dadosDoBanco.map(planta => {
-            return {
-                // Mapeando do JSON para o objeto 'produto'
-                nome: planta.nome_popular, // nome_popular -> nome
-                nomeCientifico: planta.nome_cientifico,
-                descricao: planta.descricao,
-                // Garantir que o preço esteja formatado (pode ser ajustado conforme sua preferência de display)
-                preco: parseFloat(planta.preco_unitario).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-                // Adicionamos um placeholder de imagem ou um caminho padrão (você deve ajustar isso)
-                // Se você não tiver uma URL de imagem no seu JSON, isso usará o placeholder.
-                imagem: planta.url_imagem || 'https://placehold.co/300x200/ffd6e0/ffffff?text=Planta',
-                // Outros dados importantes
-                id: planta.id_planta,
-                estoque: planta.quantidade_estoque
-            };
-        });
+        for (const planta of dadosDoBanco) {
+          // Cria um novo objeto 'produto' diretamente com as propriedades mapeadas
+          //alert (planta.id_planta)
+          const produto = {             
+              nome: planta.nome_popular,             
+            
+              nomeCientifico: planta.nome_cientifico,
+              descricao: planta.descricao,
+              id: planta.id_planta,
+              estoque: planta.quantidade_estoque,              
+              preco: parseFloat(planta.preco_unitario).toLocaleString('pt-BR', { 
+                  style: 'currency', 
+                  currency: 'BRL' 
+              }),
+              
+              // Tratamento da imagem: se 'planta.url_imagem' for falso (null, undefined, ''), usa o placeholder.
+              imagem: planta.url_imagem || 'https://placehold.co/300x200/ffd6e0/ffffff?text=Planta'
+          };
+      
+          // Adiciona o novo objeto 'produto' ao array 'produtos'
+         
+          produtos.push(produto);
+      }
 
         // 4. Preencher a variável const produtos = []; (isso já foi feito na linha acima)
 
-        // 5. Exibir os produtos na interface
-        exibirProdutos(produtos);
+        // 5. retornar os produtos na interface
+        return produtos;
 
     } catch (error) {
         console.error("Houve um erro ao carregar os produtos:", error);
