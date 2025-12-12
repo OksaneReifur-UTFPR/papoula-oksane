@@ -69,6 +69,16 @@ app.use((err, req, res, next) => {
 
 // só mexa nessa parte
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// >>>>>>>>>>> SERVINDO PASTA DE IMAGENS <<<<<<<<<<
+///home/radames/gits/dw1Compartilhados/papoula-oksane/imagens caminho completo da pasta de imagens
+const caminhoImagensProduto = path.join(__dirname, '../imagens', 'produto');
+console.log('Caminho Imagens Produto:', caminhoImagensProduto);
+
+// Mapeamos a pasta real para a rota virtual '/imagens-produtos'
+// A URL para acessar as imagens será: http://localhost:3001/imagens-produtos/nome_da_imagem.jpeg
+app.use('/imagens', express.static(caminhoImagensProduto));
+
 // Importando as rotas
 const loginRoutes = require('./routes/loginRoutes');
 app.use('/login', loginRoutes);
@@ -78,6 +88,10 @@ app.use('/login', loginRoutes);
 
 const formaPagamentoRoutes = require('./routes/formaPagamentoRoutes');
 app.use('/forma_pagamento', formaPagamentoRoutes);
+
+
+const menuRoutes = require('./routes/menuRoutes');
+app.use('/menu', menuRoutes);
 
 const pagamentoRoutes = require('./routes/pagamentoRoutes');
 app.use('/pagamento', pagamentoRoutes);
@@ -192,6 +206,10 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`🚀 Servidor rodando em http://${HOST}:${PORT}`);
+      
+      console.log("---------")
+      console.log(`🛣️ Iniciar o sistema por essa rota http://${HOST}:${PORT}/menu`);
+      console.log("---------")
       console.log(`📊 Health check disponível em http://${HOST}:${PORT}/health`);
       console.log(`🗄️ Banco de dados: PostgreSQL`);
       console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);

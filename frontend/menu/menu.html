@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu | Lindos Detalles</title>
-    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="menu.css"> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -14,18 +14,18 @@
     <div class="floating-hearts"></div>
     <div class="side-hearts"></div>
 
+    <div id="cart-message"></div>
+
     <header>
         <div class="header-container">
-            <div class="logo-box">
-                <img src="images/logo.jpg" alt="Logo Lindos Detalles">
-                <div class="logo-text">LINDOS DETALLES</div>
+            <div class="logo-box">                
+                <img src="http://localhost:3000/images/logo.jpg" alt="Logo Lindos Detalles"> <div class="logo-text">LINDOS DETALLES</div>
                 <div class="menu-subtitle">Mudas de flores para encantar seu jardim</div>
             </div>
             <nav class="nav">
                 <ul class="nav__menu">
                     <li><a href="menu.html" class="active">Início</a></li>
-                    <li><a href="produtos.html">Produtos</a></li>
-                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="produtos.html">Produtos</a></li> <li><a href="sobre.html">Sobre</a></li>
                     <li id="manager-menu-item" style="display:none">
                         <a href="gerenciamento.html" class="nav-button">
                              <i class="fas fa-cog"></i> Gerenciar
@@ -49,23 +49,36 @@
         <div class="container">
             <div class="page-title">
                 <h1>Bem-vinda à <span class="highlight">Lindos Detalles</span>!</h1>
-                <p class="page-subtitle">Sua floricultura romântica e delicada, feita para encantar cada momento. <span class="emoji">💗🌸</span></p>
+                <p class="page-subtitle">Sua floricultura romântica e delicada. <span class="emoji">💗🌸</span></p>
             </div>
             
             <section class="menu-apresentacao card-apresentacao">
                 <div class="apresentacao-content">
                     <p>
-                        Aqui você encontra flores, presentes e detalhes que transmitem amor e inspiração.<br>
-                        Navegue pelo menu acima para descobrir nossos produtos, fazer pedidos ou nos conhecer melhor.<br>
+                        Aqui você encontra flores, presentes e detalhes que transmitem amor.<br>
+                        Navegue abaixo para descobrir nossos destaques.<br>
                         <span class="apresentacao-emoji">💕💐💞</span>
                     </p>
-                    <div class="call-to-action">
-                        <a href="../produtos/produtos.html" class="btn-primary">
-                            <i class="fas fa-seedling"></i> Ver Nossas Flores
-                        </a>
+                </div>
+            </section>
+
+            <section class="products-section">
+                <div class="search-container" style="text-align: center; margin-bottom: 20px;">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="search-input" placeholder="Pesquisar flores por nome...">
+                    </div>
+                </div>
+
+                <h2>Nossas Flores em Destaque</h2>
+                
+                <div id="products-carousel" class="carousel-container">
+                    <div id="carousel-track" class="carousel-track">
+                        <p style="padding: 20px;">Carregando flores...</p>
                     </div>
                 </div>
             </section>
+
         </div>
     </main>
 
@@ -80,6 +93,7 @@
         </div>
     </footer>
 
-    <script src="menu.js"></script>
+    <script src="./menu.js"></script> 
+    <script src="../produtos/produtos.js"></script>
 </body>
 </html>
