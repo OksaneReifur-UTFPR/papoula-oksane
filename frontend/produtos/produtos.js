@@ -143,10 +143,23 @@ function exibeProdutos(searchTerm = '') {
 function renderProdutoCard(produto, container, className) {
     const item = document.createElement("div");
     item.className = className;
+
+    // 1. Defina a URL base do seu servidor (backend)
+    const API_BASE_URL = 'http://localhost:3000'; 
+    
+    // 2. Constrói a URL usando o ID do produto
+    // IMPORTANTE: Verifique se o seu objeto 'produto' usa 'id' ou 'id_produto' ou 'cod_produto'.
+    // Estou assumindo que é 'id'. Se for outro, altere abaixo.
+    const imageUrl = `${API_BASE_URL}/imagens/view/${produto.id}`;
+
     item.innerHTML = `
         <div class="product-card">
             <div class="product-image">
-                <img src="${produto.imagem}" alt="${produto.nome}" onerror="this.src='https://placehold.co/300x200/ffd6e0/ffffff?text=${encodeURIComponent(produto.nome)}'">
+                <img 
+                    src="${imageUrl}" 
+                    alt="${produto.nome}" 
+                    onerror="this.src='https://placehold.co/300x200/ffd6e0/ffffff?text=${encodeURIComponent(produto.nome)}'"
+                >
             </div>
             <div class="product-info">
                 <h3 class="product-title">${produto.nome}</h3>
@@ -158,7 +171,6 @@ function renderProdutoCard(produto, container, className) {
     `;
     container.appendChild(item);
 }
-
 
 // ==================== LÓGICA DE NAVEGAÇÃO DO CARROSSEL ====================
 

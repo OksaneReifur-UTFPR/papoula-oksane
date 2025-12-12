@@ -77,7 +77,10 @@ console.log('Caminho Imagens Produto:', caminhoImagensProduto);
 
 // Mapeamos a pasta real para a rota virtual '/imagens-produtos'
 // A URL para acessar as imagens será: http://localhost:3001/imagens-produtos/nome_da_imagem.jpeg
-app.use('/imagens', express.static(caminhoImagensProduto));
+const imageRoutes = require('./routes/imageRoutes');
+// Importante: A rota base será /imagens, então /imagens/view/1 funcionará
+app.use('/imagens', imageRoutes);
+//app.use('/imagens', express.static(caminhoImagensProduto));
 
 // Importando as rotas
 const loginRoutes = require('./routes/loginRoutes');

@@ -23,4 +23,6 @@ router.get('/view-image/:produtoId', imageController.viewImage);
 
 router.get('/view/:produtoId', imageController.mostrarImagemNoBrowser);
 
+
+//http://localhost:3000/imagens/view/1
 module.exports = router;
