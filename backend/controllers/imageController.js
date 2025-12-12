@@ -98,7 +98,7 @@ const viewImage = async (req, res) => {
     console.log('Requisição recebida para /view-image/:produtoId');
 
     const { produtoId } = req.params;
-    const filename = `${produtoId}.png`;
+    const filename = `${produtoId}.jpeg`;
     const filePath = path.join(UPLOAD_DIR, filename);
 
     try {
@@ -122,7 +122,7 @@ const mostrarImagemNoBrowser = async (req, res) => {
     const { produtoId } = req.params;
     
     // Como sua função de upload converte tudo para PNG, buscamos .png
-    const filename = `${produtoId}.png`; 
+    const filename = `${produtoId}.jpeg`; 
     const filePath = path.join(UPLOAD_DIR, filename);
 
     try {
@@ -132,7 +132,7 @@ const mostrarImagemNoBrowser = async (req, res) => {
         // 2. Define os headers para forçar a exibição no navegador
         // 'inline' diz ao navegador: "Renderize isso aqui mesmo"
         res.setHeader('Content-Disposition', 'inline; filename="' + filename + '"');
-        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('Content-Type', 'image/jpeg');
 
         // 3. Envia o arquivo
         res.sendFile(filePath);
