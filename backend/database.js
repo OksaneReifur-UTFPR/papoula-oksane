@@ -7,14 +7,14 @@ const dbConfig = {
   //  user: 'postgres', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
   //  password: 'admin',
 
-  // user: 'postgres', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
-  // password: 'admin',
-  // database: 'papoula',
+   user: 'postgres', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
+   password: 'admin',
+   database: 'papoula',
 
 
-  user: 'radames', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
-  password: 'Lageado001.',
-  database: 'oksane-papoula',
+ // user: 'radames', // Usuário padrão do PostgreSQL (ajuste conforme necessário)
+  //password: 'Lageado001.',
+ // database: 'oksane-papoula',
 
   // Configurações específicas do PostgreSQL
   ssl: false, // Defina como true se usar SSL

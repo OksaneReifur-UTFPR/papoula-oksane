@@ -4,11 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Entrar ou Cadastrar | Lindos Detalles</title>
-  <link rel="stylesheet" href="../css/login.css" />
+ <link rel="stylesheet" href="login.css" />
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Corações flutuantes -->
   <div class="floating-hearts">
     <span class="heart heart-1">💗</span>
     <span class="heart heart-2">💕</span>
@@ -37,12 +36,12 @@
   </div>
 
   <main>
-    <div id="login-message" style="display:none"></div>
+    <div id="login-message" role="alert" aria-live="polite"></div> 
 
     <div class="login-container" role="main">
       <div class="logo-box">
-        <h1 class="logo-text">LINDOS DETALLES</h1>
-        <div class="store-subtitle">🌸 Espalhe amor com flores! 🌸</div>
+        <h1 class="logo-text">LINDOS DETALLES 💖</h1> 
+        <div class="store-subtitle">Organize seus pedidos com carinho!</div>
       </div>
 
       <div class="tab-group" role="tablist" aria-label="Entrar ou Cadastrar">
@@ -50,7 +49,6 @@
         <button class="tab" id="btn-cadastrar" type="button" aria-selected="false">Cadastrar</button>
       </div>
 
-      <!-- Login form -->
       <form class="form" id="form-login" autocomplete="on">
         <label for="email-login">E-mail</label>
         <input type="email" id="email-login" name="email" required placeholder="seu@exemplo.com">
@@ -62,7 +60,6 @@
         </div>
       </form>
 
-      <!-- Cadastro form -->
       <form class="form hidden" id="form-cadastro" autocomplete="on">
         <label for="nome-cadastro">Nome completo</label>
         <input type="text" id="nome-cadastro" name="nome" required placeholder="Seu nome">
@@ -77,10 +74,8 @@
     </div>
   </main>
 
-  <!-- Voltar -->
   <button class="btn-voltar" onclick="window.history.back()"><span class="heart-btn">💗</span> Voltar <span class="heart-btn">💖</span></button>
 
-  <!-- Script modular que usa auth.js -->
   <script type="module" src="../js/login-app.js"></script>
 </body>
 </html>

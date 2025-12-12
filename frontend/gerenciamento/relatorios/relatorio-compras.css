@@ -1,0 +1,286 @@
+/* ========================================= */
+/* 1. VARIÁVEIS E ESTILOS GLOBAIS            */
+/* ========================================= */
+
+:root {
+    --color-primary: #FF69B4; /* Deep Pink - Tom principal dos botões/bordas */
+    --color-secondary: #FFC0CB; /* Light Pink - Tom de fundo suave */
+    --color-text-dark: #880E4F; /* Darker Pink/Maroon - Cor para títulos/texto principal */
+    --color-text-light: #444;
+    --color-background-card: #FFFFFF;
+    --color-border-card: #FFB6C1; /* Light Pink para bordas dos cards */
+    --color-hover: #FF1493; /* Deep Pink escuro para hover */
+    --font-fancy: 'Dancing Script', cursive;
+    --font-normal: 'Poppins', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-normal);
+    background-color: #F8F8F8; /* Fundo levemente off-white */
+    color: var(--color-text-light);
+    line-height: 1.6;
+    overflow-x: hidden; /* Evita barra de rolagem horizontal devido aos corações */
+    min-height: 100vh;
+}
+
+/* ========================================= */
+/* 2. EFEITO CORAÇÕES FLUTUANTES             */
+/* ========================================= */
+
+.heart, .side-heart {
+    position: absolute;
+    color: var(--color-primary);
+    opacity: 0.5;
+    pointer-events: none;
+    animation: floatHeart 15s infinite ease-in-out;
+    filter: drop-shadow(0 0 1px rgba(255, 105, 180, 0.5));
+}
+
+.floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.side-hearts {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+@keyframes floatHeart {
+    0% { transform: translateY(0) scale(1); opacity: 0.5; }
+    50% { transform: translateY(-50px) scale(1.1); opacity: 0.7; }
+    100% { transform: translateY(0) scale(1); opacity: 0.5; }
+}
+
+
+/* ========================================= */
+/* 3. LAYOUT PRINCIPAL E BOTÃO VOLTAR        */
+/* ========================================= */
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-text-dark);
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background-color: var(--color-secondary);
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.back-button i {
+    margin-right: 8px;
+}
+
+.back-button:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+
+/* ========================================= */
+/* 4. CABEÇALHO (Header)                     */
+/* ========================================= */
+
+.header {
+    background-color: var(--color-background-card);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(255, 105, 180, 0.1);
+    border: 1px solid var(--color-border-card);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    font-size: 3rem;
+    margin-right: 15px;
+}
+
+.title {
+    font-family: var(--font-fancy);
+    font-size: 2.5rem;
+    color: var(--color-text-dark);
+    margin-bottom: -5px;
+    text-shadow: 1px 1px 2px rgba(255, 105, 180, 0.3);
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--color-primary);
+}
+
+
+/* ========================================= */
+/* 5. DASHBOARD E CARDS                      */
+/* ========================================= */
+
+.dashboard {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr; /* Padrão de 1 coluna */
+}
+
+@media (min-width: 1000px) {
+    .dashboard {
+        grid-template-columns: 1fr 2fr; /* Gráfico e Tabela */
+    }
+    .full-width {
+        grid-column: 1 / -1; /* Tabela ocupa toda a largura */
+    }
+    .chart-single {
+        grid-column: 1 / 2;
+    }
+}
+
+.card {
+    background-color: var(--color-background-card);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(255, 105, 180, 0.1);
+    border: 1px solid var(--color-border-card);
+}
+
+.card h3 {
+    font-family: var(--font-normal);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-text-dark);
+    margin-bottom: 15px;
+    border-bottom: 2px dashed var(--color-secondary);
+    padding-bottom: 10px;
+}
+
+.footer-note {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dotted var(--color-secondary);
+    text-align: center;
+}
+
+/* Gráfico */
+.chart-wrap {
+    height: 400px;
+}
+
+#chartGastoCliente {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* ========================================= */
+/* 6. TABELA (Detalhes dos Itens)            */
+/* ========================================= */
+
+.table-wrap {
+    overflow-x: auto;
+    max-height: 500px; /* Limita a altura para rolagem da tabela */
+    overflow-y: auto;
+}
+
+#tableCompras {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 700px; /* Garante que a tabela não fique muito estreita */
+}
+
+#tableCompras thead th {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#tableCompras thead th:first-child { border-top-left-radius: 8px; }
+#tableCompras thead th:last-child { border-top-right-radius: 8px; }
+
+#tableCompras tbody tr {
+    background-color: #FFF;
+    transition: background-color 0.2s;
+    border-bottom: 1px solid var(--color-secondary);
+}
+
+#tableCompras tbody tr:nth-child(even) {
+    background-color: #FEEFF3; /* Linhas alternadas em rosa suave */
+}
+
+#tableCompras tbody tr:hover {
+    background-color: var(--color-secondary);
+}
+
+#tableCompras tbody td {
+    padding: 12px 15px;
+    color: var(--color-text-light);
+    vertical-align: middle;
+}
+
+/* Estilos específicos para números/moedas */
+#tableCompras th:nth-child(4), #tableCompras td:nth-child(4),
+#tableCompras th:nth-child(5), #tableCompras td:nth-child(5),
+#tableCompras th:nth-child(6), #tableCompras td:nth-child(6) {
+    text-align: right;
+    font-weight: 700;
+    color: var(--color-text-dark);
+}
+
+/* Cursor de ordenação */
+#tableCompras th[data-sort] {
+    cursor: pointer;
+    position: relative;
+    padding-right: 25px; /* Espaço para o ícone */
+}
+
+#tableCompras th[data-sort]::after {
+    content: '\f0dc'; /* Ícone de seta de ordenação padrão (Font Awesome) */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 10px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Se estiver ordenando (opcional: mudar ícone para indicar direção) */
+#tableCompras th[data-asc="1"]::after {
+    content: '\f062'; /* seta para cima */
+    color: white;
+}
+#tableCompras th[data-asc="0"]::after {
+    content: '\f063'; /* seta para baixo */
+    color: white;
+}
