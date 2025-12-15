@@ -143,13 +143,14 @@ main {
     position: relative;
 }
 .container {
-    max-width: 1200px; /* Aumentei um pouco para caber melhor o carrossel */
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
     text-align: center;
 }
 .page-title {
-    margin-bottom: 40px;
+    /* Ajustado para novo layout */
+    margin-bottom: 20px; 
 }
 .page-title h1 {
     font-family: 'Dancing Script', cursive;
@@ -163,36 +164,13 @@ main {
 .page-subtitle {
     font-size: 1.2rem;
     color: var(--cor-texto-claro);
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
-/* Card de Apresentação */
+/* Card de Apresentação (Estilos removidos ou mantidos apenas o essencial) */
 .card-apresentacao {
-    background-color: var(--cor-branca);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: var(--sombra-suave);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid var(--cor-rosa-suave);
-    max-width: 900px; /* Limitando largura do texto */
-    margin: 0 auto 50px auto;
+    display: none; /* Estilo para garantir a remoção visual */
 }
-.card-apresentacao:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--sombra-hover);
-}
-.apresentacao-content p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 20px;
-}
-.apresentacao-emoji {
-    font-size: 1.5rem;
-    display: block;
-    margin-top: 15px;
-}
-
-/* Call to Action Button */
 .call-to-action {
     margin-top: 30px;
 }
@@ -222,13 +200,13 @@ main {
 
 
 /* ================================================= */
-/* NOVO: BARRA DE PESQUISA, CARROSSEL E CARDS       */
+/* NOVO: BARRA DE PESQUISA E CATEGORIAS             */
 /* ================================================= */
 
 /* --- Barra de Pesquisa --- */
 .search-container {
     margin: 0 auto 40px auto;
-    max-width: 500px;
+    max-width: 600px; 
     position: relative;
     z-index: 20;
 }
@@ -245,14 +223,14 @@ main {
 }
 #search-input {
     width: 100%;
-    padding: 12px 15px 12px 45px;
+    padding: 15px 15px 15px 45px; 
     border: 2px solid var(--cor-rosa-suave);
     border-radius: 30px;
     font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem; 
     outline: none;
     transition: all 0.3s;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--cor-branca); 
 }
 #search-input:focus {
     border-color: var(--cor-primaria);
@@ -268,12 +246,63 @@ main {
     margin-bottom: 30px;
 }
 
-/* --- Container do Carrossel --- */
+/* NOVO ESTILO: CATEGORIAS CIRCULARES */
+.category-section {
+    margin-bottom: 50px;
+}
+.category-circles-container {
+    overflow-x: auto; /* Permite rolagem horizontal */
+    padding: 10px 0;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+.category-circles-track {
+    display: flex;
+    gap: 25px; /* Espaço entre os círculos */
+    justify-content: center; /* Centraliza se houver espaço */
+    padding-bottom: 10px; /* Espaço para sombra */
+}
+.category-circle-item {
+    flex-shrink: 0;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 120px; /* Largura padrão */
+}
+.category-circle-item:hover {
+    transform: translateY(-5px);
+}
+.category-circle-image {
+    width: 100px; /* Diâmetro do círculo */
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 10px auto;
+    border: 3px solid var(--cor-primaria);
+    box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.category-circle-item:hover .category-circle-image {
+    border-color: #e9598a;
+    box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
+}
+.category-circle-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.category-circle-name {
+    font-weight: 600;
+    color: var(--cor-texto);
+    font-size: 1rem;
+}
+
+/* --- Container do Carrossel (MANTIDO) --- */
 .carousel-container {
     position: relative; 
     max-width: 100%; 
     margin: 0 auto 50px auto; 
-    padding: 0 50px; /* Espaço para setas */
+    padding: 0 50px; 
 }
 
 /* Janela de Visualização */
@@ -291,7 +320,7 @@ main {
     gap: 20px;
 }
 
-/* --- Card do Produto (Estilo compatível com o tema) --- */
+/* --- Card do Produto (Estilo mantido) --- */
 .carousel-item {
     flex-shrink: 0; 
     width: 280px; 
@@ -369,7 +398,7 @@ main {
     transform: scale(1.02);
 }
 
-/* --- Botões de Navegação (Setas) --- */
+/* --- Botões de Navegação (Setas) (MANTIDO) --- */
 .carousel-button {
     position: absolute;
     top: 50%;
@@ -397,7 +426,7 @@ main {
 .carousel-button.prev { left: 0; }
 .carousel-button.next { right: 0; }
 
-/* --- Grade de Produtos (usado na busca) --- */
+/* --- Grade de Produtos (usado na busca) (MANTIDO) --- */
 .carousel-track-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -409,7 +438,7 @@ main {
     width: 100%;
 }
 
-/* --- Mensagem de Carrinho (Toast) --- */
+/* --- Mensagem de Carrinho (Toast) (MANTIDO) --- */
 #cart-message {
     position: fixed;
     top: 20px;
@@ -432,7 +461,7 @@ main {
 }
 
 
-/* ===== FOOTER ===== */
+/* ===== FOOTER (MANTIDO) ===== */
 footer {
     background-color: var(--cor-secundaria);
     padding: 40px 20px 20px 20px;
@@ -483,12 +512,17 @@ footer p {
     .carousel-item { width: 85vw; } 
     .carousel-button { width: 35px; height: 35px; }
     .carousel-track-grid { grid-template-columns: 1fr; }
+
+    /* Ajuste de Categoria Mobile: Rolagem horizontal */
+    .category-circles-track { justify-content: start; }
+    .category-circle-item { width: 100px; } 
+    .category-circle-image { width: 80px; height: 80px; } 
 }
 
 @media (max-width: 600px) {
     .page-title h1 { font-size: 2.5rem; }
     .page-subtitle { font-size: 1rem; }
-    .card-apresentacao { padding: 30px 20px; }
-    .apresentacao-content p { font-size: 1rem; }
+    /* .card-apresentacao { padding: 30px 20px; } (Estilo desativado)*/
+    /* .apresentacao-content p { font-size: 1rem; } (Estilo desativado)*/
     .btn-primary { font-size: 1rem; padding: 10px 20px; }
 }

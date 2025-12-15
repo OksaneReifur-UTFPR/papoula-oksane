@@ -1,8 +1,8 @@
 // ===================================================
-// ARQUIVO: menu.js (Atualizado com Lógica de Corações Unificada)
+// ARQUIVO: menu.js (Atualizado para nova navegação)
 // ===================================================
 
-// --- LÓGICA DE CORAÇÕES FLUTUANTES (Unificada com produtos.js) ---
+// --- LÓGICA DE CORAÇÕES FLUTUANTES (Mantida) ---
 
 /**
  * Cria os corações flutuantes e laterais para o efeito visual unificado.
@@ -69,7 +69,7 @@ function createHearts() {
   });
 }
 
-// --- LÓGICA DE GERENCIAMENTO (MANTIDA) ---
+// --- LÓGICA DE GERENCIAMENTO (Atualizada) ---
 
 function isManagerLoggedIn() {
   const role = (localStorage.getItem('userRole') || localStorage.getItem('role') || '').toLowerCase();
@@ -96,12 +96,21 @@ function isManagerLoggedIn() {
 
 // Mostra ou esconde o item de menu de gerenciamento.
 function showManagerButtonIfNeeded() {
+  // O item 'Gerenciar' (botão com ícone, visível só para gerente)
   const el = document.getElementById('manager-menu-item');
-  if (!el) return;
+  // O item 'Gerenciamento' (link padrão que substitui 'Produtos')
+  const elVisible = document.getElementById('manager-menu-item-visible'); 
+
+  if (!el || !elVisible) return;
+  
   if (isManagerLoggedIn()) {
-    el.style.display = 'block'; // Mostra
+    // Se for gerente: mostra o botão 'Gerenciar' e esconde o link 'Gerenciamento'.
+    el.style.display = 'list-item'; 
+    elVisible.style.display = 'none';
   } else {
-    el.style.display = 'none'; // Esconde
+    // Se não for gerente: esconde o botão 'Gerenciar' e mostra o link 'Gerenciamento'.
+    el.style.display = 'none';
+    elVisible.style.display = 'list-item';
   }
 }
 
