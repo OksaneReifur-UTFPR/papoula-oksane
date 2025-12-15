@@ -27,15 +27,33 @@ exports.verificarEmail = async (req, res) => {
   }
 };
 
-// Verifica senha_pessoa e gera token JWT quando ok
+// Verifica senha_pessoa, identifica o cargo e gera token JWT quando ok
 exports.verificarSenha = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     const { email_pessoa, senha_pessoa } = req.body;
     if (!email_pessoa || !senha_pessoa) return res.status(400).json({ error: 'email_pessoa e senha_pessoa são obrigatórios' });
 
-    const query = 'SELECT cpf_pessoa, nome_pessoa, email_pessoa, senha_pessoa FROM pessoa WHERE email_pessoa = $1 LIMIT 1';
-    const result = await db.pool.query(query, [email_pessoa]);
+    // Query para buscar pessoa, senha_pessoa, e determinar o cargo/role (Gerente/Outro Funcionário/Cliente)
+    const query = `
+      SELECT 
+        p.cpf_pessoa, 
+        p.nome_pessoa, 
+        p.email_pessoa, 
+        p.senha_pessoa,
+        c.nome_cargo,
+        f.id_cargo
+      FROM 
+        pessoa p
+      LEFT JOIN 
+        funcionario f ON p.cpf_pessoa = f.cpf_pessoa
+      LEFT JOIN 
+        cargo c ON f.id_cargo = c.id_cargo
+      WHERE 
+        p.email_pessoa = $1
+      LIMIT 1;
+    `;
+    const result = await db.pool.query(query, [email_pessoa]); 
 
     if (result.rows.length === 0) {
       return res.status(401).json({ auth: false, message: 'Credenciais inválidas' });
@@ -48,14 +66,36 @@ exports.verificarSenha = async (req, res) => {
       return res.status(401).json({ auth: false, message: 'Credenciais inválidas' });
     }
 
-    // Gera token JWT
-    const payload = { id: user.cpf_pessoa, email_pessoa: user.email_pessoa, nome_pessoa: user.nome_pessoa };
+    // Determinar o papel (role) do usuário
+    // Regra: Se for funcionário, usa o cargo. Se não for, é Cliente (garantido pelo cadastro).
+    let role = 'Cliente';
+    if (user.id_cargo) {
+      // Remove espaços em branco do nome do cargo, se houver.
+      role = user.nome_cargo ? user.nome_cargo.trim() : 'Funcionário'; 
+    }
+
+    // Gera token JWT com o papel do usuário
+    const payload = { 
+        id: user.cpf_pessoa, 
+        email_pessoa: user.email_pessoa, 
+        nome_pessoa: user.nome_pessoa,
+        role: role 
+    };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
 
     // Não retornar a senha_pessoa
     delete user.senha_pessoa;
 
-    return res.json({ auth: true, token, user: { id: user.cpf_pessoa, nome_pessoa: user.nome_pessoa, email_pessoa: user.email_pessoa } });
+    return res.json({ 
+        auth: true, 
+        token, 
+        user: { 
+            id: user.cpf_pessoa, 
+            nome_pessoa: user.nome_pessoa, 
+            email_pessoa: user.email_pessoa,
+            role: role // Retornar o papel para o frontend
+        } 
+    });
   } catch (err) {
     console.error('verificarSenha error:', err);
     return res.status(500).json({ error: 'Erro ao verificar senha_pessoa' });
@@ -95,32 +135,60 @@ exports.listarPessoas = async (req, res) => {
   }
 };
 
-// Cria uma nova pessoa (hash da senha_pessoa)
+/// Cria uma nova pessoa (hash da senha_pessoa) e a registra como cliente
 exports.criarPessoa = async (req, res) => {
-  try {
-    const { nome_pessoa, email_pessoa, senha_pessoa } = req.body;
-    if (!nome_pessoa || !email_pessoa || !senha_pessoa) return res.status(400).json({ error: 'nome_pessoa, email_pessoa e senha_pessoa são obrigatórios' });
+  const { cpf_pessoa, nome_pessoa, data_nascimento_pessoa, email_pessoa, senha_pessoa } = req.body;
+  
+  if (!cpf_pessoa || !nome_pessoa || !data_nascimento_pessoa || !email_pessoa || !senha_pessoa) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios para o cadastro.' });
+  }
 
-    // Verifica se email_pessoa já existe
-    const check = await db.pool.query('SELECT cpf_pessoa FROM pessoa WHERE email_pessoa = $1 LIMIT 1', [email_pessoa]);
-    if (check.rows.length > 0) return res.status(409).json({ error: 'Email já cadastrado' });
+  // Validação básica do CPF
+  if (cpf_pessoa.length !== 11 || !/^\d+$/.test(cpf_pessoa)) {
+     return res.status(400).json({ error: 'O CPF deve conter exatamente 11 dígitos numéricos.' });
+  }
+
+  try {
+    // 1. Verificar se CPF ou Email já existem
+    const checkQuery = 'SELECT 1 FROM pessoa WHERE cpf_pessoa = $1 OR email_pessoa = $2 LIMIT 1';
+    // Uso da função db.query que você definiu no database.js
+    const checkResult = await db.query(checkQuery, [cpf_pessoa, email_pessoa]); 
+    if (checkResult.rows.length > 0) {
+      return res.status(409).json({ error: 'CPF ou Email já cadastrado.' });
+    }
 
     const hashed = await bcrypt.hash(senha_pessoa, SALT_ROUNDS);
+    // Data de cadastro é a data atual para a tabela cliente
+    const dataCadastro = new Date().toISOString().split('T')[0]; 
 
-    const insertQuery = `
-      INSERT INTO pessoa (nome_pessoa, email_pessoa, senha_pessoa)
-      VALUES ($1, $2, $3)
-      RETURNING cpf_pessoa, nome_pessoa, email_pessoa
-    `;
+    // Uso de transação para garantir que a pessoa e o cliente sejam inseridos juntos
+    const resultTransaction = await db.transaction(async (client) => {
+      // 2. Inserir na tabela pessoa
+      const insertPessoaQuery = `
+        INSERT INTO pessoa (cpf_pessoa, nome_pessoa, data_nascimento_pessoa, email_pessoa, senha_pessoa)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING cpf_pessoa, nome_pessoa, email_pessoa
+      `;
+      const pessoaResult = await client.query(insertPessoaQuery, [cpf_pessoa, nome_pessoa, data_nascimento_pessoa, email_pessoa, hashed]);
+      const novaPessoa = pessoaResult.rows[0];
 
-    const result = await db.pool.query(insertQuery, [nome_pessoa, email_pessoa, hashed]);
-    return res.status(201).json(result.rows[0]);
+      // 3. Inserir automaticamente como cliente (Regra de Negócio)
+      const insertClienteQuery = `
+        INSERT INTO cliente (cpf_cliente, data_cadastro)
+        VALUES ($1, $2)
+      `;
+      await client.query(insertClienteQuery, [cpf_pessoa, dataCadastro]);
+      
+      return { ...novaPessoa, role: 'Cliente', message: 'Cadastro realizado com sucesso!' };
+    });
+    
+    return res.status(201).json(resultTransaction);
+
   } catch (err) {
     console.error('criarPessoa error:', err);
-    return res.status(500).json({ error: 'Erro ao criar pessoa' });
+    return res.status(500).json({ error: 'Erro ao criar pessoa e registrar como cliente.' });
   }
 };
-
 // Retorna uma pessoa por id (sem senha_pessoa)
 exports.obterPessoa = async (req, res) => {
   try {

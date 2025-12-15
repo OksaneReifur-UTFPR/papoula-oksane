@@ -26,15 +26,15 @@
                 <ul class="nav__menu">
                     <li><a href="menu.html" class="active">Início</a></li>
                     <li id="manager-menu-item-visible"> 
-                         <a href="gerenciamento.html">Gerenciamento</a>
+                         <a href="../gerenciamento/gerenciamento.html">Gerenciamento</a>
                     </li>
                     <li><a href="sobre.html">Sobre</a></li>
                     <li id="manager-menu-item" style="display:none">
-                        <a href="gerenciamento.html" class="nav-button">
+                        <a href="../gerenciamento/gerenciamento.html" class="nav-button">
                              <i class="fas fa-cog"></i> Gerenciar
                         </a>
                     </li>
-                    <li><a href="login.html">Cadastro</a></li>
+                   <li><a href="../login-ok/login.html">Cadastro</a></li>
                     <li>
                         <a href="carrinho.html">
                             Carrinho <span id="cart-count" class="cart-count"></span>
@@ -104,13 +104,12 @@
     
     <script>
         // Dados de Simulação para as Categorias Circulares
-        const categoriesData = [
-            { name: "Orquídeas", image: "http://localhost:3000/images/orquidea.jpg", type: "orquidea" },
-            { name: "Rosas", image: "http://localhost:3000/images/rosa.jpg", type: "rosas" },
-            { name: "Lírios", image: "http://localhost:3000/images/lirio.jpg", type: "lirios" },
-            { name: "Bulbos", image: "http://localhost:3000/images/bulbo.jpg", type: "bulbos" },
-            { name: "Narcisos", image: "http://localhost:3000/images/narciso.jpg", type: "narcisos" },
-            { name: "Gladíolos", image: "http://localhost:3000/images/gladiolo.jpg", type: "gladiolos" },
+        const categoriesData = [          
+            { name: "Tuberculosa", image: "http://localhost:3000/images/produto/1.jpeg", type: "Tuberculosa" },
+            { name: "Orquídeas", image: "http://localhost:3000/imagens/produto/orquideafantasma.jpeg", type: "orquidea" },
+            { name: "Rosas", image: "http://localhost:3000/imagens/produto/2.jpeg", type: "rosas" },
+            { name: "Bulbos", image: "http://localhost:3000/imagens/produto/Narcissus poeticus.jpeg", type: "bulbos" },
+            { name: "Gladíolos", image: "http://localhost:3000/images/imagens/produto/Gladiolus italicus.jpeg", type: "gladiolos" },
         ];
 
         function renderCategories() {

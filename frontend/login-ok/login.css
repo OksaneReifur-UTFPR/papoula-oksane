@@ -1,4 +1,4 @@
-/* login.css — Tema Lindos Detalles 💖 (Versão Aprimorada, APLICANDO O ESTILO GERENCIAMENTO) */
+/* carrinho.css — Tema Lindos Detalles 💖 (Delicado e Romântico) */
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap');
 
 /* ========================================= */
@@ -6,369 +6,366 @@
 /* ========================================= */
 
 :root{
-  --color-primary: #FF5C8A; /* Rosa Vibrante (Mais forte no destaque) */
-  --color-secondary: #FFD4E5; /* Rosa Suave (Bordas e Fundo) */
-  --color-text-dark: #880E4F; /* Darker Pink/Maroon (Texto principal) */
-  --color-text-light: #444;
-  --color-background-card: #FFFFFF;
-  --color-border-card: #FFB6C1; /* Rosa claro para bordas do card */
-  --sombra-suave: 0 10px 40px rgba(255, 92, 138, 0.3); /* Sombra mais rosa */
-  --font-fancy: 'Dancing Script', cursive;
-  --font-normal: 'Poppins', sans-serif;
+    --color-primary: #FF5C8A;        /* Rosa Vibrante (Botões e Destaque) */
+    --color-secondary: #FFB6C1;      /* Rosa Médio (Bordas de Cards) */
+    --color-tertiary: #FFEBF0;       /* Rosa Ultra-Claro (Fundo) */
+    --color-text-dark: #880E4F;      /* Darker Pink/Maroon (Texto principal) */
+    --color-text-light: #555;        /* Texto Secundário */
+    --color-background-card: #FFFFFF;
+    --sombra-suave: 0 12px 45px rgba(255, 92, 138, 0.2); /* Sombra mais difusa */
+    --font-fancy: 'Dancing Script', cursive;
+    --font-normal: 'Poppins', sans-serif;
+
+    /* Variáveis do Carrinho adaptadas */
+    --cor-primaria: var(--color-primary);
+    --cor-secundaria: var(--color-tertiary);
+    --cor-texto: var(--color-text-dark);
+    --cor-texto-claro: var(--color-text-light);
+    --cor-branca: var(--color-background-card);
+    --cor-rosa-suave: #ffe4f1; 
+    --sombra-hover: 0 8px 30px rgba(255, 92, 138, 0.25);
 }
 
-/* Reset/Body */
+/* ===== BASE ===== */
 * { box-sizing: border-box; margin: 0; padding: 0 }
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: var(--font-normal);
-  /* Fundo Rosa Ultra Suave (como se fosse uma nuvem) */
-  background: linear-gradient(135deg, #fefeff 0%, #fdf5f9 100%);
-  min-height: 100vh;
-  color: var(--color-text-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden; 
-  padding-bottom: 80px; /* Espaço para o botão Voltar */
+    font-family: var(--font-normal);
+    /* Fundo harmonizado com a tela de login */
+    background-color: var(--color-tertiary); 
+    min-height: 100vh;
+    color: var(--cor-texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    position: relative;
+    padding: 20px;
 }
 
+main {
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
-/* ========================================= */
-/* 2. EFEITO CORAÇÕES FLUTUANTES (Aprimorado)*/
-/* ========================================= */
+/* ===== Card Carrinho (Container) ===== */
+.carrinho-container {
+    background: var(--cor-branca);
+    border: 3px solid var(--color-secondary);
+    border-radius: 25px;
+    padding: 40px 30px;
+    box-shadow: var(--sombra-suave);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
 
-/* ... (Manter o estilo dos corações) ... */
-
-/* Estilo do Coração Flutuante */
-.heart, .side-heart {
+/* Dupla Borda no Card Principal */
+.carrinho-container::before {
+    content: '';
     position: absolute;
-    color: var(--color-primary);
-    opacity: 0.2; /* Menor opacidade para parecer mais etéreo/levitando */
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    border: 2px solid var(--color-primary); 
+    border-radius: 20px;
     pointer-events: none;
-    animation: floatHeart 20s infinite ease-in-out; /* Animação mais longa e suave */
-    filter: drop-shadow(0 0 2px rgba(255, 92, 138, 0.4)); /* Sombra suave para glow */
+    opacity: 0.5;
 }
 
-/* Containers (Z-index negativo garante que fiquem no fundo) */
+/* ===== LOGO E TÍTULOS ===== */
+.logo-box {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--color-secondary);
+}
+
+.logo-box img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid var(--color-primary);
+}
+
+.logo-text {
+    font-family: var(--font-fancy);
+    color: var(--color-primary);
+    font-size: 2.5rem;
+    margin: 0;
+    line-height: 1;
+}
+
+.carrinho-subtitle {
+    color: var(--cor-texto-claro);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.carrinho-title {
+    margin-bottom: 20px;
+}
+
+.carrinho-title h2 {
+    font-family: var(--font-fancy);
+    color: var(--color-primary);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.carrinho-title p {
+    color: var(--cor-texto-claro);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* ===== ITENS DO CARRINHO ===== */
+.carrinho-itens {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 40vh;
+    overflow-y: auto; /* Permite scroll se muitos itens */
+    padding-right: 10px; /* Espaço para a barra de scroll */
+}
+
+/* Estilo da barra de rolagem (Chrome, Edge, Safari) */
+.carrinho-itens::-webkit-scrollbar {
+    width: 8px;
+}
+.carrinho-itens::-webkit-scrollbar-track {
+    background: var(--cor-rosa-suave);
+    border-radius: 10px;
+}
+.carrinho-itens::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 10px;
+}
+
+.item-carrinho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: var(--cor-rosa-suave);
+    border-radius: 12px;
+    border: 1px solid var(--color-secondary);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.item-carrinho:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 92, 138, 0.15);
+}
+
+.item-imagem {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 1px solid var(--color-primary);
+}
+
+.item-info {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.item-nome {
+    font-weight: 600;
+    color: var(--cor-texto);
+}
+
+.item-preco {
+    font-size: 0.9rem;
+    color: var(--cor-texto-claro);
+}
+
+.item-quantidade {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 15px;
+}
+
+.btn-quantidade {
+    background: var(--color-primary);
+    color: var(--cor-branca);
+    border: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: background-color 0.2s;
+}
+.btn-quantidade:hover {
+    background-color: #E6517A;
+}
+
+.quantidade-valor {
+    font-weight: 700;
+    color: var(--cor-texto);
+}
+
+.btn-remover {
+    color: var(--color-primary);
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.btn-remover:hover {
+    color: #E6517A;
+}
+
+/* ===== TOTAL E BOTÃO FINALIZAR ===== */
+.carrinho-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--color-secondary);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.total-valor {
+    font-size: 1.4rem;
+}
+
+.btn-finalizar {
+    display: block;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--color-primary);
+    color: var(--cor-branca);
+    font-family: var(--font-normal);
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: var(--sombra-suave);
+    transition: all 0.23s;
+    letter-spacing: 0.5px;
+}
+
+.btn-finalizar:hover {
+    background-color: #E6517A;
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-hover);
+}
+
+/* ===== BOTÃO VOLTAR (Harmonizado com o Login) ===== */
+
+.btn-voltar {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    border: 2px solid var(--color-primary);
+    border-radius: 10px;
+    background-color: var(--color-background-card);
+    color: var(--color-primary);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 92, 138, 0.3);
+    transition: all 0.3s ease;
+    z-index: 10;
+    text-decoration: none; /* Como é um <a> tag no HTML */
+    display: flex;
+    align-items: center;
+}
+
+.btn-voltar:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background-card);
+    transform: translateY(-2px);
+}
+
+.voltar-emoji {
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+/* ===== CORAÇÕES E RESPONSIVIDADE (Copiado do login.css) ===== */
+/* Ajuste as classes .floating-hearts e .side-hearts para o carrinho */
+/* NOTA: Requer que as animações @keyframes estejam no CSS final */
+
 .floating-hearts, .side-hearts {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
-}
-
-/* Animação: Corações mais lentos e com movimento de onda */
-@keyframes floatHeart {
-    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; }
-    30% { transform: translateY(-50px) translateX(20px) scale(1.1); opacity: 0.35; }
-    60% { transform: translateY(-10px) translateX(-10px) scale(1.05); opacity: 0.25; }
-    100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.2; }
-}
-/* ========================================= */
-/* 3. CAIXA DE LOGIN (Card)                  */
-/* ========================================= */
-
-.login-container {
-    background-color: var(--color-background-card);
-    /* Borda Dupla (Para replicar o visual da imagem de Gerenciamento) */
-    border: 3px solid var(--color-secondary); 
-    padding: 30px 40px;
-    border-radius: 25px; /* Bordas mais arredondadas */
-    box-shadow: var(--sombra-suave);
-    width: 90%;
-    max-width: 420px;
-    text-align: center;
-    z-index: 10;
-    /* Linha rosa dentro do card */
-    position: relative;
-    margin-top: 30px; /* Adicionado para centralizar melhor */
-    margin-bottom: 30px;
-}
-
-.login-container::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    bottom: 5px;
-    left: 5px;
-    right: 5px;
-    border: 2px solid var(--color-border-card);
-    border-radius: 20px;
     pointer-events: none;
-    opacity: 0.8;
+    z-index: 5;
 }
 
-.logo-box {
-    margin-bottom: 25px;
-}
-
-.logo-box .logo-text { /* Estilo do TÍTULO PRINCIPAL (Como o 'Gerenciamento de Formas de Pagamento') */
-    font-family: var(--font-fancy);
-    font-size: 3rem; /* Título maior e mais impactante */
-    color: var(--color-primary); /* Alterado para rosa vibrante */
-    margin-bottom: 5px;
-    text-shadow: 1px 1px 2px rgba(255, 92, 138, 0.3);
-}
-
-.logo-box .store-subtitle { /* Estilo do SUBTÍTULO (Como o 'Organize seus métodos...') */
-    color: var(--color-text-dark); /* Cor principal do texto */
-    font-size: 1rem;
-    font-weight: 400; /* Mais leve */
-}
-
-
-/* ========================================= */
-/* 4. TABS (Login/Cadastro)                  */
-/* ========================================= */
-
-.tab-group { /* Renomeado de .tabs para .tab-group */
-    display: flex;
-    justify-content: space-around;
-    /* Linha rosa dupla tracejada para separar o header das abas */
-    border-top: 1px dashed var(--color-border-card);
-    border-bottom: 1px dashed var(--color-border-card);
-    margin: 20px 0;
-    padding: 5px 0;
-}
-
-.tab { /* Renomeado de .tab-btn para .tab */
-    flex: 1;
-    padding: 10px 0;
-    background: transparent;
-    border: none;
-    color: var(--color-text-dark);
-    font-weight: 600;
-    font-size: 1.1rem; /* Mais visível */
-    cursor: pointer;
-    transition: color 0.3s;
-    border-bottom: 3px solid transparent;
-}
-
-.tab:hover {
-    color: var(--color-primary);
-}
-
-.tab.active {
-    color: var(--color-primary);
-    /* Borda inferior que parece um sublinhado (como na imagem de gerenciamento) */
-    border-bottom: 3px solid var(--color-primary);
-    font-weight: 700;
-}
-
-
-/* ========================================= */
-/* 5. FORMULÁRIO E INPUTS                    */
-/* ========================================= */
-
-.form {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.form label {
-    font-size: 0.95rem;
-    color: var(--color-text-dark);
-    font-weight: 700; /* Mais negrito */
-    margin-bottom: 5px;
-    margin-top: 15px;
-}
-
-.form input {
-    padding: 12px 15px;
-    border: 1px solid var(--color-secondary);
-    border-radius: 12px;
-    font-size: 1rem;
-    margin-bottom: 10px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: #fff9fc; /* Fundo do input quase branco */
-    color: var(--color-text-dark);
-}
-
-.form input:focus {
-    border-color: var(--color-primary);
-    outline: none;
-    box-shadow: 0 0 8px rgba(255, 92, 138, 0.4);
-}
-
-/* ========================================= */
-/* 6. BOTÕES (Padronizado ao estilo do exemplo) */
-/* ========================================= */
-
-.btn-primary {
-    /* Gradiente mais intenso */
-    background: linear-gradient(135deg, var(--color-primary), #FF1493); 
-    color: white;
-    border: none;
-    padding: 12px 20px; /* Um pouco menor para caber melhor no card */
-    border-radius: 15px; /* Mais arredondado */
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 10px rgba(255, 92, 138, 0.4);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 15px rgba(255, 92, 138, 0.6);
-}
-
-/* Link Esqueceu a senha */
-.form-link a {
-    color: var(--color-primary);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: color 0.2s;
-}
-
-.form-link a:hover {
-    color: var(--color-text-dark);
-}
-
-/* Botão Voltar (na parte inferior) */
-.btn-voltar {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-background-card);
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: background 0.2s, color 0.2s;
-    z-index: 20;
-}
-
-.btn-voltar:hover {
-    background: var(--color-primary);
-    color: white;
-}
-
-.heart-btn {
-    margin: 0 5px;
-}
-
-/* Estilo para as mensagens de erro/sucesso */
-#login-message {
+.heart, .side-heart {
     position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: 700;
-    z-index: 100;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    display: none; /* Inicia escondido */
-}
-
-/* Mensagem de sucesso (verde/rosa) */
-.success {
-    background-color: #e6ffed; /* Fundo verde suave */
-    border: 1px solid #c8e6c9; /* Borda verde suave */
-    color: var(--color-text-dark); /* Texto em rosa escuro */
-}
-
-/* Mensagem de erro (vermelho/rosa) */
-.error {
-    background-color: #ffe6e6; /* Fundo vermelho suave */
-    border: 1px solid #f9c8c8; /* Borda vermelha suave */
-    color: var(--color-text-dark); /* Texto em rosa escuro */
-}
-
-
-/* ========================================= */
-/* 7. ESTILOS DO POP-UP (Recado e Gerente)   */
-/* ========================================= */
-
-.recado-overlay, .manager-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 240, 245, 0.8); /* Fundo semi-transparente e rosa suave */
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.recado-box, .manager-box {
-    background: var(--color-background-card);
-    border: 3px solid var(--color-secondary);
-    border-radius: 25px;
-    padding: 30px;
-    box-shadow: var(--sombra-suave);
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    z-index: 1001;
-    position: relative;
-}
-
-/* Dupla Borda no Pop-up */
-.recado-box::before, .manager-box::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    bottom: 5px;
-    left: 5px;
-    right: 5px;
-    border: 2px solid var(--color-border-card);
-    border-radius: 20px;
-    pointer-events: none;
-    opacity: 0.8;
-}
-
-
-.recado-icon {
-    font-size: 3rem;
-    margin-bottom: 10px;
-}
-
-.recado-box h2, .manager-box h3 {
-    font-family: var(--font-fancy);
-    color: var(--color-primary);
     font-size: 2rem;
-    margin-bottom: 10px;
+    opacity: 0.6;
+    animation: floatHeart 15s infinite ease-out;
 }
 
-.recado-box p, .manager-box p {
-    color: var(--color-text-dark);
-    margin-bottom: 20px;
-    font-size: 1rem;
+/* Padrões de coração */
+.heart-1, .heart-5, .heart-9, .side-heart { color: #FF69B4; }
+.heart-2, .heart-6, .heart-10 { color: #FF1493; }
+.heart-3, .heart-7, .heart-11 { color: #FFC0CB; }
+.heart-4, .heart-8, .heart-12 { color: #E9967A; }
+
+.heart-1 { top: 5%; left: 10%; animation-delay: 0s; }
+.heart-2 { top: 15%; left: 50%; font-size: 1.5rem; animation-delay: 2s; }
+/* ... (Inclua os outros posicionamentos de coração aqui se necessário) ... */
+
+@keyframes floatHeart {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    50% { transform: translateY(-30px) rotate(5deg); opacity: 0.9; }
+    100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
 }
 
-.recado-botoes button, .manager-actions button {
-    background: var(--color-primary);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    margin: 5px;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 4px 10px rgba(255, 92, 138, 0.4);
+/* Posicionamento dos corações laterais (mais estáticos) */
+.side-hearts .side-heart {
+    animation: pulseHeart 3s infinite ease-in-out;
+}
+/* ... (Inclua os posicionamentos laterais aqui se necessário) ... */
+
+@keyframes pulseHeart {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 0.9; }
 }
 
-.recado-botoes button:hover, .manager-actions button:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-}
-
-#btn-finalizar-compra, #mgr-continuar {
-    background: #FF1493; /* Um rosa um pouco mais escuro para destaque */
+/* ===== RESPONSIVO ===== */
+@media (max-width: 600px) {
+    .carrinho-container {
+        padding: 20px 10px;
+        max-width: 95vw;
+    }
+    .logo-text { font-size: 2rem; }
+    .carrinho-title h2 { font-size: 1.5rem; }
+    .item-carrinho {
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+    .item-imagem { margin-right: 10px; }
+    .item-info { width: 100%; margin-bottom: 5px; }
+    .item-quantidade { margin: 0; }
+    .item-preco { order: 3; }
+    .btn-remover { order: 4; }
+    .carrinho-total { font-size: 1rem; }
+    .total-valor { font-size: 1.2rem; }
 }

@@ -66,16 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- CARREGAR LISTA ---
-    const carregarPlantas = async () => {
-        try {
-            const res = await fetch(`${API_BASE_URL}/planta`);
-            if (!res.ok) throw new Error('Falha ao carregar plantas.');
-            const plantas = await res.json();
+   const carregarPlantas = async () => {
+    try {
+        const res = await fetch(`${API_BASE_URL}/planta`);
+        if (!res.ok) throw new Error('Falha ao carregar plantas.');
+        const plantas = await res.json();
 
-            // popular tabela
-            plantaTableBody.innerHTML = '';
-            // popular datalist de IDs
-            if (idsList) idsList.innerHTML = '';
+        // ✅ ADICIONE ESTA LINHA AQUI
+        plantas.sort((a, b) => a.id_planta - b.id_planta);
+
+        // popular tabela
+        plantaTableBody.innerHTML = '';
+        // popular datalist de IDs
+        if (idsList) idsList.innerHTML = '';
 
             plantas.forEach(planta => {
                 const row = document.createElement('tr');

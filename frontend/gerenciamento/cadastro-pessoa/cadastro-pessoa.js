@@ -426,14 +426,10 @@ async function loadPessoas() {
         pessoas.forEach(p => {
             const row = document.createElement('tr');
             
-            let detalhe = '';
-            if (p.tipo_pessoa === 'funcionario' && p.salario) {
-                detalhe = `Salário: ${formatMoney(p.salario)}`;
-            } else if (p.tipo_pessoa === 'cliente' && p.data_cadastro) {
-                detalhe = `Cadastro: ${formatDate(p.data_cadastro)}`;
-            } else if (p.tipo_pessoa === 'funcionario' && p.nome_cargo) {
-                detalhe = `Cargo: ${p.nome_cargo}`;
-            }
+            // Mostra Data de Nascimento e Senha na coluna Detalhe
+            const dataNasc = formatDate(p.data_nascimento_pessoa);
+            const senha = p.senha_pessoa ? '••••••••' : '-'; // Mostra asteriscos por segurança
+            const detalhe = `Nasc: ${dataNasc} | Senha: ${senha}`;
 
             // Adicionei p.email_pessoa na tabela
             row.innerHTML = `
