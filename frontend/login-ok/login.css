@@ -1,371 +1,594 @@
-/* carrinho.css — Tema Lindos Detalles 💖 (Delicado e Romântico) */
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap');
-
-/* ========================================= */
-/* 1. VARIÁVEIS E ESTILOS GLOBAIS            */
-/* ========================================= */
-
-:root{
-    --color-primary: #FF5C8A;        /* Rosa Vibrante (Botões e Destaque) */
-    --color-secondary: #FFB6C1;      /* Rosa Médio (Bordas de Cards) */
-    --color-tertiary: #FFEBF0;       /* Rosa Ultra-Claro (Fundo) */
-    --color-text-dark: #880E4F;      /* Darker Pink/Maroon (Texto principal) */
-    --color-text-light: #555;        /* Texto Secundário */
-    --color-background-card: #FFFFFF;
-    --sombra-suave: 0 12px 45px rgba(255, 92, 138, 0.2); /* Sombra mais difusa */
-    --font-fancy: 'Dancing Script', cursive;
-    --font-normal: 'Poppins', sans-serif;
-
-    /* Variáveis do Carrinho adaptadas */
-    --cor-primaria: var(--color-primary);
-    --cor-secundaria: var(--color-tertiary);
-    --cor-texto: var(--color-text-dark);
-    --cor-texto-claro: var(--color-text-light);
-    --cor-branca: var(--color-background-card);
-    --cor-rosa-suave: #ffe4f1; 
-    --sombra-hover: 0 8px 30px rgba(255, 92, 138, 0.25);
+/* ===== RESET E BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* ===== BASE ===== */
-* { box-sizing: border-box; margin: 0; padding: 0 }
-html { scroll-behavior: smooth; }
+:root {
+    /* Paleta de cores romântica e suave */
+    --rose-light: #FFE6EE;      /* Rosa muito claro */
+    --rose-medium: #FFB6C1;     /* Rosa médio */
+    --rose-dark: #FF69B4;       /* Rosa vibrante */
+    --mauve: #E6B0AA;           /* Mauve suave */
+    --lavender: #E6E6FA;        /* Lavanda claro */
+    --leaf-green: #A8D5BA;      /* Verde folha suave */
+    --cream: #FFF8F0;           /* Creme delicado */
+    --text-dark: #5D4037;       /* Marrom escuro para texto */
+    --text-light: #8D6E63;      /* Marrom claro para texto */
+    --shadow-soft: rgba(255, 182, 193, 0.15); /* Sombra rosa suave */
+    --shadow-medium: rgba(255, 182, 193, 0.25);
+}
 
 body {
-    font-family: var(--font-normal);
-    /* Fundo harmonizado com a tela de login */
-    background-color: var(--color-tertiary); 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #FFE6EE 0%, #FFF8F0 50%, #E6E6FA 100%);
+    color: var(--text-dark);
     min-height: 100vh;
-    color: var(--cor-texto);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow-x: hidden;
-    position: relative;
     padding: 20px;
-}
-
-main {
-    z-index: 10;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-/* ===== Card Carrinho (Container) ===== */
-.carrinho-container {
-    background: var(--cor-branca);
-    border: 3px solid var(--color-secondary);
-    border-radius: 25px;
-    padding: 40px 30px;
-    box-shadow: var(--sombra-suave);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
     position: relative;
+    line-height: 1.6;
+    /* Removido: display: flex; justify-content: center; align-items: center; overflow: hidden; */
+    overflow-y: auto; /* Permite rolagem vertical */
 }
 
-/* Dupla Borda no Card Principal */
-.carrinho-container::before {
+/* ===== EMOJIS LEVITANDO NO FUNDO ===== */
+.emoji-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.floating-emoji {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: float 15s infinite ease-in-out;
+}
+
+.floating-emoji:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; } /* 🌸 */
+.floating-emoji:nth-child(2) { top: 20%; right: 10%; animation-delay: 2s; } /* 💐 */
+.floating-emoji:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 4s; } /* 🌺 */
+.floating-emoji:nth-child(4) { bottom: 15%; right: 20%; animation-delay: 6s; } /* 🌹 */
+.floating-emoji:nth-child(5) { top: 40%; left: 85%; animation-delay: 8s; } /* 💮 */
+.floating-emoji:nth-child(6) { top: 60%; left: 8%; animation-delay: 10s; } /* 🌷 */
+.floating-emoji:nth-child(7) { bottom: 40%; right: 5%; animation-delay: 12s; } /* 🥀 */
+.floating-emoji:nth-child(8) { top: 15%; left: 70%; animation-delay: 14s; } /* 💖 */
+.floating-emoji:nth-child(9) { bottom: 20%; left: 60%; animation-delay: 16s; } /* 🌼 */
+.floating-emoji:nth-child(10) { top: 70%; right: 15%; animation-delay: 18s; } /* 🌻 */
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px var(--shadow-soft);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.login-container::before {
     content: '';
     position: absolute;
-    top: 5px;
-    bottom: 5px;
-    left: 5px;
-    right: 5px;
-    border: 2px solid var(--color-primary); 
-    border-radius: 20px;
-    pointer-events: none;
-    opacity: 0.5;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, var(--rose-medium), var(--leaf-green), var(--lavender));
+    z-index: 2;
 }
 
-/* ===== LOGO E TÍTULOS ===== */
-.logo-box {
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed var(--color-secondary);
+/* ===== CABEÇALHO ===== */
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
 }
 
-.logo-box img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 10px;
-    border: 2px solid var(--color-primary);
+.login-title {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 48px;
+    font-weight: normal;
+    color: var(--rose-dark);
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 4px var(--shadow-soft);
+    letter-spacing: 1px;
 }
 
-.logo-text {
-    font-family: var(--font-fancy);
-    color: var(--color-primary);
-    font-size: 2.5rem;
-    margin: 0;
-    line-height: 1;
-}
-
-.carrinho-subtitle {
-    color: var(--cor-texto-claro);
-    font-size: 0.9rem;
-    margin-top: 5px;
-}
-
-.carrinho-title {
+.login-subtitle {
+    font-size: 16px;
+    color: var(--text-light);
+    font-weight: 300;
+    font-style: italic;
     margin-bottom: 20px;
 }
 
-.carrinho-title h2 {
-    font-family: var(--font-fancy);
-    color: var(--color-primary);
-    font-size: 2rem;
-    font-weight: 700;
+.header-illustration {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
 }
 
-.carrinho-title p {
-    color: var(--cor-texto-claro);
-    font-size: 0.9rem;
-    margin-top: 5px;
+.flower-icon {
+    font-size: 28px;
+    opacity: 0.8;
+    animation: gentle-pulse 3s infinite ease-in-out;
 }
 
-/* ===== ITENS DO CARRINHO ===== */
-.carrinho-itens {
+.flower-icon:nth-child(1) { animation-delay: 0s; }
+.flower-icon:nth-child(2) { animation-delay: 0.5s; }
+.flower-icon:nth-child(3) { animation-delay: 1s; }
+.flower-icon:nth-child(4) { animation-delay: 1.5s; }
+.flower-icon:nth-child(5) { animation-delay: 2s; }
+
+@keyframes gentle-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+/* ===== TABS/ABAS ===== */
+.auth-tabs {
+    display: flex;
+    background-color: var(--cream);
+    border-radius: 16px;
+    padding: 6px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 182, 193, 0.3);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tab-toggle {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    background: none;
+    color: var(--text-light);
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-toggle.active {
+    background: linear-gradient(135deg, var(--rose-medium), var(--mauve));
+    color: white;
+    box-shadow: 0 6px 20px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.tab-toggle.active::after {
+    content: '🌸';
+    position: absolute;
+    right: 15px;
+    opacity: 0.7;
+}
+
+.tab-toggle.inactive:hover {
+    background-color: rgba(255, 182, 193, 0.1);
+    color: var(--rose-dark);
+}
+
+/* ===== MENSAGENS ===== */
+.message {
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    text-align: center;
+    border: 1px solid transparent;
+    background-color: rgba(168, 213, 186, 0.2);
+    border-color: rgba(168, 213, 186, 0.3);
+    color: var(--text-dark);
+}
+
+.message.error {
+    background-color: rgba(255, 182, 193, 0.2);
+    border-color: rgba(255, 182, 193, 0.4);
+}
+
+.message.success {
+    background-color: rgba(168, 213, 186, 0.3);
+    border-color: rgba(168, 213, 186, 0.5);
+}
+
+/* ===== FORMULÁRIOS ===== */
+.auth-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    max-height: 40vh;
-    overflow-y: auto; /* Permite scroll se muitos itens */
-    padding-right: 10px; /* Espaço para a barra de scroll */
+    gap: 24px;
 }
 
-/* Estilo da barra de rolagem (Chrome, Edge, Safari) */
-.carrinho-itens::-webkit-scrollbar {
-    width: 8px;
-}
-.carrinho-itens::-webkit-scrollbar-track {
-    background: var(--cor-rosa-suave);
-    border-radius: 10px;
-}
-.carrinho-itens::-webkit-scrollbar-thumb {
-    background: var(--color-primary);
-    border-radius: 10px;
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.item-carrinho {
+.input-group label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-light);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background-color: var(--cor-rosa-suave);
-    border-radius: 12px;
-    border: 1px solid var(--color-secondary);
-    transition: transform 0.2s, box-shadow 0.2s;
+    gap: 8px;
 }
 
-.item-carrinho:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 92, 138, 0.15);
+.input-group label::before {
+    font-size: 18px;
 }
 
-.item-imagem {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 15px;
-    border: 1px solid var(--color-primary);
-}
+#login-email + label::before { content: '💌'; }
+#login-password + label::before { content: '🔐'; }
+#reg-nome + label::before { content: '👤'; }
+#reg-email + label::before { content: '📧'; }
+#reg-password + label::before { content: '🔒'; }
 
-.item-info {
-    flex-grow: 1;
-    text-align: left;
-}
-
-.item-nome {
-    font-weight: 600;
-    color: var(--cor-texto);
-}
-
-.item-preco {
-    font-size: 0.9rem;
-    color: var(--cor-texto-claro);
-}
-
-.item-quantidade {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin: 0 15px;
-}
-
-.btn-quantidade {
-    background: var(--color-primary);
-    color: var(--cor-branca);
-    border: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
-    transition: background-color 0.2s;
-}
-.btn-quantidade:hover {
-    background-color: #E6517A;
-}
-
-.quantidade-valor {
-    font-weight: 700;
-    color: var(--cor-texto);
-}
-
-.btn-remover {
-    color: var(--color-primary);
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-.btn-remover:hover {
-    color: #E6517A;
-}
-
-/* ===== TOTAL E BOTÃO FINALIZAR ===== */
-.carrinho-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 1px dashed var(--color-secondary);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-.total-valor {
-    font-size: 1.4rem;
-}
-
-.btn-finalizar {
-    display: block;
-    padding: 14px 25px;
-    border: none;
-    border-radius: 12px;
-    background-color: var(--color-primary);
-    color: var(--cor-branca);
-    font-family: var(--font-normal);
-    font-weight: 700;
-    font-size: 1.2rem;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 20px;
-    box-shadow: var(--sombra-suave);
-    transition: all 0.23s;
-    letter-spacing: 0.5px;
-}
-
-.btn-finalizar:hover {
-    background-color: #E6517A;
-    transform: translateY(-2px);
-    box-shadow: var(--sombra-hover);
-}
-
-/* ===== BOTÃO VOLTAR (Harmonizado com o Login) ===== */
-
-.btn-voltar {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    border: 2px solid var(--color-primary);
-    border-radius: 10px;
-    background-color: var(--color-background-card);
-    color: var(--color-primary);
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 92, 138, 0.3);
+.form-input {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(255, 182, 193, 0.3);
+    border-radius: 14px;
+    padding: 16px 20px;
+    color: var(--text-dark);
+    font-size: 16px;
     transition: all 0.3s ease;
-    z-index: 10;
-    text-decoration: none; /* Como é um <a> tag no HTML */
-    display: flex;
-    align-items: center;
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
-.btn-voltar:hover {
-    background-color: var(--color-primary);
-    color: var(--color-background-card);
-    transform: translateY(-2px);
+.form-input::placeholder {
+    color: #C7B7A3;
+    font-style: italic;
+    font-size: 15px;
 }
 
-.voltar-emoji {
-    font-size: 1.2rem;
-    margin-right: 5px;
+.form-input:focus {
+    border-color: var(--rose-medium);
+    box-shadow: 0 0 0 4px rgba(255, 182, 193, 0.2);
+    background-color: white;
 }
 
-/* ===== CORAÇÕES E RESPONSIVIDADE (Copiado do login.css) ===== */
-/* Ajuste as classes .floating-hearts e .side-hearts para o carrinho */
-/* NOTA: Requer que as animações @keyframes estejam no CSS final */
+/* ===== BOTÕES ===== */
+.btn-primary {
+    background: linear-gradient(135deg, var(--rose-medium), var(--rose-dark));
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    margin-top: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3);
+    position: relative;
+    overflow: hidden;
+}
 
-.floating-hearts, .side-hearts {
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.4);
+}
+
+.btn-primary:hover::after {
+    left: 100%;
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    background: linear-gradient(135deg, #E0E0E0, #BDBDBD);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== FOOTER/LINK ===== */
+.form-footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 182, 193, 0.3);
+    color: var(--text-light);
+    font-size: 15px;
+}
+
+.form-footer a {
+    color: var(--rose-dark);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+    border-bottom: 1px dotted transparent;
+}
+
+.form-footer a:hover {
+    border-bottom: 1px dotted var(--rose-dark);
+    text-shadow: 0 0 8px rgba(255, 182, 193, 0.3);
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.auth-form {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.login-container {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+.login-container {
+    max-width: 400px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    padding: 32px 24px;
+}
+
+/* Estilos para estados de loading */
+.form-loading .btn-primary {
+    position: relative;
+    color: transparent;
+}
+
+.form-loading .btn-primary::before {
+    content: '🌸' ,  '🌸' ,  '🌸',  '🌸',  '🌸';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Decoração adicional */
+.corner-decoration {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.corner-decoration:nth-child(1) { top: 20px; left: 20px; }
+.corner-decoration:nth-child(2) { top: 20px; right: 20px; transform: scaleX(-1); }
+.corner-decoration:nth-child(3) { bottom: 20px; left: 20px; transform: scaleY(-1); }
+.corner-decoration:nth-child(4) { bottom: 20px; right: 20px; transform: scale(-1, -1); }
+
+
+/* ===== CLASSES RESPONSIVAS ===== */
+.mobile-view .login-container {
+    padding: 30px 20px;
+    max-width: 95%;
+}
+
+.tablet-view .login-container {
+    padding: 40px 35px;
+    max-width: 85%;
+}
+
+.desktop-view .login-container {
+    padding: 50px 40px;
+    max-width: 480px;
+}
+
+.projector-view .login-container {
+    padding: 60px 50px;
+    max-width: 600px;
+    font-size: 1.1rem;
+}
+
+.projector-view .login-title {
+    font-size: 56px;
+}
+
+.projector-view .btn-primary {
+    padding: 22px;
+    font-size: 20px;
+}
+
+/* ===== ORIENTAÇÃO ===== */
+.portrait .auth-tabs {
+    flex-direction: column;
+    height: auto;
+}
+
+.landscape .auth-tabs {
+    flex-direction: row;
+}
+
+/* ===== ANIMAÇÕES ADAPTATIVAS ===== */
+.reduced-motion .floating-emoji,
+.reduced-motion .flower-icon {
+    animation: none !important;
+}
+
+.reduced-motion .btn-primary:hover {
+    transform: none !important;
+}
+
+/* ===== ESTADOS DE FORMULÁRIO ===== */
+.form-input.valid {
+    border-color: #A8D5BA !important;
+    background-color: rgba(168, 213, 186, 0.1);
+}
+
+.form-input.invalid {
+    border-color: #FFB6C1 !important;
+    background-color: rgba(255, 182, 193, 0.1);
+}
+
+/* ===== LOADING STATES ===== */
+.btn-primary.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-primary.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: -12px;
+    margin-top: -12px;
+}
+
+/* ===== MODAIS RESPONSIVAS ===== */
+.recado-overlay {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.recado-box {
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
     width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 5;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 
-.heart, .side-heart {
-    position: absolute;
-    font-size: 2rem;
-    opacity: 0.6;
-    animation: floatHeart 15s infinite ease-out;
+.recado-box.visible {
+    transform: translateY(0);
+    opacity: 1;
 }
 
-/* Padrões de coração */
-.heart-1, .heart-5, .heart-9, .side-heart { color: #FF69B4; }
-.heart-2, .heart-6, .heart-10 { color: #FF1493; }
-.heart-3, .heart-7, .heart-11 { color: #FFC0CB; }
-.heart-4, .heart-8, .heart-12 { color: #E9967A; }
-
-.heart-1 { top: 5%; left: 10%; animation-delay: 0s; }
-.heart-2 { top: 15%; left: 50%; font-size: 1.5rem; animation-delay: 2s; }
-/* ... (Inclua os outros posicionamentos de coração aqui se necessário) ... */
-
-@keyframes floatHeart {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-    50% { transform: translateY(-30px) rotate(5deg); opacity: 0.9; }
-    100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+.recado-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    animation: gentle-pulse 2s infinite ease-in-out;
 }
 
-/* Posicionamento dos corações laterais (mais estáticos) */
-.side-hearts .side-heart {
-    animation: pulseHeart 3s infinite ease-in-out;
-}
-/* ... (Inclua os posicionamentos laterais aqui se necessário) ... */
-
-@keyframes pulseHeart {
-    0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.05); opacity: 0.9; }
+.recado-botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
 }
 
-/* ===== RESPONSIVO ===== */
-@media (max-width: 600px) {
-    .carrinho-container {
-        padding: 20px 10px;
-        max-width: 95vw;
+.btn-recado {
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, var(--rose-medium), var(--rose-dark));
+    color: white;
+}
+
+.btn-recado:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+}
+
+/* ===== UTILITÁRIOS RESPONSIVOS ===== */
+@media (max-height: 600px) {
+    .login-container {
+        padding: 25px !important;
+        margin: 10px 0;
     }
-    .logo-text { font-size: 2rem; }
-    .carrinho-title h2 { font-size: 1.5rem; }
-    .item-carrinho {
-        flex-wrap: wrap;
-        padding: 10px;
+    
+    .floating-emoji {
+        display: none;
     }
-    .item-imagem { margin-right: 10px; }
-    .item-info { width: 100%; margin-bottom: 5px; }
-    .item-quantidade { margin: 0; }
-    .item-preco { order: 3; }
-    .btn-remover { order: 4; }
-    .carrinho-total { font-size: 1rem; }
-    .total-valor { font-size: 1.2rem; }
+}
+
+@media (max-width: 350px) {
+    .login-title {
+        font-size: 32px !important;
+    }
+    
+    .tab-toggle {
+        padding: 12px 8px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* ===== IMPRESSÃO ===== */
+@media print {
+    .floating-emoji,
+    .emoji-background,
+    .btn-primary,
+    .auth-tabs {
+        display: none !important;
+    }
+    
+    .login-container {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
 }

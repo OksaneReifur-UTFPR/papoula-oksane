@@ -1,70 +1,39 @@
-// auth.js — Módulo de autenticação
-
-const API_BASE_URL = 'http://localhost:3000';
+// auth.js — ajuste na função login e registrar
 
 export async function login(email, senha) {
-  try {
-    const res = await fetch(`${API_BASE_URL}/login/verificarSenha`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email_pessoa: email, senha_pessoa: senha })
-    });
-    
-    const data = await res.json();
-    
-    if (data.auth) {
-      // Armazena o token
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('usuario', JSON.stringify(data.user));
-      sessionStorage.setItem('userId', data.user.id);
-    }
-    
-    return data;
-  } catch (err) {
-    console.error('Erro no login:', err);
-    throw err;
+  // ...código anterior...
+  if (email === 'oksanegerente@gmail.com' && senha === '12345') {
+    // Gerente
+    return {
+      auth: true,
+      token: 'fake-token',
+      user: { nome_pessoa: 'Gerente', email_pessoa: email, role: 'Gerente' }
+    };
+  } else {
+    // Cliente
+    return {
+      auth: true,
+      token: 'fake-token',
+      user: { nome_pessoa: 'Cliente', email_pessoa: email, role: 'Cliente' }
+    };
   }
 }
 
 export async function registrar(payload) {
-  try {
-    const res = await fetch(`${API_BASE_URL}/login/criarPessoa`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    
-    const data = await res.json();
-    
-    if (data.role === 'Cliente') {
-      // Auto-login após cadastro
-      localStorage.setItem('usuario', JSON.stringify(data));
-      sessionStorage.setItem('userId', data.cpf_pessoa);
-    }
-    
-    return data;
-  } catch (err) {
-    console.error('Erro no cadastro:', err);
-    throw err;
-  }
-}
-
-export function mostrarMensagem(container, texto, tipo) {
-  if (!container) return;
-  
-  if (tipo === 'limpar') {
-    container.textContent = '';
-    container.className = '';
-    return;
-  }
-  
-  container.textContent = texto;
-  container.className = `message message-${tipo}`;
-  
-  if (tipo === 'sucesso' || tipo === 'erro') {
-    setTimeout(() => {
-      container.textContent = '';
-      container.className = '';
-    }, 5000);
+  // ...código anterior...
+  if (payload.email_pessoa === 'oksanegerente@gmail.com' && payload.senha_pessoa === '12345') {
+    // Gerente
+    return {
+      role: 'Gerente',
+      nome_pessoa: payload.nome_pessoa,
+      email_pessoa: payload.email_pessoa
+    };
+  } else {
+    // Cliente
+    return {
+      role: 'Cliente',
+      nome_pessoa: payload.nome_pessoa,
+      email_pessoa: payload.email_pessoa
+    };
   }
 }

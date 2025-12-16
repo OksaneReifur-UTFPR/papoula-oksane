@@ -2,57 +2,75 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CRUD - Forma de Pagamento</title>
-
-  <!-- Estilos: ajuste o caminho se necessário -->
-  <link rel="stylesheet" href="/forma_pagamento/forma_pagamento.css">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>Formas de Pagamento - Lindos Detalles Floricultura</title>
+  
+  <!-- CSS Romântico -->
+  <link rel="stylesheet" href="formadepagamento.css">
+  
+  <!-- Fonte para título decorativo -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  
   <!-- Script principal -->
-  <script src="/forma_pagamento/forma_pagamento.js" defer></script>
+  <script src="formadepagamento.js" defer></script>
 </head>
 <body>
+  <!-- Fundo com flores flutuantes -->
+  <div class="floral-background" id="floralBackground"></div>
+  
   <header>
-    <h1>CRUD Forma de Pagamento</h1>
+    <h1>🌺 Formas de Pagamento</h1>
+    <p style="font-style: italic; opacity: 0.9; font-size: 1.1rem; margin-top: 0.5rem;">
+      Cada pagamento é uma nova história de amor
+    </p>
   </header>
 
   <main>
     <section class="form-section" aria-labelledby="titulo-forma">
-      <h2 id="titulo-forma">Cadastro de Forma de Pagamento</h2>
+      <!-- Flores decorativas nos cantos -->
+      <div class="corner-flower">🌼</div>
+      <div class="corner-flower">🌷</div>
+      <div class="corner-flower">🌸</div>
+      <div class="corner-flower">🌺</div>
+      
+      <h2 id="titulo-forma">💳 Cadastro de Forma de Pagamento</h2>
 
       <form id="formaPagamentoForm" novalidate>
         <div class="search-container" aria-live="polite">
           <label for="searchId">Buscar por ID:</label>
           <div class="search-input-group">
-            <input type="number" id="searchId" placeholder="Digite o ID para buscar" inputmode="numeric" aria-label="ID da forma de pagamento">
-            <button type="button" id="btnBuscar">🔍 Buscar</button>
-
-            <button type="button" id="btnIncluir" class="btn-primary">Incluir</button>
-            <button type="button" id="btnAlterar" class="btn-secondary" style="display:none;">Alterar</button>
-            <button type="button" id="btnExcluir" class="btn-danger" style="display:none;">Excluir</button>
-            <button type="button" id="btnSalvar" class="btn-save" style="display:none;">Salvar</button>
-            <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+            <input type="number" id="searchId" placeholder="Digite o ID para buscar..." 
+                   inputmode="numeric" aria-label="ID da forma de pagamento">
+            <button type="button" id="btnBuscar" class="btn-primary">🔍 Buscar</button>
+            
+            <button type="button" id="btnIncluir" class="btn-primary">➕ Incluir</button>
+            <button type="button" id="btnAlterar" class="btn-secondary" style="display:none;">✏️ Alterar</button>
+            <button type="button" id="btnExcluir" class="btn-danger" style="display:none;">🗑️ Excluir</button>
+            <button type="button" id="btnSalvar" class="btn-save" style="display:none;">💾 Salvar</button>
+            <button type="button" id="btnCancelar" class="btn-cancel">↩️ Cancelar</button>
           </div>
         </div>
 
         <fieldset id="formFields">
-          <legend>Dados da Forma de Pagamento</legend>
+          <legend>Dados da Forma de Pagamento 💸</legend>
 
           <div class="form-group">
             <label for="id_formadepagamento">ID (opcional)</label>
-            <input type="number" id="id_formadepagamento" name="id_formadepagamento" placeholder="ID (deixe vazio para auto-incremento)" inputmode="numeric" />
+            <input type="number" id="id_formadepagamento" name="id_formadepagamento" 
+                   placeholder="Deixe vazio para auto-incremento..." inputmode="numeric" />
           </div>
 
           <div class="form-group">
             <label for="nome_formadepagamento">Nome da Forma de Pagamento</label>
-            <input type="text" id="nome_formadepagamento" name="nome_formadepagamento" required />
+            <input type="text" id="nome_formadepagamento" name="nome_formadepagamento" 
+                   placeholder="Ex: Cartão de Crédito, Pix, Dinheiro..." required />
           </div>
         </fieldset>
       </form>
     </section>
 
     <section class="list-section" aria-labelledby="lista-formas">
-      <h2 id="lista-formas">Lista de Formas de Pagamento</h2>
+      <h2 id="lista-formas">📋 Lista de Formas de Pagamento</h2>
       <div class="table-container" role="region" aria-label="Tabela de formas de pagamento">
         <table id="forma_pagamentosTable" aria-describedby="lista-formas">
           <thead>
@@ -61,16 +79,78 @@
               <th scope="col">Nome</th>
             </tr>
           </thead>
-          <tbody id="forma_pagamentosTableBody"></tbody>
+          <tbody id="forma_pagamentosTableBody">
+            <!-- Dados serão carregados via JavaScript -->
+            <tr>
+              <td colspan="2" style="text-align: center; padding: 3rem; color: var(--text-light);">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🌸</div>
+                Carregando formas de pagamento...
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 CRUD Forma de Pagamento</p>
+    <p>💖 &copy; 2025 Lindos Detalles Floricultura - Cada detalhe feito com amor</p>
   </footer>
 
   <div id="messageContainer" class="message-container" role="status" aria-live="polite"></div>
+
+  <script>
+    // Script para criar flores flutuantes dinâmicas
+    document.addEventListener('DOMContentLoaded', function() {
+      const floralBackground = document.getElementById('floralBackground');
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      
+      // Quantidade de flores baseada no tamanho da tela
+      const flowerCount = Math.min(Math.floor((screenWidth * screenHeight) / 50000), 25);
+      
+      // Emojis de flores
+      const flowers = ['🌸', '💐', '🌺', '🌹', '💮', '🌷', '🥀', '💖', '🌼', '🌻', '🌱', '🌿'];
+      
+      for (let i = 0; i < flowerCount; i++) {
+        const flower = document.createElement('div');
+        flower.className = 'floating-flower';
+        flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+        
+        // Posição aleatória
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        const size = 1 + Math.random() * 2.5; // Tamanhos entre 1rem e 3.5rem
+        const delay = Math.random() * 20; // Delay aleatório para animação
+        
+        flower.style.cssText = `
+          left: ${left}%;
+          top: ${top}%;
+          font-size: ${size}rem;
+          animation-delay: ${delay}s;
+          opacity: ${0.1 + Math.random() * 0.2};
+        `;
+        
+        floralBackground.appendChild(flower);
+      }
+      
+      // Scroll suave para links internos
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
